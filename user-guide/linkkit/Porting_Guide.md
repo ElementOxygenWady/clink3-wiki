@@ -371,7 +371,9 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
     CONFIG_tests                    :=
     CONFIG_src/tools/linkkit_tsl_convert :=
 
-注意, 倒数4行表示对`src/ref-impl/hal`, `examples`, `tests`, `src/tools/linkkit_tsl_convert`这些目录跳过编译, 在编译未被适配平台的库时, 这在最初是必要的
+**注意, 上面的最后4行表示跳过对`src/ref-impl/hal`, `examples`, `tests`, `src/tools/linkkit_tsl_convert`这些目录的编译**
+
+**在编译未被适配平台的库时在最初是必要的, 这样可以避免产生过多的错误**
 
 ### <a name="选择配置文件">选择配置文件</a>
 
@@ -438,6 +440,8 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 
 ### <a name="交叉编译产生库文件`libiot_sdk.a`">交叉编译产生库文件`libiot_sdk.a`</a>
 
+> 注: 本步骤不编译HAL, 只是为了验证配置文件中的交叉编译参数是否正确, 如果出现错误请对配置文件再次进行修改, 直到编译成功
+
     $ make
     BUILDING WITH EXISTING CONFIGURATION:
 
@@ -481,6 +485,8 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 仍然以上一节中, 某款目前未适配的`arm-linux`目标平台为例, 假设这款平台和`Ubuntu`差别很小, 完全可以用`Ubuntu`上开发测试的HAL层代码作为开发的基础, 则可以这样做:
 
 ### <a name="复制一份HAL层实现代码">复制一份HAL层实现代码</a>
+
+> 注: 在 `src/ref-impl/hal/os` 下需要创建一个与 `src/board/confg.XXX.YYY` 中的 `XXX` 一样的目录用于存放HAL实现
 
     $ cd src/ref-impl/hal/os/
     $ ls

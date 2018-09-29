@@ -6,7 +6,7 @@
     * [2.2 准备云端控制台环境](#2.2 准备云端控制台环境)
         - [注册/登录阿里云账号](#注册/登录阿里云账号)
         - [访问物联网套件控制台](#访问物联网套件控制台)
-    * [2.3 体验基础版C-SDK](#2.3 体验基础版C-SDK)
+    * [2.3 体验MQTT Topic编程方式接入设备](#2.3 体验MQTT Topic编程方式接入设备)
         - [创建基础版产品和设备](#创建基础版产品和设备)
         - [编译运行基础版例程](#编译运行基础版例程)
             + [下载解压物联网平台设备端C-SDK](#下载解压物联网平台设备端C-SDK)
@@ -18,7 +18,7 @@
             + [观察消息上报](#观察消息上报)
             + [观察消息下推](#观察消息下推)
             + [观察控制台日志](#观察控制台日志)
-    * [2.4 体验高级版C-SDK](#2.4 体验高级版C-SDK)
+    * [2.4 体验物模型编程方式接入设备](#2.4 体验物模型编程方式接入设备)
         - [创建高级版产品和设备](#创建高级版产品和设备)
         - [为高级版设备创建物模型](#为高级版设备创建物模型)
         - [编译运行高级版例程](#编译运行高级版例程)
@@ -37,13 +37,13 @@
 
 # <a name="第二章 快速开始">第二章 快速开始</a>
 
-本章描述如何申请自己的设备, 并结合C-SDK快速体验该设备通过`MQTT`协议(基础版), 以及通过`Alink`协议(高级版), 连接到阿里云, 上报和接收业务报文.
+本章描述如何申请自己的设备, 并结合C-SDK快速体验该设备通过`MQTT`协议以topic的方式和通过物模型的编程方式, 上报和接收业务报文.
 
 ## <a name="2.1 准备本地开发环境">2.1 准备本地开发环境</a>
 
 ### <a name="安装Ubuntu16.04">安装Ubuntu16.04</a>
 
-本SDK的编译环境是**64位**主机上的`Ubuntu16.04`, 在其它Linux上尚未测试过, 所以推荐安装与阿里开发者一致的发行版
+本SDK的编译环境是**64位**主机上的`Ubuntu16.04`, 在其它Linux上尚未测试过, 所以推荐安装与阿里一致的发行版
 
 如果您使用`Windows`操作系统, 建议安装虚拟机软件`Virtualbox`, 下载地址: [https://www.virtualbox.org/wiki/Downloads](https://www.virtualbox.org/wiki/Downloads)
 
@@ -66,7 +66,7 @@
 
 登入之后, 鼠标悬停在**产品**上, 弹出层叠菜单, 并单击**物联网平台**
 
-*注: 本处以在物联网平台创建产品作为示例，用户也可以在生活物联网平台 (https://living.aliyun.com) 上进行产品创建*
+> *注: 本处以在物联网平台创建产品作为示例, 用户也可以在阿里云IoT的其它物联网平台, 比如[生活物联网平台](https://living.aliyun.com), 上进行产品创建*
 
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/%E4%BA%A7%E5%93%81-%E7%89%A9%E8%81%94%E7%BD%91%E5%B9%B3%E5%8F%B0.png)
 
@@ -74,7 +74,7 @@
 
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/%E4%BA%A7%E5%93%81-%E9%98%BF%E9%87%8C%E4%BA%91Link%20Platform-%E7%AB%8B%E5%8D%B3%E5%BC%80%E9%80%9A.png)
 
-## <a name="2.3 体验基础版C-SDK">2.3 体验基础版C-SDK</a>
+## <a name="2.3 体验MQTT Topic编程方式接入设备">2.3 体验MQTT Topic编程方式接入设备</a>
 
 > MQTT协议是IBM开发的一个即时通讯协议, 是为大量计算能力有限, 且工作在低带宽, 不可靠的网络的远程传感器和控制设备通讯而设计的协议
 >
@@ -92,7 +92,7 @@
 
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/LP-%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86-%E5%88%9B%E5%BB%BA%E4%BA%A7%E5%93%81.png)
 
-在弹出的创建产品中, 选择基础版, 填写产品信息:
+在弹出的创建产品中, 选择基础版(也即直接对topic进行消息发布或者订阅), 填写产品信息:
 
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/LP-%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86-%E5%88%9B%E5%BB%BA%E4%BA%A7%E5%93%81-%E8%AF%A6%E7%BB%86%E5%8F%82%E6%95%B0.png)
 
@@ -487,14 +487,14 @@ static void _demo_message_arrive(void *pcontext, void *pclient, iotx_mqtt_event_
 
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/LP-%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86-%E4%BA%A7%E5%93%81%E8%AF%A6%E6%83%85-%E6%97%A5%E5%BF%97%E6%9C%8D%E5%8A%A1.png)
 
-## <a name="2.4 体验高级版C-SDK">2.4 体验高级版C-SDK</a>
+## <a name="2.4 体验物模型编程方式接入设备">2.4 体验物模型编程方式接入设备</a>
 
 ### <a name="创建高级版产品和设备">创建高级版产品和设备</a>
 进入IoT控制台后, 点击页面左侧导航栏的**产品管理**, 再点击右侧的**创建产品**, 如下图所示:
 
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/LP-%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86-%E5%88%9B%E5%BB%BA%E4%BA%A7%E5%93%81.png)
 
-在弹出的创建产品中, 选择高级版, 填写产品信息:
+在弹出的创建产品中, 选择高级版(即物模型), 填写产品信息:
 
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/LP-ADV-%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86-%E5%88%9B%E5%BB%BA%E4%BA%A7%E5%93%81-%E8%AF%A6%E7%BB%86%E5%8F%82%E6%95%B0.png)
 
@@ -713,7 +713,7 @@ int linkkit_example()
     ...
 
 用户回调函数, 高级版产生事件时, 会自动调用用户的回调函数
-    
+
     linkkit_ops_t linkkit_ops = {
         .on_connect           = on_connect,            /* connect handler */
         .on_disconnect        = on_disconnect,         /* disconnect handler */
