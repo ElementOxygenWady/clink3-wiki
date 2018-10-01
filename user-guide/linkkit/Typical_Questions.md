@@ -187,11 +187,12 @@ SSL报文缓冲区过短: `Buffer is too small to hold the data`
 #### <a name="-37/MQTT_CONNACK_IDENTIFIER_REJECTED_ERROR">-37/MQTT_CONNACK_IDENTIFIER_REJECTED_ERROR</a>
 解释
 ---
-云端认为设备权限而拒绝设备端的连接请求: `CONNACK` 报文中的错误码是 `2`
+云端认为设备权限不足而拒绝设备端的连接请求: `CONNACK` 报文中的错误码是 `2`
 
 可能的原因和解决建议
 ---
-+ 建议检查在控制台创建当前设备三元组的账号, 是否有权限, 是否有发生欠费等
++ MQTT的Connect报文参数中, clientId的上报内容和协议预期不符, 这通常发生在不使用官方SDK而使用第三方MQTT自行对接时
++ 建议检查在控制台创建当前设备三元组的账号, 是否有权限, 如是否有发生欠费等
 
 #### <a name="-42/MQTT_PUSH_TO_LIST_ERROR">-42/MQTT_PUSH_TO_LIST_ERROR</a>
 解释
