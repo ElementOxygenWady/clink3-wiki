@@ -1,6 +1,6 @@
 # <a name="目录">目录</a>
-+ [第六章 API说明](#第六章 API说明)
-    * [6.1 API接口列表](#6.1 API接口列表)
++ [第七章 API说明](#第七章 API说明)
+    * [7.1 API接口列表](#7.1 API接口列表)
         - [基础API](#基础API)
         - [MQTT功能API](#MQTT功能API)
         - [OTA功能API](#OTA功能API)
@@ -12,11 +12,11 @@
         - [高级版(旧版)网关场景API](#高级版(旧版)网关场景API)
         - [主子设备相关(老版本接口, 不推荐使用)](#主子设备相关(老版本接口, 不推荐使用))
         - [WiFi配网API](#WiFi配网API)
-    * [6.2 API接口清单](#6.2 API接口清单)
+    * [7.2 API接口清单](#7.2 API接口清单)
         - [基础版API清单](#基础版API清单)
         - [高级版单品场景API清单](#高级版单品场景API清单)
         - [高级版网关场景API清单](#高级版网关场景API清单)
-    * [6.3 基础版API接口详解](#6.3 基础版API接口详解)
+    * [7.3 基础版API接口详解](#7.3 基础版API接口详解)
         - [IOT_OpenLog](#IOT_OpenLog)
         - [IOT_CloseLog](#IOT_CloseLog)
         - [IOT_SetLogLevel](#IOT_SetLogLevel)
@@ -82,7 +82,7 @@
         - [IOT_Gateway_Publish](#IOT_Gateway_Publish)
         - [IOT_Gateway_RRPC_Register](#IOT_Gateway_RRPC_Register)
         - [IOT_Gateway_RRPC_Response](#IOT_Gateway_RRPC_Response)
-    * [6.3 高级版(新版)API接口详解](#6.3 高级版(新版)API接口详解)
+    * [7.3 高级版(新版)API接口详解](#7.3 高级版(新版)API接口详解)
         - [IOT_Linkkit_Open](#IOT_Linkkit_Open)
         - [IOT_Linkkit_Ioctl](#IOT_Linkkit_Ioctl)
         - [IOT_Linkkit_Connect](#IOT_Linkkit_Connect)
@@ -90,7 +90,7 @@
         - [IOT_Linkkit_Close](#IOT_Linkkit_Close)
         - [IOT_Linkkit_Post](#IOT_Linkkit_Post)
         - [IOT_Linkkit_TriggerEvent](#IOT_Linkkit_TriggerEvent)
-    * [6.4 高级版(旧版)单品API详解](#6.4 高级版(旧版)单品API详解)
+    * [7.4 高级版(旧版)单品API详解](#7.4 高级版(旧版)单品API详解)
         - [linkkit_answer_service](#linkkit_answer_service)
         - [linkkit_cota_init](#linkkit_cota_init)
         - [linkkit_dispatch](#linkkit_dispatch)
@@ -112,7 +112,7 @@
         - [linkkit_trigger_extended_info_operate](#linkkit_trigger_extended_info_operate)
         - [linkkit_try_leave](#linkkit_try_leave)
         - [linkkit_yield](#linkkit_yield)
-    * [6.5 高级版(旧版)网关API详解](#6.5 高级版(旧版)网关API详解)
+    * [7.5 高级版(旧版)网关API详解](#7.5 高级版(旧版)网关API详解)
         - [linkkit_gateway_delete_extinfos](#linkkit_gateway_delete_extinfos)
         - [linkkit_gateway_exit](#linkkit_gateway_exit)
         - [linkkit_gateway_fota_init](#linkkit_gateway_fota_init)
@@ -139,7 +139,7 @@
         - [linkkit_gateway_trigger_event_json_sync](#linkkit_gateway_trigger_event_json_sync)
 
 
-# <a name="第六章 API说明">第六章 API说明</a>
+# <a name="第七章 API说明">第七章 API说明</a>
 
 > 本节说明 C-SDK 向客户提供的功能和对应的API, 用于让客户编写业务逻辑. 另外模组商/芯片商封装AT命令时, 也是基于这些API的
 >
@@ -147,7 +147,7 @@
 >>
 >> 如何使用这些API编写应用逻辑, 以代码 `examples/*/*.c` 的示例程序为准
 
-## <a name="6.1 API接口列表">6.1 API接口列表</a>
+## <a name="7.1 API接口列表">7.1 API接口列表</a>
 
 ### <a name="基础API">基础API</a>
 
@@ -159,7 +159,7 @@
 | [IOT_DumpMemoryStats](#IOT_DumpMemoryStats)     | 调试函数, 打印内存的使用统计情况, 入参为1-5, 数字越大, 打印越详细
 | [IOT_Ioctl](#IOT_Ioctl)                         | 设置SDK运行时可配置选项, 详情见API注释
 
-用户可通过`IOT_Ioctl()`配置是否使用一型一密功能, 详细内容可查看 [第七章 典型场景示例](#第七章 典型场景示例) 第3节
+用户可通过`IOT_Ioctl()`配置是否使用一型一密功能, 详细内容可查看 [第五章 典型场景示例](#第五章 典型场景示例)
 
 ### <a name="MQTT功能API">MQTT功能API</a>
 
@@ -521,7 +521,7 @@ void user_post_event(void)
 
 1. 用户只需要调用`linkkit_start()`便可以完成linkkit的初始化, 并与云端建立连接
 ---
-用户可配置是否从云端拉取TSL, 详细内容可查看 [第七章 典型场景示例](#第七章 典型场景示例) 第2节
+用户可配置是否从云端拉取TSL, 详细内容可查看 [第五章 典型场景示例](#第五章 典型场景示例)
 
 ```
     int get_tsl_from_cloud = 0;                        /* the param of whether it is get tsl from cloud */
@@ -676,7 +676,7 @@ int trigger_event(sample_context_t *sample)
 WiFi配网相关API说明请查看[WiFi设备端开发指南](https://living.aliyun.com/doc#wifi.html)。
 
 
-## <a name="6.2 API接口清单">6.2 API接口清单</a>
+## <a name="7.2 API接口清单">7.2 API接口清单</a>
 如下列出当前SDK代码提供的所有面向用户的API函数:
 
 ### <a name="基础版API清单">基础版API清单</a>
@@ -814,7 +814,7 @@ WiFi配网相关API说明请查看[WiFi设备端开发指南](https://living.ali
     23  linkkit_gateway_trigger_event_json
     24  linkkit_gateway_trigger_event_json_sync
 
-## <a name="6.3 基础版API接口详解">6.3 基础版API接口详解</a>
+## <a name="7.3 基础版API接口详解">7.3 基础版API接口详解</a>
 ### <a name="IOT_OpenLog">IOT_OpenLog</a>
 
 原型
@@ -2986,7 +2986,7 @@ int IOT_Gateway_RRPC_Response(void* handle,
 
 -----
 
-## <a name="6.3 高级版(新版)API接口详解">6.3 高级版(新版)API接口详解</a>
+## <a name="7.3 高级版(新版)API接口详解">7.3 高级版(新版)API接口详解</a>
 ### <a name="IOT_Linkkit_Open">IOT_Linkkit_Open</a>
 
 原型
@@ -3329,7 +3329,7 @@ int IOT_Linkkit_TriggerEvent(int devid, char *eventid, int eventid_len, char *pa
 
 -----
 
-## <a name="6.4 高级版(旧版)单品API详解">6.4 高级版(旧版)单品API详解</a>
+## <a name="7.4 高级版(旧版)单品API详解">7.4 高级版(旧版)单品API详解</a>
 
 > 本节介绍的API适用于您的设备不具有对子设备的管理能力的场景, 参看 [单品](#单品) 的名词解释部分
 
@@ -4024,7 +4024,7 @@ int deprecated linkkit_yield(int timeout_ms);
 
 -----
 
-## <a name="6.5 高级版(旧版)网关API详解">6.5 高级版(旧版)网关API详解</a>
+## <a name="7.5 高级版(旧版)网关API详解">7.5 高级版(旧版)网关API详解</a>
 
 > 本节介绍的API适用于您的设备具有对子设备的管理能力的场景, 参看 [网关](#网关) 的名词解释部分
 

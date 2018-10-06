@@ -1,7 +1,7 @@
 # <a name="目录">目录</a>
-+ [第五章 HAL说明](#第五章 HAL说明)
-    * [5.1 设备端C-SDK分层](#5.1 设备端C-SDK分层)
-    * [5.2 HAL层接口列表](#5.2 HAL层接口列表)
++ [第六章 HAL说明](#第六章 HAL说明)
+    * [6.1 设备端C-SDK分层](#6.1 设备端C-SDK分层)
+    * [6.2 HAL层接口列表](#6.2 HAL层接口列表)
         - [全部接口列表](#全部接口列表)
         - [基础相关](#基础相关)
         - [多线程相关](#多线程相关)
@@ -12,7 +12,7 @@
         - [OTA功能相关](#OTA功能相关)
         - [本地定时任务功能相关](#本地定时任务功能相关)
         - [WIFI配网功能相关](#WIFI配网功能相关)
-    * [5.3 HAL层接口详解](#5.3 HAL层接口详解)
+    * [6.3 HAL层接口详解](#6.3 HAL层接口详解)
         - [HAL_Aes128_Cbc_Decrypt](#HAL_Aes128_Cbc_Decrypt)
         - [HAL_Aes128_Cbc_Encrypt](#HAL_Aes128_Cbc_Encrypt)
         - [HAL_Aes128_Cfb_Decrypt](#HAL_Aes128_Cfb_Decrypt)
@@ -118,9 +118,9 @@
         - [HAL_Wifi_Send_80211_Raw_Frame](#HAL_Wifi_Send_80211_Raw_Frame)
 
 
-# <a name="第五章 HAL说明">第五章 HAL说明</a>
+# <a name="第六章 HAL说明">第六章 HAL说明</a>
 
-## <a name="5.1 设备端C-SDK分层">5.1 设备端C-SDK分层</a>
+## <a name="6.1 设备端C-SDK分层">6.1 设备端C-SDK分层</a>
 
         +---------------------------+
         |                           |
@@ -176,7 +176,7 @@
 + 这些`include/imports`目录下的子文件, 都被`include/iot_import.h`包含
 + 这个部分的函数声明, 对应在`src/ref-impl/hal/os/ubuntu/`有提供一份`Ubuntu`桌面系统上的参考实现, 会被编译成`output/release/lib/libiot_hal.a`
 
-## <a name="5.2 HAL层接口列表">5.2 HAL层接口列表</a>
+## <a name="6.2 HAL层接口列表">6.2 HAL层接口列表</a>
 ### <a name="全部接口列表">全部接口列表</a>
 以下命令可以列出所有跨平台移植时需要实现的HAL层接口
 
@@ -472,7 +472,7 @@
 | HAL_Wifi_Scan                                           | 启动一次WiFi的空中扫描, 该API是一个阻塞操作, 所有的AP列表收集完成后, 通过回调函数告知C-SDK
 | HAL_Wifi_Send_80211_Raw_Frame                           | 在当前信道(channel)上以基本数据速率(1Mbps)发送裸的802.11帧(raw 802.11 frame)
 
-## <a name="5.3 HAL层接口详解">5.3 HAL层接口详解</a>
+## <a name="6.3 HAL层接口详解">6.3 HAL层接口详解</a>
 ### <a name="HAL_Aes128_Cbc_Decrypt">HAL_Aes128_Cbc_Decrypt</a>
 
 原型
