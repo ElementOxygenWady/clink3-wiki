@@ -132,34 +132,34 @@
 
 # <a name="MQTT功能API">MQTT功能API</a>
 
-| 函数名                                                      | 说明
-|-------------------------------------------------------------|---------------------------------------------------------
-| [IOT_SetupConnInfo](#IOT_SetupConnInfo)                     | MQTT连接前的准备, 基于`DeviceName + DeviceSecret + ProductKey`产生MQTT连接的用户名和密码等
-| [IOT_MQTT_CheckStateNormal](#IOT_MQTT_CheckStateNormal)     | MQTT连接后, 调用此函数检查长连接是否正常
-| [IOT_MQTT_Construct](#IOT_MQTT_Construct)                   | MQTT实例的构造函数, 入参为`iotx_mqtt_param_t`结构体, 连接MQTT服务器, 并返回被创建句柄
-| [IOT_MQTT_Destroy](#IOT_MQTT_Destroy)                       | MQTT实例的摧毁函数, 入参为 [IOT_MQTT_Construct](#IOT_MQTT_Construct) 创建的句柄
-| [IOT_MQTT_Publish](#IOT_MQTT_Publish)                       | MQTT会话阶段, 组织一个完整的`MQTT Publish`报文, 向服务端发送消息发布报文
-| [IOT_MQTT_Publish_Simple](#IOT_MQTT_Publish_Simple)         | MQTT会话阶段, 组织一个完整的`MQTT Publish`报文, 向服务端发送消息发布报文,参数中不含结构体等复杂数据类型
-| [IOT_MQTT_Subscribe](#IOT_MQTT_Subscribe)                   | MQTT会话阶段, 组织一个完整的`MQTT Subscribe`报文, 向服务端发送订阅请求
-| [IOT_MQTT_Subscribe_Sync](#IOT_MQTT_Subscribe_Sync)         | MQTT会话阶段, 组织一个完整的`MQTT Subscribe`报文, 向服务端发送订阅请求,并等待应答
-| [IOT_MQTT_Unsubscribe](#IOT_MQTT_Unsubscribe)               | MQTT会话阶段, 组织一个完整的`MQTT UnSubscribe`报文, 向服务端发送取消订阅请求
-| [IOT_MQTT_Yield](#IOT_MQTT_Yield)                           | MQTT会话阶段, MQTT主循环函数, 内含了心跳的维持, 服务器下行报文的收取等
+| 函数名                                                                                                                                                      | 说明
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------
+| [IOT_SetupConnInfo](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_SetupConnInfo)                    | MQTT连接前的准备, 基于`DeviceName + DeviceSecret + ProductKey`产生MQTT连接的用户名和密码等
+| [IOT_MQTT_CheckStateNormal](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_CheckStateNormal)    | MQTT连接后, 调用此函数检查长连接是否正常
+| [IOT_MQTT_Construct](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Construct)                  | MQTT实例的构造函数, 入参为`iotx_mqtt_param_t`结构体, 连接MQTT服务器, 并返回被创建句柄
+| [IOT_MQTT_Destroy](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Destroy)                      | MQTT实例的摧毁函数, 入参为 [IOT_MQTT_Construct](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Construct) 创建的句柄
+| [IOT_MQTT_Publish](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Publish)                      | MQTT会话阶段, 组织一个完整的`MQTT Publish`报文, 向服务端发送消息发布报文
+| [IOT_MQTT_Publish_Simple](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Publish_Simple)        | MQTT会话阶段, 组织一个完整的`MQTT Publish`报文, 向服务端发送消息发布报文,参数中不含结构体等复杂数据类型
+| [IOT_MQTT_Subscribe](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Subscribe)                  | MQTT会话阶段, 组织一个完整的`MQTT Subscribe`报文, 向服务端发送订阅请求
+| [IOT_MQTT_Subscribe_Sync](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Subscribe_Sync)        | MQTT会话阶段, 组织一个完整的`MQTT Subscribe`报文, 向服务端发送订阅请求,并等待应答
+| [IOT_MQTT_Unsubscribe](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Unsubscribe)              | MQTT会话阶段, 组织一个完整的`MQTT UnSubscribe`报文, 向服务端发送取消订阅请求
+| [IOT_MQTT_Yield](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Yield)                          | MQTT会话阶段, MQTT主循环函数, 内含了心跳的维持, 服务器下行报文的收取等
 
 
 
 # <a name="需要实现的HAL API">需要实现的HAL API</a>
 **以下函数为可选实现, 如果希望SDK提供MQTT通道功能, 则需要用户对接**
 
-| 函数名                                      | 说明
-|---------------------------------------------|-------------------------------------------------------------------------
-| [HAL_SSL_Destroy](#HAL_SSL_Destroy)         | 销毁一个TLS连接, 用于MQTT功能, HTTPS功能
-| [HAL_SSL_Establish](#HAL_SSL_Establish)     | 建立一个TLS连接, 用于MQTT功能, HTTPS功能
-| [HAL_SSL_Read](#HAL_SSL_Read)               | 从一个TLS连接中读数据, 用于MQTT功能, HTTPS功能
-| [HAL_SSL_Write](#HAL_SSL_Write)             | 向一个TLS连接中写数据, 用于MQTT功能, HTTPS功能
-| [HAL_TCP_Destroy](#HAL_TCP_Destroy)         | 销毁一个TLS连接, 用于MQTT功能, HTTPS功能
-| [HAL_TCP_Establish](#HAL_TCP_Establish)     | 建立一个TCP连接, 包含了域名解析的动作和TCP连接的建立
-| [HAL_TCP_Read](#HAL_TCP_Read)               | 在指定时间内, 从TCP连接读取流数据, 并返回读到的字节数
-| [HAL_TCP_Write](#HAL_TCP_Write)             | 在指定时间内, 向TCP连接发送流数据, 并返回发送的字节数
-| [HAL_Random](#HAL_Random)                   | 随机数函数, 接受一个无符号数作为范围, 返回0到该数值范围内的随机无符号数
-| [HAL_Srandom](#HAL_Srandom)                 | 随机数播种函数, 使 [HAL_Random](#HAL_Random) 的返回值每个执行序列各不相同, 类似`srand`
+| 函数名                                                                                                                                      | 说明
+|---------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------
+| [HAL_SSL_Destroy](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_SSL_Destroy)        | 销毁一个TLS连接, 用于MQTT功能, HTTPS功能
+| [HAL_SSL_Establish](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_SSL_Establish)    | 建立一个TLS连接, 用于MQTT功能, HTTPS功能
+| [HAL_SSL_Read](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_SSL_Read)              | 从一个TLS连接中读数据, 用于MQTT功能, HTTPS功能
+| [HAL_SSL_Write](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_SSL_Write)            | 向一个TLS连接中写数据, 用于MQTT功能, HTTPS功能
+| [HAL_TCP_Destroy](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_TCP_Destroy)        | 销毁一个TLS连接, 用于MQTT功能, HTTPS功能
+| [HAL_TCP_Establish](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_TCP_Establish)    | 建立一个TCP连接, 包含了域名解析的动作和TCP连接的建立
+| [HAL_TCP_Read](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_TCP_Read)              | 在指定时间内, 从TCP连接读取流数据, 并返回读到的字节数
+| [HAL_TCP_Write](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_TCP_Write)            | 在指定时间内, 向TCP连接发送流数据, 并返回发送的字节数
+| [HAL_Random](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_Random)                  | 随机数函数, 接受一个无符号数作为范围, 返回0到该数值范围内的随机无符号数
+| [HAL_Srandom](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_Srandom)                | 随机数播种函数, 使 [HAL_Random](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_Random) 的返回值每个执行序列各不相同, 类似`srand`
 
