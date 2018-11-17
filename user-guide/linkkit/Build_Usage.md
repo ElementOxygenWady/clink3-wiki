@@ -1,50 +1,51 @@
 # <a name="目录">目录</a>
-+ [第四章 构建配置系统](#第四章 构建配置系统)
-    * [4.1 基于 make 的编译系统详解](#4.1 基于 make 的编译系统详解)
++ [构建配置系统](#构建配置系统)
+    * [基于 make 的编译系统详解](#基于 make 的编译系统详解)
         - [常用命令](#常用命令)
         - [输出说明](#输出说明)
         - [组成部分](#组成部分)
         - [调试方式](#调试方式)
-    * [4.2 config.xxx.yyy 文件详解](#4.2 config.xxx.yyy 文件详解)
+    * [config.xxx.yyy 文件详解](#config.xxx.yyy 文件详解)
         - [交叉编译相关](#交叉编译相关)
         - [目录文件相关](#目录文件相关)
         - [资源耗费相关](#资源耗费相关)
-    * [4.3 典型产品的 make.settings 示例](#4.3 典型产品的 make.settings 示例)
+    * [用 make.settings 文件裁剪 C-SDK 详解](#用 make.settings 文件裁剪 C-SDK 详解)
+    * [典型产品的 make.settings 示例](#典型产品的 make.settings 示例)
         - [不具有网关功能的WiFi模组](#不具有网关功能的WiFi模组)
         - [具有网关功能的WiFi模组](#具有网关功能的WiFi模组)
-        - [GSM模组](#GSM模组)
+        - [蜂窝网模组](#蜂窝网模组)
         - [基于Linux系统的网关](#基于Linux系统的网关)
-    * [4.4 用 make.settings 文件裁剪 C-SDK 详解](#4.4 用 make.settings 文件裁剪 C-SDK 详解)
-    * [4.5 基于 make 编译到主机例程](#4.5 基于 make 编译到主机例程)
-    * [4.6 基于 make 交叉编译到嵌入式平台](#4.6 基于 make 交叉编译到嵌入式平台)
-    * [4.7 在 Ubuntu 上使用 cmake 的编译示例](#4.7 在 Ubuntu 上使用 cmake 的编译示例)
+    * [基于 make 编译到主机例程](#基于 make 编译到主机例程)
+    * [基于 make 交叉编译到嵌入式平台](#基于 make 交叉编译到嵌入式平台)
+    * [在 Ubuntu 上使用 cmake 的编译示例](#在 Ubuntu 上使用 cmake 的编译示例)
+    * [在 Windows 上使用 cmake 和 Visual Studio 2015 的编译示例](#在 Windows 上使用 cmake 和 Visual Studio 2015 的编译示例)
 
-# <a name="第四章 构建配置系统">第四章 构建配置系统</a>
+# <a name="构建配置系统">构建配置系统</a>
 
 目前设备端C-SDK的构建配置系统支持以下的编译方式
 ---
 + 在`Linux`上以`GNU Make` + `各种工具链`编译, 产生`各种嵌入式目标架构`的SDK, 本章将演示
-    * 以`GNU Make` + `gcc`, 产生适用于 `64位Linux` 的SDK以及可执行例程
-    * 以`GNU Make` + `gcc`, 产生适用于 `32位Linux` 的SDK以及可执行例程
-    * 以`GNU Make` + `i686-w64-mingw32-gcc`, 产生适用于 `Windows` 平台的SDK以及可执行例程
-    * 以`GNU Make` + `arm-none-eabi-gcc`, 产生适用于 `MK3060/MK3080` 嵌入式平台的SDK
-    * 以`GNU Make` + `xtensa-lx106-elf-gcc`, 产生适用于 `ESP8266` 嵌入式平台的SDK
-    * 以`GNU Make` + `arm-linux-gnueabihf-gcc`, 产生适用于 `arm-linux` 嵌入式平台的SDK
+    * 以GNU Make + gcc, 产生适用于 64位Linux 的SDK以及可执行例程
+    * 以GNU Make + gcc, 产生适用于 32位Linux 的SDK以及可执行例程
+    * 以GNU Make + i686-w64-mingw32-gcc, 产生适用于 Windows 平台的SDK以及可执行例程
+    * 以GNU Make + arm-none-eabi-gcc, 产生适用于 MK3060/MK3080 嵌入式平台的SDK
+    * 以GNU Make + xtensa-lx106-elf-gcc, 产生适用于 ESP8266 嵌入式平台的SDK
+    * 以GNU Make + arm-linux-gnueabihf-gcc, 产生适用于 arm-linux 嵌入式平台的SDK
 
 + 在`Linux`上以`cmake` + `各种工具链`编译, 产生`各种目标架构`的SDK, 本章将演示
-    * 以`cmake` + `gcc`, 产生适用于 `64位Linux` 的SDK
-    * 以`cmake` + `gcc`, 产生适用于 `32位Linux` 的SDK
-    * 以`cmake` + `arm-linux-gnueabihf-gcc`, 产生适用于 `arm-linux` 嵌入式平台的SDK
-    * 以`cmake` + `i686-w64-mingw32-gcc`, 产生适用于 `Windows` 平台的SDK
+    * 以cmake + gcc, 产生适用于 64位Linux 的SDK
+    * 以cmake + gcc, 产生适用于 32位Linux 的SDK
+    * 以cmake + arm-linux-gnueabihf-gcc, 产生适用于 arm-linux 嵌入式平台的SDK
+    * 以cmake + i686-w64-mingw32-gcc, 产生适用于 Windows 平台的SDK
+
++ 在Windows上以VS Code 2015编译, 产生适用于 Windows 平台的SDK
 
 未来可能支持以下的编译方式
 ---
 + 在`Windows`上以`Keil IDE`编译, 产生适用于 `ARM` 嵌入式平台的SDK
 + 在`Windows`上以`IAR IDE`编译, 产生适用于 `ARM` 嵌入式平台的SDK
 + 在`Windows`上以`cmake` + `mingw32`编译, 产生适用于 `Windows` 平台的SDK
-+ 在`Windows`上以`VS Code 2017`编译, 产生适用于 `Windows` 平台的SDK
 + 在`Windows`上以`QT Creator`编译, 产生适用于 `Windows` 平台的SDK
-+ 在`Windows`上以`Visual Studio 2017`编译, 产生适用于 `Windows` 平台的SDK
 
 目前设备端C-SDK的构建配置系统的配置/裁剪接口是由以下三者组合提供
 ---
@@ -58,7 +59,7 @@
 >
 > 最后介绍了跨平台的 cmake 编译系统, 它接受配置的地方仍是 make.settings 文件, 但可适用于更多的开发环境
 
-## <a name="4.1 基于 make 的编译系统详解">4.1 基于 make 的编译系统详解</a>
+## <a name="基于 make 的编译系统详解">基于 make 的编译系统详解</a>
 
 ### <a name="常用命令">常用命令</a>
 
@@ -69,6 +70,7 @@
 | `make env`          | **显示当前编译配置, 非常有用, 比如可显示交叉编译链, 编译CFLAGS等**
 | `make reconfig`     | **弹出多平台选择菜单, 用户可按数字键选择, 然后根据相应的硬件平台配置开始编译**
 | `make config`       | **显示当前被选择的平台配置文件**
+| `make menuconfig`   | **以图形化的方式编辑和生成功能配置文件make.settings**
 | `make help`         | **打印帮助文本**
 | `make <directory>`  | **单独编译被<directory>指定的目录, 或者叫构建单元**
 | `make test`         | **运行指定的测试集程序, 统计显示测试例的通过率和源代码的覆盖率**
@@ -107,8 +109,8 @@ output/release/include
 ---
 | 产物文件名      | 说明
 |-----------------|-------------------------------------------------------------------------------------------------
-| `iot_import.h`  | 列出所有需要C-SDK的用户提供给SDK的底层支撑接口, 详见 [第六章 HAL说明](#第六章 HAL说明) 部分
-| `iot_export.h`  | 列出所有C-SDK向用户提供的底层API编程接口, 详见 [第七章 API说明](#第七章 API说明) 部分
+| `iot_import.h`  | 列出所有需要C-SDK的用户提供给SDK的底层支撑接口
+| `iot_export.h`  | 列出所有C-SDK向用户提供的底层API编程接口
 
 output/release/bin
 ---
@@ -180,7 +182,7 @@ output/release/bin
 + 可以用`make foo/bar`单独对`foo/bar`进行构建, 不过, 这可能需要先执行`make reconfig`
 + 可以进入`.O/foo/bar`路径, 看到完整的编译临时目录, 有makefile和全部源码, 所以在这里执行`make`, 效果和`make foo/bar`等同
 
-## <a name="4.2 config.xxx.yyy 文件详解">4.2 config.xxx.yyy 文件详解</a>
+## <a name="config.xxx.yyy 文件详解">config.xxx.yyy 文件详解</a>
 
 ### <a name="交叉编译相关">交叉编译相关</a>
 
@@ -236,76 +238,22 @@ output/release/bin
 + 可配置的值为整数, 建议`512`到`2048`, 过小会导致上行报文不够空间组装, 过大会导致设备上RAM资源消耗增大
 + 起作用的源码目录在 `src/services/linkkit`
 
-## <a name="4.3 典型产品的 make.settings 示例">4.3 典型产品的 make.settings 示例</a>
-> 解压之后, 打开功能配置文件 `make.settings`, 根据需要编辑配置项, 使用不同的编译配置, 编译输出的SDK内容以及examples都有所不同
->
-> 以下针对C-SDK的客户中, 较多出现的几种产品形态, 给出典型的配置文件, **并在注释中说明为什么这样配置**
+## <a name="用 make.settings 文件裁剪 C-SDK 详解">用 make.settings 文件裁剪 C-SDK 详解</a>
+> 对V2.3.0以上版本, 可以用 `make menuconfig` 命令图形化的编辑 `make.settings` 文件
 
-注: 2.2.1版本中若要使用WiFi配网功能, 请将 `FEATURE_WIFI_AWSS_ENABLED = y` 一行放置为 make.setting 的第一个配置项, 否则会工作异常
+![image](https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/make_menuconfig.png)
 
-### <a name="不具有网关功能的WiFi模组">不具有网关功能的WiFi模组</a>
-这种场景下客户使用WiFi上行的MCU模组, 比如乐鑫ESP8266, 庆科MK3060等.
-
-这种场景下, 设备和阿里云直接的连接只用于它自己和云端的通信, 不会用于代理给其它嵌入式设备做消息上报和指令下发或固件升级等.
-
-    FEATURE_MQTT_COMM_ENABLED    = y          # 一般WiFi模组都有固定供电, 所以都采用MQTT的方式上云
-    FEATURE_MQTT_DIRECT          = y          # MQTT直连效率更高, 该选项只在部分海外设备上才会关闭
-    FEATURE_OTA_ENABLED          = y          # 一般WiFi模组的客户, 都会使用阿里提供的固件升级服务
-    FEATURE_SDK_ENHANCE          = y          # 一般WiFi模组片上资源充足, 可以容纳高级版, 所以打开
-    FEATURE_ENHANCED_GATEWAY     = n          # 如上述说明, 不具备高级版网关功能的场景, 当然关闭这个选项
-    FEATURE_WIFI_AWSS_ENABLED    = y          # 一般WiFi模组的客户, 都会使用阿里的配网app或sdk, 告诉模组SSID和密码
-    FEATURE_SUPPORT_TLS          = y          # 绝大多数的客户都是用标准的TLS协议连接公网
-    FEATURE_SUPPORT_ITLS         = n          # 阿里私有的iTLS标准和TLS是互斥的, 上面把TLS打开了, 这里必须关闭
-
-### <a name="具有网关功能的WiFi模组">具有网关功能的WiFi模组</a>
-这种场景下客户使用WiFi上行的MCU模组, 比如庆科MK3080等.
-
-这种场景下, 设备和阿里云直接的连接不仅用于它自己和云端的通信, 还会用于代理给其它嵌入式设备做消息上报和指令下发或固件升级等.
-
-    FEATURE_MQTT_COMM_ENABLED    = y          # 一般WiFi模组都有固定供电, 所以都采用MQTT的方式上云
-    FEATURE_MQTT_DIRECT          = y          # MQTT直连效率更高, 该选项只在部分海外设备上才会关闭
-    FEATURE_OTA_ENABLED          = y          # 一般WiFi模组的客户, 都会使用阿里提供的固件升级服务
-    FEATURE_SDK_ENHANCE          = y          # 一般WiFi模组片上资源充足, 可以容纳高级版, 所以打开
-    FEATURE_ENHANCED_GATEWAY     = y          # 如上述说明, 要具备高级版网关功能的场景, 当然打开这个选项
-    FEATURE_WIFI_AWSS_ENABLED    = y          # 一般WiFi模组的客户, 都会使用阿里的配网app或sdk, 告诉模组SSID和密码
-    FEATURE_SUPPORT_TLS          = y          # 绝大多数的客户都是用标准的TLS协议连接公网
-    FEATURE_SUPPORT_ITLS         = n          # 阿里私有的iTLS标准和TLS是互斥的, 上面把TLS打开了, 这里必须关闭
-
-### <a name="GSM模组">GSM模组</a>
-这种场景下设备直接连接2G网络
-
-    FEATURE_MQTT_COMM_ENABLED    = y          # 虽然CoAP更省电, 但不能做云端消息的及时下推, 所以目前GSM模组仍主要用MQTT的方式上云
-    FEATURE_MQTT_DIRECT          = y          # MQTT直连效率更高, 对网络远慢于WiFi的GSM模组而言, 直连开关必须打开
-    FEATURE_OTA_ENABLED          = y          # 一般GSM模组的客户, 也会使用阿里提供的固件升级服务
-    FEATURE_SDK_ENHANCE          = n          # GSM模组网速很慢, 资源较少, 所以这种模组的客户一般不会用高级版, 而只需要基础版的MQTT上云
-    FEATURE_ENHANCED_GATEWAY     = n          # GSM模组一般不集成高级版(物模型)功能, 并且它也不会下联其它嵌入式设备分享MQTT上云通道
-    FEATURE_WIFI_AWSS_ENABLED    = n          # GSM模组不通过WiFi协议连接公网, 因此关闭WiFi配网的开关
-    FEATURE_SUPPORT_TLS          = y          # 绝大多数的客户都是用标准的TLS协议连接公网, 对GSM模组, 甚至可能连这个选项都关闭
-    FEATURE_SUPPORT_ITLS         = n          # GSM模组有不少是做不加密通信(FEATURE_SUPPORT_TLS = n), 有加密也是走TLS, 所以ITLS都是关闭的
-
-### <a name="基于Linux系统的网关">基于Linux系统的网关</a>
-比如家庭网关, 工业网关等, 一般是相对MCU模组来说, 性能强大的多, 资源丰富的多的设备
-
-    FEATURE_MQTT_COMM_ENABLED    = y          # 一般Linux网关都有固定供电, 所以都采用MQTT的方式上云
-    FEATURE_MQTT_DIRECT          = y          # MQTT直连效率更高, 该选项只在部分海外设备上才会关闭
-    FEATURE_OTA_ENABLED          = y          # 一般Linux网关的客户, 都会使用阿里提供的固件升级服务
-    FEATURE_SDK_ENHANCE          = y          # 一般Linux网关片上资源充足, 可以容纳高级版, 所以打开
-    FEATURE_ENHANCED_GATEWAY     = y          # 如上述说明, 要具备高级版网关功能的场景, 当然打开这个选项
-    FEATURE_WIFI_AWSS_ENABLED    = y          # 取决于Linux网关是否用WiFi做上行并使用阿里的配网app/sdk, 如果皆是, 则打开这个选项
-    FEATURE_SUPPORT_TLS          = y          # 绝大多数的客户都是用标准的TLS协议连接公网
-    FEATURE_SUPPORT_ITLS         = n          # 阿里私有的iTLS标准和TLS是互斥的, 上面把TLS打开了, 这里必须关闭
-
-## <a name="4.4 用 make.settings 文件裁剪 C-SDK 详解">4.4 用 make.settings 文件裁剪 C-SDK 详解</a>
 > 解压之后, 打开功能配置文件 `make.settings`, 根据需要编辑配置项, 使用不同的编译配置, 编译输出的SDK内容以及examples都有所不同
 
 默认的配置状态为
 ---
+
     FEATURE_MQTT_COMM_ENABLED    = y          # 是否打开MQTT通道的总开关
     FEATURE_MQTT_DIRECT          = y          # 是否打开MQTT直连的分开关
     FEATURE_OTA_ENABLED          = y          # 是否打开固件升级功能的分开关
-    FEATURE_SDK_ENHANCE          = y          # 是否打开高级版功能的总开关
-    FEATURE_ENHANCED_GATEWAY     = n          # 是否产生高级版网关SDK的分开关
-    FEATURE_WIFI_AWSS_ENABLED    = y          # 是否打开WiFi配网功能的开关
+    FEATURE_DEVICE_MODEL_ENABLED = y          # 是否打开高级版功能的总开关
+    FEATURE_DEVICE_MODEL_GATEWAY = n          # 是否产生高级版网关SDK的分开关
+    FEATURE_WIFI_PROVISION_ENABLED = y        # 是否打开WiFi配网功能的开关
     FEATURE_SUPPORT_TLS          = y          # 选择TLS安全连接的开关, 此开关与iTLS开关互斥
     FEATURE_SUPPORT_ITLS         = n          # 选择iTLS安全连接的开关, 此开关与TLS开关互斥, 使能ID2时需打开此开关
 
@@ -314,7 +262,7 @@ output/release/bin
 #### <a name="FEATURE_ALCS_ENABLED">FEATURE_ALCS_ENABLED</a>
 + 本地通信功能开关, 所谓本地通信是指搭载了C-SDK的嵌入式设备和手机app之间的局域网直接通信, 而不经过因特网和阿里云服务器中转
 + 可取的值是 `y` 或者 `n`
-+ 它不依赖其它的 `FEATURE_XXX`
++ 它依赖其它的 `FEATURE_DEVICE_MODEL_ENABLED` 的值是 `y`
 + 它不是其它 `FEATURE_XXX` 的依赖之一
 + 对应的源码目录是 `src/protocol/alcs`
 
@@ -325,24 +273,28 @@ output/release/bin
 + 它不是其它 `FEATURE_XXX` 的依赖之一
 + 对应的源码目录是 `src/protocol/coap`
 
-#### <a name="FEATURE_COAP_DTLS_SUPPORT">FEATURE_COAP_DTLS_SUPPORT</a>
-+ CoAP上云DTLS开关, 配置设备和阿里云服务器之间使用 `CoAP` 协议进行连接和交互时, 是否要以 `DTLS` 方式进行身份认证和报文加解密
-+ 可取的值是 `y` 或者 `n`
-+ 它依赖于 `FEATURE_COAP_COMM_ENABLED` 的值是 `y`
-+ 它不是其它 `FEATURE_XXX` 的依赖之一
-+ 对应的源码目录是 `src/protocol/coap`
-
 #### <a name="FEATURE_DEPRECATED_LINKKIT">FEATURE_DEPRECATED_LINKKIT</a>
 + 高级版接口风格的开关, 配置进行高级版物模型相关的编程时, C-SDK是提供 `linkkit_xxx_yyy()` 风格的旧版接口, 还是提供 `IOT_Linkkit_XXX()` 风格的新版接口
 + 可取的值是 `y` 或者 `n`
-+ 它依赖于 `FEATURE_SDK_ENHANCE` 的值是 `y`
++ 它依赖于 `FEATURE_DEVICE_MODEL_ENABLED` 的值是 `y`
 + 它不是其它 `FEATURE_XXX` 的依赖之一
 + 对应的源码目录是 `src/sdk-impl`
 
-#### <a name="FEATURE_ENHANCED_GATEWAY">FEATURE_ENHANCED_GATEWAY</a>
+#### <a name="FEATURE_DEV_BIND_ENABLED">FEATURE_DEV_BIND_ENABLED</a>
+> V2.3.0之后的版本才新增的这个开关
+
++ 绑定功能的开关, 只有用C-SDK连接飞燕平台的客户才需要关注并打开它, 用于使能设备被飞燕的公版app控制, 可绑定设备和用户账号
++ 可取的值是 `y` 或者 `n`
++ 它依赖其它的 `FEATURE_DEVICE_MODEL_ENABLED` 的值是 `y`
++ 它不是其它 `FEATURE_XXX` 的依赖之一
++ 对应的源码目录是 `src/services/linkkit/dev_bind`
+
+#### <a name="FEATURE_DEVICE_MODEL_GATEWAY">FEATURE_DEVICE_MODEL_GATEWAY</a>
+> 在V2.3.0以前的版本中, 这个开关的曾用名是 `FEATURE_ENHANCED_GATEWAY`
+
 + 高级版网关能力的开关, 配置进行高级版物模型相关的编程时, C-SDK是提供 `linkkit_xxx_yyy()` 风格的单品接口, 还是提供 `linkkit_gateway_xxx_yyy()` 风格的网关接口
 + 可取的值是 `y` 或者 `n`
-+ 它依赖于 `FEATURE_SDK_ENHANCE` 的值是 `y`
++ 它依赖于 `FEATURE_DEVICE_MODEL_ENABLED` 的值是 `y`
 + 它不是其它 `FEATURE_XXX` 的依赖之一
 + 对应的源码目录是 `src/services/linkkit/dm`
 
@@ -368,8 +320,8 @@ output/release/bin
     * FEATURE_MQTT_DIRECT
     * FEATURE_MQTT_SHADOW
     * FEATURE_SUBDEVICE_ENABLED
-    * FEATURE_WIFI_AWSS_ENABLED
-    * FEATURE_SDK_ENHANCE
+    * FEATURE_WIFI_PROVISION_ENABLED
+    * FEATURE_DEVICE_MODEL_ENABLED
 + 对应的源码目录是 `src/protocol/mqtt`
 
 #### <a name="FEATURE_MQTT_DIRECT">FEATURE_MQTT_DIRECT</a>
@@ -390,30 +342,15 @@ output/release/bin
 + 固件升级功能开关, 所谓固件升级是指设备从阿里云服务器上下载用户在IoT控制台中上传的固件文件功能
 + 可取的值是 `y` 或者 `n`
 + 它依赖于 `FEATURE_MQTT_COMM_ENABLED` 或者 `FEATURE_COAP_COMM_ENABLED` 的值是 `y`
-+ 它被以下 `FEATURE_XXX` 的依赖
-    * FEATURE_OTA_FETCH_CHANNEL
-    * FEATURE_OTA_SIGNAL_CHANNEL
-+ 对应的源码目录是 `src/services/uOTA`
++ 对应的源码目录是 `src/services/ota`
 
-#### <a name="FEATURE_OTA_FETCH_CHANNEL">FEATURE_OTA_FETCH_CHANNEL</a>
-+ 固件升级中文件下载的通道配置, 所谓文件下载通道是指设备从阿里云服务器下载固件文件的数据通道
-+ 可取的值是 `HTTP` 或者 `COAP`
-+ 它在被配置为 `COAP` 的时候, 依赖于 `FEATURE_COAP_COMM_ENABLED` 的值是 `y`
-+ 它不是其它 `FEATURE_XXX` 的依赖之一
-+ 对应的源码目录是 `src/services/uOTA`
+#### <a name="FEATURE_DEVICE_MODEL_ENABLED">FEATURE_DEVICE_MODEL_ENABLED</a>
+> 在V2.3.0以前的版本中, 这个开关的曾用名是 `FEATURE_SDK_ENHANCE`
 
-#### <a name="FEATURE_OTA_SIGNAL_CHANNEL">FEATURE_OTA_SIGNAL_CHANNEL</a>
-+ 固件升级中推送消息的通道配置, 所谓推送消息通道是指设备从阿里云服务器接收到有新固件需要下载的控制通道
-+ 可取的值是 `MQTT` 或者 `COAP`
-+ 它依赖于 `FEATURE_MQTT_COMM_ENABLED` 或者 `FEATURE_COAP_COMM_ENABLED` 的值是 `y`
-+ 它不是其它 `FEATURE_XXX` 的依赖之一
-+ 对应的源码目录是 `src/services/uOTA`
-
-#### <a name="FEATURE_SDK_ENHANCE">FEATURE_SDK_ENHANCE</a>
 + 高级版物模型能力的功能开关, 所谓高级版物模型能力是指设备可使用基于服务/属性/事件三要素的Alink协议和服务端通信
 + 可取的值是 `y` 或者 `n`
 + 它依赖于 `FEATURE_MQTT_COMM_ENABLED` 的值是 `y`
-+ 它被 `FEATURE_ENHANCED_GATEWAY` 所依赖
++ 它被 `FEATURE_DEVICE_MODEL_GATEWAY` 所依赖
 + 对应的源码目录是 `src/services/linkkit`
 
 #### <a name="FEATURE_SUBDEVICE_ENABLED">FEATURE_SUBDEVICE_ENABLED</a>
@@ -431,14 +368,75 @@ output/release/bin
 + 它不是其它 `FEATURE_XXX` 的依赖之一
 + 对应的源码目录是 `src/ref-impl/hal`
 
-#### <a name="FEATURE_WIFI_AWSS_ENABLED">FEATURE_WIFI_AWSS_ENABLED</a>
+#### <a name="FEATURE_WIFI_PROVISION_ENABLED">FEATURE_WIFI_PROVISION_ENABLED</a>
+> 在V2.3.0以前的版本中, 这个开关的曾用名是 `FEATURE_WIFI_AWSS_ENABLED`
+
 + WiFi配网的功能开关, 所谓WiFi配网是阿里巴巴自研的一种从手机app发送WiFi网络的SSID和密码给设备端的通信协议
 + 可取的值是 `y` 或者 `n`
 + 它依赖于 `FEATURE_ALCS_ENABLED` 的值是 `y`
 + 它不是其它 `FEATURE_XXX` 的依赖之一
 + 对应的源码目录是 `src/services/awss`
 
-## <a name="4.5 基于 make 编译到主机例程">4.5 基于 make 编译到主机例程</a>
+## <a name="典型产品的 make.settings 示例">典型产品的 make.settings 示例</a>
+> 解压之后, 打开功能配置文件 `make.settings`, 根据需要编辑配置项, 使用不同的编译配置, 编译输出的SDK内容以及examples都有所不同
+>
+> 以下针对C-SDK的客户中, 较多出现的几种产品形态, 给出典型的配置文件, **并在注释中说明为什么这样配置**
+
+注: 2.2.1版本中若要使用WiFi配网功能, 请将 `FEATURE_WIFI_AWSS_ENABLED = y` 一行放置为 make.setting 的第一个配置项, 否则会工作异常
+
+### <a name="不具有网关功能的WiFi模组">不具有网关功能的WiFi模组</a>
+这种场景下客户使用WiFi上行的MCU模组, 比如乐鑫ESP8266, 庆科MK3060等.
+
+这种场景下, 设备和阿里云直接的连接只用于它自己和云端的通信, 不会用于代理给其它嵌入式设备做消息上报和指令下发或固件升级等.
+
+    FEATURE_MQTT_COMM_ENABLED    = y          # 一般WiFi模组都有固定供电, 所以都采用MQTT的方式上云
+    FEATURE_MQTT_DIRECT          = y          # MQTT直连效率更高, 该选项只在部分海外设备上才会关闭
+    FEATURE_OTA_ENABLED          = y          # 一般WiFi模组的客户, 都会使用阿里提供的固件升级服务
+    FEATURE_DEVICE_MODEL_ENABLED = y          # 一般WiFi模组片上资源充足, 可以容纳高级版, 所以打开
+    FEATURE_DEVICE_MODEL_GATEWAY = n          # 如上述说明, 不具备高级版网关功能的场景, 当然关闭这个选项
+    FEATURE_WIFI_PROVISION_ENABLED = y        # 一般WiFi模组的客户, 都会使用阿里的配网app或sdk, 告诉模组SSID和密码
+    FEATURE_SUPPORT_TLS          = y          # 绝大多数的客户都是用标准的TLS协议连接公网
+    FEATURE_SUPPORT_ITLS         = n          # 阿里私有的iTLS标准和TLS是互斥的, 上面把TLS打开了, 这里必须关闭
+
+### <a name="具有网关功能的WiFi模组">具有网关功能的WiFi模组</a>
+这种场景下客户使用WiFi上行的MCU模组, 比如庆科MK3080等.
+
+这种场景下, 设备和阿里云直接的连接不仅用于它自己和云端的通信, 还会用于代理给其它嵌入式设备做消息上报和指令下发或固件升级等.
+
+    FEATURE_MQTT_COMM_ENABLED    = y          # 一般WiFi模组都有固定供电, 所以都采用MQTT的方式上云
+    FEATURE_MQTT_DIRECT          = y          # MQTT直连效率更高, 该选项只在部分海外设备上才会关闭
+    FEATURE_OTA_ENABLED          = y          # 一般WiFi模组的客户, 都会使用阿里提供的固件升级服务
+    FEATURE_DEVICE_MODEL_ENABLED = y          # 一般WiFi模组片上资源充足, 可以容纳高级版, 所以打开
+    FEATURE_DEVICE_MODEL_GATEWAY = y          # 如上述说明, 要具备高级版网关功能的场景, 当然打开这个选项
+    FEATURE_WIFI_PROVISION_ENABLED = y        # 一般WiFi模组的客户, 都会使用阿里的配网app或sdk, 告诉模组SSID和密码
+    FEATURE_SUPPORT_TLS          = y          # 绝大多数的客户都是用标准的TLS协议连接公网
+    FEATURE_SUPPORT_ITLS         = n          # 阿里私有的iTLS标准和TLS是互斥的, 上面把TLS打开了, 这里必须关闭
+
+### <a name="蜂窝网模组">蜂窝网模组</a>
+这种场景下设备直接连接GPRS/3G/4G网络
+
+    FEATURE_MQTT_COMM_ENABLED    = y          # 虽然CoAP更省电, 但不能做云端消息的及时下推, 所以目前蜂窝网模组仍主要用MQTT的方式上云
+    FEATURE_MQTT_DIRECT          = y          # MQTT直连效率更高, 对网络远慢于WiFi的蜂窝网模组而言, 直连开关必须打开
+    FEATURE_OTA_ENABLED          = y          # 一般蜂窝网模组的客户, 也会使用阿里提供的固件升级服务
+    FEATURE_DEVICE_MODEL_ENABLED = n          # 蜂窝网模组网速很慢, 资源较少, 所以这种模组的客户一般不会用高级版, 而只需要基础版的MQTT上云
+    FEATURE_DEVICE_MODEL_GATEWAY = n          # 蜂窝网模组一般不集成高级版(物模型)功能, 并且它也不会下联其它嵌入式设备分享MQTT上云通道
+    FEATURE_WIFI_PROVISION_ENABLED = n        # 蜂窝网模组不通过WiFi协议连接公网, 因此关闭WiFi配网的开关
+    FEATURE_SUPPORT_TLS          = y          # 绝大多数的客户都是用标准的TLS协议连接公网, 对蜂窝网模组, 甚至可能连这个选项都关闭
+    FEATURE_SUPPORT_ITLS         = n          # 蜂窝网模组有不少是做不加密通信(FEATURE_SUPPORT_TLS = n), 有加密也是走TLS, 所以ITLS都是关闭的
+
+### <a name="基于Linux系统的网关">基于Linux系统的网关</a>
+比如家庭网关, 工业网关等, 一般是相对MCU模组来说, 性能强大的多, 资源丰富的多的设备
+
+    FEATURE_MQTT_COMM_ENABLED    = y          # 一般Linux网关都有固定供电, 所以都采用MQTT的方式上云
+    FEATURE_MQTT_DIRECT          = y          # MQTT直连效率更高, 该选项只在部分海外设备上才会关闭
+    FEATURE_OTA_ENABLED          = y          # 一般Linux网关的客户, 都会使用阿里提供的固件升级服务
+    FEATURE_DEVICE_MODEL_ENABLED = y          # 一般Linux网关片上资源充足, 可以容纳高级版, 所以打开
+    FEATURE_DEVICE_MODEL_GATEWAY = y          # 如上述说明, 要具备高级版网关功能的场景, 当然打开这个选项
+    FEATURE_WIFI_PROVISION_ENABLED = y        # 取决于Linux网关是否用WiFi做上行并使用阿里的配网app/sdk, 如果皆是, 则打开这个选项
+    FEATURE_SUPPORT_TLS          = y          # 绝大多数的客户都是用标准的TLS协议连接公网
+    FEATURE_SUPPORT_ITLS         = n          # 阿里私有的iTLS标准和TLS是互斥的, 上面把TLS打开了, 这里必须关闭
+
+## <a name="基于 make 编译到主机例程">基于 make 编译到主机例程</a>
 > 本节的示例适用于开发者的开发环境是 Ubuntu16.04 的Linux主机的情况
 
 **这些例子都是在64位主机上的执行情况, 推荐您和阿里开发者一样, 安装64位的操作系统**
@@ -505,7 +503,7 @@ output/release/bin
 安装32位工具链
 ---
 
-    sudo apt-get install -y libc6:i386 libstdc++6:i386 gcc:i386
+    sudo apt-get install -y libc6:i386 libstdC++6:i386 gcc:i386
 
 修改平台配置文件
 ---
@@ -586,7 +584,7 @@ output/release/bin
     output/release/bin/mqtt-example:              ELF 32-bit LSB executable, Intel 80386, ... stripped
     output/release/bin/mqtt-example-multithread:  ELF 32-bit LSB executable, Intel 80386, ... stripped
     output/release/bin/mqtt-example-rrpc:         ELF 32-bit LSB executable, Intel 80386, ... stripped
-    output/release/bin/ota_mqtt-example:          ELF 32-bit LSB executable, Intel 80386, ... stripped
+    output/release/bin/ota-example-mqtt:          ELF 32-bit LSB executable, Intel 80386, ... stripped
     output/release/bin/sdk-testsuites:            ELF 32-bit LSB executable, Intel 80386, ... stripped
     output/release/bin/uota_app-example:          ELF 32-bit LSB executable, Intel 80386, ... stripped
 
@@ -631,13 +629,13 @@ output/release/bin
 | 产物文件名                  | 说明
 |-----------------------------|-----------------------------------------------------------------------------------------
 | `mqtt-example.exe`          | 基础版的例程, 可演示 `IOT_XXX()` 接口的使用
-| `linkkit_tsl_convert.exe`   | 高级版的物模型转换工具, 何时需要使用它详见 [第二章 快速开始](#第二章 快速开始) 章节
+| `linkkit_tsl_convert.exe`   | 高级版的物模型转换工具, 何时需要使用它详见 [第二章 快速体验](#第二章 快速体验) 章节
 
 目前对Windows平台仅提供基础版的例程, 可以把它拿到Windows主机上运行, 如下图则是在一台`Win10`主机上运行的效果
 
 ![image](https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/win_mqtt_example.png)
 
-## <a name="4.6 基于 make 交叉编译到嵌入式平台">4.6 基于 make 交叉编译到嵌入式平台</a>
+## <a name="基于 make 交叉编译到嵌入式平台">基于 make 交叉编译到嵌入式平台</a>
 > 本节的示例适用于开发者的开发环境是 Ubuntu16.04 的Linux主机的情况
 
 **这些例子都是在64位主机上的执行情况, 推荐您和阿里开发者一样, 安装64位的操作系统**
@@ -822,7 +820,7 @@ output/release/bin
 |-----------------|-------------------------------------------------------------
 | `libiot_sdk.a`  | SDK的主库, 提供了 `IOT_XXX` 接口和 `linkkit_xxx()` 接口
 
-## <a name="4.7 在 Ubuntu 上使用 cmake 的编译示例">4.7 在 Ubuntu 上使用 cmake 的编译示例</a>
+## <a name="在 Ubuntu 上使用 cmake 的编译示例">在 Ubuntu 上使用 cmake 的编译示例</a>
 > 本节的示例适用于开发者的开发环境是 Ubuntu16.04 的Linux主机的情况
 
 **这些例子都是在64位主机上的执行情况, 推荐您和阿里开发者一样, 安装64位的操作系统**
@@ -873,13 +871,13 @@ output/release/bin
     ls bin/
 
     linkkit-example-countdown  linkkit-example-sched  linkkit-example-solo  linkkit_tsl_convert
-    mqtt-example  mqtt_example_multithread  mqtt_example_rrpc  ota_mqtt-example  uota_app-example
+    mqtt-example  mqtt_example_multithread  mqtt_example_rrpc  ota-example-mqtt  uota_app-example
 
 二进制库在 `lib/` 目录下:
 
     ls lib/
 
-    libiot_hal.a  libiot_sdk.a  libiot_tls.a
+    libiot_hal.so  libiot_sdk.so  libiot_tls.so
 
 #### <a name="用 cmake 为32位Linux编译">用 cmake 为32位Linux编译</a>
 
@@ -913,7 +911,7 @@ output/release/bin
     ls bin/
 
     linkkit-example-countdown  linkkit-example-sched  linkkit-example-solo  linkkit_tsl_convert
-    mqtt-example  mqtt_example_multithread  mqtt_example_rrpc  ota_mqtt-example  uota_app-example
+    mqtt-example  mqtt_example_multithread  mqtt_example_rrpc  ota-example-mqtt  uota_app-example
 
 可以用如下方式验证, 注意 `file` 命令的输出中, 已经显示程序都是32位的了(`ELF 32-bit LSB executable`)
 
@@ -926,7 +924,7 @@ output/release/bin
     ooo/bin/mqtt-example:              ELF 32-bit LSB executable, Intel 80386, ... stripped
     ooo/bin/mqtt-example-multithread:  ELF 32-bit LSB executable, Intel 80386, ... stripped
     ooo/bin/mqtt-example-rrpc:         ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/ota_mqtt-example:          ELF 32-bit LSB executable, Intel 80386, ... stripped
+    ooo/bin/ota-example-mqtt:          ELF 32-bit LSB executable, Intel 80386, ... stripped
     ooo/bin/sdk-testsuites:            ELF 32-bit LSB executable, Intel 80386, ... stripped
     ooo/bin/uota_app-example:          ELF 32-bit LSB executable, Intel 80386, ... stripped
 
@@ -934,7 +932,7 @@ output/release/bin
 
     ls lib/
 
-    libiot_hal.a  libiot_sdk.a  libiot_tls.a
+    libiot_hal.so  libiot_sdk.so  libiot_tls.so
 
 #### <a name="用 cmake 为arm-linux编译">用 cmake 为arm-linux编译</a>
     sudo apt-get install -y gcc-arm-linux-gnueabihf
@@ -1008,7 +1006,7 @@ output/release/bin
     ls bin/
 
     linkkit-example-countdown  linkkit-example-sched  linkkit-example-solo  linkkit_tsl_convert
-    mqtt-example  mqtt_example_multithread  mqtt_example_rrpc  ota_mqtt-example  uota_app-example
+    mqtt-example  mqtt_example_multithread  mqtt_example_rrpc  ota-example-mqtt  uota_app-example
 
 可以用如下方式验证, 注意 `file` 命令的输出中, 已经显示程序都是32位ARM架构的了(`ELF 32-bit LSB executable, ARM, EABI5 version 1`)
 
@@ -1021,14 +1019,14 @@ output/release/bin
     ooo/bin/mqtt-example:              ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV) ... not stripped
     ooo/bin/mqtt_example_multithread:  ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV) ... not stripped
     ooo/bin/mqtt_example_rrpc:         ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV) ... not stripped
-    ooo/bin/ota_mqtt-example:          ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV) ... not stripped
+    ooo/bin/ota-example-mqtt:          ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV) ... not stripped
     ooo/bin/uota_app-example:          ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV) ... not stripped
 
 二进制库在 `lib/` 目录下, 它们同样是是32位ARM架构的
 
     ls lib/
 
-    libiot_hal.a  libiot_sdk.a  libiot_tls.a
+    libiot_hal.so  libiot_sdk.so  libiot_tls.so
 
 #### <a name="用 cmake 为Windows编译">用 cmake 为Windows编译</a>
 安装 mingw-w64-i686 工具链
@@ -1096,3 +1094,211 @@ output/release/bin
 编译
 ---
     make -j32
+
+
+## <a name="在 Windows 上使用 cmake 和 Visual Studio 2015 的编译示例">在 Windows 上使用 cmake 和 Visual Studio 2015 的编译示例</a>
+
+>本节的示例适用于开发者的开发环境是Windows7 SP1
+
+*Windows7不能安装Visual Studio 2015, 请通过软件更新升级到Windows7 SP1*
+
+**这些例子都是在64位主机上的执行情况, 推荐您和阿里开发者一样, 安装64位的操作系统**
+
+#### <a name="环境配置">环境配置</a>
+安装Visual Studio 2015
+---
+
+选自定义安装
+
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/visual_studio_2015_install_setup_1.png>)
+
+点击下一步
+
+选C++组件
+---
+选C++有关的组件, 其他默认的组件建议不勾选
+
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/visual_studio_c%2B%2B_install_setup_2.png>)
+
+安装cmake, 并把cmake添加到系统环境的路径里面
+---
+从 [cmake官网](https://cmake.org/download/) 下载Windows的cmake的安装包
+
+安装后将 `C:\Program Files\CMake\bin` 添加到
+
+    控制面板-->系统和安全-->高级-->环境变量-->系统变量-->Path
+
+确保cmd可以调用到cmake
+
+安装gitbash
+---
+从 [gitbash官网](https://git-scm.com/download/win) 下载安装
+
+#### <a name="配置Windows环境下的cmake文件">配置Windows环境下的cmake文件</a>
+
+下载linkkit C SDK的压缩包, 解压
+
+修改cmake文件
+---
+从链接中下载patch文件: [cmake patch](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/visual_studio_cmake.patch)
+
+通过gitbash执行下列命令:
+
+    cd linkkit_sdk-c
+    patch -p1 < visual_studio_cmake.patch
+
+visual_studio_cmake.patch的具体内容如下:
+
+    diff --git a/sdk-c/CMakeLists.txt b/sdk-c/CMakeLists.txt
+    index f676423..612b9e8 100644
+    --- a/sdk-c/CMakeLists.txt
+    +++ b/sdk-c/CMakeLists.txt
+    @@ -34,31 +34,18 @@ MESSAGE ("---------------------------------------------------------------------"
+
+    ADD_DEFINITIONS (-DDLL_IOT_EXPORTS)
+
+    -ADD_DEFINITIONS (-DALCS_ENABLED)
+    -ADD_DEFINITIONS (-DALCS_SERVER_ENABLED)
+    -ADD_DEFINITIONS (-DAWSS_DISABLE_ENROLLEE)
+    -ADD_DEFINITIONS (-DAWSS_DISABLE_REGISTRAR)
+    -ADD_DEFINITIONS (-DAWSS_SUPPORT_ADHA)
+    -ADD_DEFINITIONS (-DAWSS_SUPPORT_AHA)
+    -ADD_DEFINITIONS (-DAWSS_SUPPORT_APLIST)
+    -ADD_DEFINITIONS (-DAWSS_SUPPORT_PHONEASAP)
+    -ADD_DEFINITIONS (-DAWSS_SUPPORT_ROUTER)
+    -ADD_DEFINITIONS (-DAWSS_SUPPORT_SMARTCONFIG)
+    -ADD_DEFINITIONS (-DAWSS_SUPPORT_SMARTCONFIG_WPS)
+    -ADD_DEFINITIONS (-DAWSS_SUPPORT_ZEROCONFIG)
+    ADD_DEFINITIONS (-DCOAP_SERV_MULTITHREAD)
+    ADD_DEFINITIONS (-DCONFIG_GUIDER_AUTH_TIMEOUT=500)
+    ADD_DEFINITIONS (-DCONFIG_HTTP_AUTH_TIMEOUT=500)
+    ADD_DEFINITIONS (-DCONFIG_MID_HTTP_TIMEOUT=500)
+    ADD_DEFINITIONS (-DDEVICE_MODEL_ENABLED)
+    -ADD_DEFINITIONS (-DDEV_BIND_ENABLED)
+    -ADD_DEFINITIONS (-DFORCE_SSL_VERIFY)
+    +ADD_DEFINITIONS (-DFS_ENABLED)
+    +ADD_DEFINITIONS (-DHTTP2_COMM_ENABLED)
+    ADD_DEFINITIONS (-DMQTT_COMM_ENABLED)
+    ADD_DEFINITIONS (-DMQTT_DIRECT)
+    ADD_DEFINITIONS (-DOTA_ENABLED)
+    ADD_DEFINITIONS (-DOTA_SIGNAL_CHANNEL=1)
+    ADD_DEFINITIONS (-DSUPPORT_TLS)
+    -ADD_DEFINITIONS (-DWIFI_PROVISION_ENABLED)
+    ADD_DEFINITIONS (-D_PLATFORM_IS_HOST_)
+
+    ADD_SUBDIRECTORY (src/infra/utils)
+    @@ -71,10 +58,8 @@ ADD_SUBDIRECTORY (src/services/linkkit/ntp)
+    ADD_SUBDIRECTORY (src/services/linkkit/cm)
+    ADD_SUBDIRECTORY (src/services/linkkit/dm)
+    ADD_SUBDIRECTORY (src/services/linkkit/dev_reset)
+    -ADD_SUBDIRECTORY (src/protocol/coap/local)
+    -ADD_SUBDIRECTORY (src/services/awss)
+    -ADD_SUBDIRECTORY (src/services/dev_bind)
+    -ADD_SUBDIRECTORY (src/protocol/alcs)
+    +ADD_SUBDIRECTORY (src/services/http2_stream)
+    +ADD_SUBDIRECTORY (src/protocol/http2)
+
+    ADD_SUBDIRECTORY (src/ref-impl/hal)
+    ADD_SUBDIRECTORY (examples)
+    @@ -92,10 +77,8 @@ ADD_LIBRARY (iot_sdk SHARED
+        $<TARGET_OBJECTS:iot_cm>
+        $<TARGET_OBJECTS:iot_dm>
+        $<TARGET_OBJECTS:iot_reset>
+    -    $<TARGET_OBJECTS:iot_coap_local>
+    -    $<TARGET_OBJECTS:iot_awss>
+    -    $<TARGET_OBJECTS:iot_bind>
+    -    $<TARGET_OBJECTS:iot_alcs>
+    +    $<TARGET_OBJECTS:http2_stream>
+    +    $<TARGET_OBJECTS:iot_http2>
+    )
+    if(WIN32)
+        TARGET_LINK_LIBRARIES (iot_sdk ws2_32)
+
+    diff --git a/sdk-c/examples/CMakeLists.txt b/sdk-c/examples/CMakeLists.txt
+    index d61637d..5f5e0ad 100644
+    --- a/sdk-c/examples/CMakeLists.txt
+    +++ b/sdk-c/examples/CMakeLists.txt
+    @@ -57,6 +57,14 @@ ADD_EXECUTABLE (mqtt-example-multithread
+        app_entry.c
+        mqtt/mqtt_example_multithread.c
+    )
+    +ADD_EXECUTABLE (http2-example
+    +    http2/http2_example_stream.c
+    +    app_entry.c
+    +)
+    +ADD_EXECUTABLE (http2-example-uploadfile
+    +    http2/http2_example_uploadfile.c
+    +    app_entry.c
+    +)
+    ADD_EXECUTABLE (ota-example-mqtt
+        ota/ota-example-mqtt.c
+    )
+    @@ -106,6 +114,26 @@ IF (NOT MSVC)
+    TARGET_LINK_LIBRARIES (mqtt-example-multithread rt)
+    ENDIF (NOT MSVC)
+
+    +TARGET_LINK_LIBRARIES (http2-example iot_sdk)
+    +TARGET_LINK_LIBRARIES (http2-example iot_hal)
+    +TARGET_LINK_LIBRARIES (http2-example iot_tls)
+    +IF (NOT MSVC)
+    +TARGET_LINK_LIBRARIES (http2-example pthread)
+    +ENDIF (NOT MSVC)
+    +IF (NOT MSVC)
+    +TARGET_LINK_LIBRARIES (http2-example rt)
+    +ENDIF (NOT MSVC)
+    +
+    +TARGET_LINK_LIBRARIES (http2-example-uploadfile iot_sdk)
+    +TARGET_LINK_LIBRARIES (http2-example-uploadfile iot_hal)
+    +TARGET_LINK_LIBRARIES (http2-example-uploadfile iot_tls)
+    +IF (NOT MSVC)
+    +TARGET_LINK_LIBRARIES (http2-example-uploadfile pthread)
+    +ENDIF (NOT MSVC)
+    +IF (NOT MSVC)
+    +TARGET_LINK_LIBRARIES (http2-example-uploadfile rt)
+    +ENDIF (NOT MSVC)
+    +
+    TARGET_LINK_LIBRARIES (ota-example-mqtt iot_sdk)
+    TARGET_LINK_LIBRARIES (ota-example-mqtt iot_hal)
+    TARGET_LINK_LIBRARIES (ota-example-mqtt iot_tls)
+
+#### <a name="创建 Visual Studio 工程">创建 Visual Studio 工程</a>
+
+    mkdir ooo
+    cd ooo
+    cmake ..
+
+在执行cmake命令过程中可能报错, 请参考[cmake编译错误处理](#cmake编译错误处理)
+
+#### <a name="使用 Visual Studio 工程">使用 Visual Studio 工程</a>
+打开 Visual Studio 工程
+---
+鼠标右键打开红框标注的文件
+
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/windows_cmake_ooo_folder.jpg>)
+
+mqtt_example工程的使用
+---
+选中mqtt_example这个用例
+
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/select_mqtt_class_view.jpg>)
+
+右键, 选择"重新生成", 执行直至编译成功
+
+右键, 选择"调试"-->"启动新实例", 可以看到对话框弹出
+
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/mqtt-example-run.jpg>)
+
+用例运行成功
+
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/mqtt_example_sucess.jpg>)
+
+http2_example工程的使用
+---
+选中http2_example, 其余操作跟mqtt_example类似
+
+#### <a name="cmake编译错误处理">cmake编译错误处理</a>
+如果碰到下列错误, 说明Visual Studio 2015 C++并没有安装完成, 建议在这个IDE中创建并且编译一个C++工程
+
+按照提示安装所有缺失的工具, 直到编译和运行都正确为止
+
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/compile_err.png>)

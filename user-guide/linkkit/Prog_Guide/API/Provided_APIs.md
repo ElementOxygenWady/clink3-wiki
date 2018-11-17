@@ -1,145 +1,5 @@
-# <a name="目录">目录</a>
-+ [第七章 API说明](#第七章 API说明)
-    * [7.1 API接口列表](#7.1 API接口列表)
-        - [基础API](#基础API)
-        - [MQTT功能API](#MQTT功能API)
-        - [OTA功能API](#OTA功能API)
-        - [CoAP功能API](#CoAP功能API)
-        - [HTTP功能API](#HTTP功能API)
-        - [设备影子API](#设备影子API)
-        - [高级版(新版)API](#高级版(新版)API)
-        - [高级版(旧版)单品场景API](#高级版(旧版)单品场景API)
-        - [高级版(旧版)网关场景API](#高级版(旧版)网关场景API)
-        - [主子设备相关(老版本接口, 不推荐使用)](#主子设备相关(老版本接口, 不推荐使用))
-        - [WiFi配网API](#WiFi配网API)
-    * [7.2 API接口清单](#7.2 API接口清单)
-        - [基础版API清单](#基础版API清单)
-        - [高级版单品场景API清单](#高级版单品场景API清单)
-        - [高级版网关场景API清单](#高级版网关场景API清单)
-    * [7.3 基础版API接口详解](#7.3 基础版API接口详解)
-        - [IOT_OpenLog](#IOT_OpenLog)
-        - [IOT_CloseLog](#IOT_CloseLog)
-        - [IOT_SetLogLevel](#IOT_SetLogLevel)
-        - [IOT_DumpMemoryStats](#IOT_DumpMemoryStats)
-        - [IOT_SetupConnInfo](#IOT_SetupConnInfo)
-        - [IOT_Ioctl](#IOT_Ioctl)
-        - [IOT_CoAP_Init](#IOT_CoAP_Init)
-        - [IOT_CoAP_Deinit](#IOT_CoAP_Deinit)
-        - [IOT_CoAP_DeviceNameAuth](#IOT_CoAP_DeviceNameAuth)
-        - [IOT_CoAP_Yield](#IOT_CoAP_Yield)
-        - [IOT_CoAP_SendMessage](#IOT_CoAP_SendMessage)
-        - [IOT_CoAP_GetMessagePayload](#IOT_CoAP_GetMessagePayload)
-        - [IOT_CoAP_GetMessageCode](#IOT_CoAP_GetMessageCode)
-        - [IOT_HTTP_Init](#IOT_HTTP_Init)
-        - [IOT_HTTP_DeInit](#IOT_HTTP_DeInit)
-        - [IOT_HTTP_DeviceNameAuth](#IOT_HTTP_DeviceNameAuth)
-        - [IOT_HTTP_SendMessage](#IOT_HTTP_SendMessage)
-        - [IOT_HTTP_Disconnect](#IOT_HTTP_Disconnect)
-        - [IOT_MQTT_Construct](#IOT_MQTT_Construct)
-        - [IOT_MQTT_Destroy](#IOT_MQTT_Destroy)
-        - [IOT_MQTT_Yield](#IOT_MQTT_Yield)
-        - [IOT_MQTT_LogPost](#IOT_MQTT_LogPost)
-        - [IOT_MQTT_CheckStateNormal](#IOT_MQTT_CheckStateNormal)
-        - [IOT_MQTT_Subscribe](#IOT_MQTT_Subscribe)
-        - [IOT_MQTT_Subscribe_Sync](#IOT_MQTT_Subscribe_Sync)
-        - [IOT_MQTT_Unsubscribe](#IOT_MQTT_Unsubscribe)
-        - [IOT_MQTT_Publish](#IOT_MQTT_Publish)
-        - [IOT_OTA_Init](#IOT_OTA_Init)
-        - [IOT_OTA_Deinit](#IOT_OTA_Deinit)
-        - [IOT_OTA_ReportVersion](#IOT_OTA_ReportVersion)
-        - [IOT_OTA_RequestImage](#IOT_OTA_RequestImage)
-        - [IOT_OTA_ReportProgress](#IOT_OTA_ReportProgress)
-        - [IOT_OTA_GetConfig](#IOT_OTA_GetConfig)
-        - [IOT_OTA_IsFetching](#IOT_OTA_IsFetching)
-        - [IOT_OTA_IsFetchFinish](#IOT_OTA_IsFetchFinish)
-        - [IOT_OTA_FetchYield](#IOT_OTA_FetchYield)
-        - [IOT_OTA_Ioctl](#IOT_OTA_Ioctl)
-        - [IOT_OTA_GetLastError](#IOT_OTA_GetLastError)
-        - [IOT_Shadow_Construct](#IOT_Shadow_Construct)
-        - [IOT_Shadow_Destroy](#IOT_Shadow_Destroy)
-        - [IOT_Shadow_Yield](#IOT_Shadow_Yield)
-        - [IOT_Shadow_RegisterAttribute](#IOT_Shadow_RegisterAttribute)
-        - [IOT_Shadow_DeleteAttribute](#IOT_Shadow_DeleteAttribute)
-        - [IOT_Shadow_PushFormat_Init](#IOT_Shadow_PushFormat_Init)
-        - [IOT_Shadow_PushFormat_Add](#IOT_Shadow_PushFormat_Add)
-        - [IOT_Shadow_PushFormat_Finalize](#IOT_Shadow_PushFormat_Finalize)
-        - [IOT_Shadow_Push](#IOT_Shadow_Push)
-        - [IOT_Shadow_Push_Async](#IOT_Shadow_Push_Async)
-        - [IOT_Shadow_Pull](#IOT_Shadow_Pull)
-        - [IOT_Gateway_Generate_Message_ID](#IOT_Gateway_Generate_Message_ID)
-        - [IOT_Gateway_Construct](#IOT_Gateway_Construct)
-        - [IOT_Gateway_Destroy](#IOT_Gateway_Destroy)
-        - [IOT_Subdevice_Register](#IOT_Subdevice_Register)
-        - [IOT_Subdevice_Unregister](#IOT_Subdevice_Unregister)
-        - [IOT_Subdevice_Login](#IOT_Subdevice_Login)
-        - [IOT_Subdevice_Logout](#IOT_Subdevice_Logout)
-        - [IOT_Gateway_Get_TOPO](#IOT_Gateway_Get_TOPO)
-        - [IOT_Gateway_Get_Config](#IOT_Gateway_Get_Config)
-        - [IOT_Gateway_Publish_Found_List](#IOT_Gateway_Publish_Found_List)
-        - [IOT_Gateway_Yield](#IOT_Gateway_Yield)
-        - [IOT_Gateway_Subscribe](#IOT_Gateway_Subscribe)
-        - [IOT_Gateway_Unsubscribe](#IOT_Gateway_Unsubscribe)
-        - [IOT_Gateway_Publish](#IOT_Gateway_Publish)
-        - [IOT_Gateway_RRPC_Register](#IOT_Gateway_RRPC_Register)
-        - [IOT_Gateway_RRPC_Response](#IOT_Gateway_RRPC_Response)
-    * [7.3 高级版(新版)API接口详解](#7.3 高级版(新版)API接口详解)
-        - [IOT_Linkkit_Open](#IOT_Linkkit_Open)
-        - [IOT_Linkkit_Ioctl](#IOT_Linkkit_Ioctl)
-        - [IOT_Linkkit_Connect](#IOT_Linkkit_Connect)
-        - [IOT_Linkkit_Yield](#IOT_Linkkit_Yield)
-        - [IOT_Linkkit_Close](#IOT_Linkkit_Close)
-        - [IOT_Linkkit_Post](#IOT_Linkkit_Post)
-        - [IOT_Linkkit_TriggerEvent](#IOT_Linkkit_TriggerEvent)
-    * [7.4 高级版(旧版)单品API详解](#7.4 高级版(旧版)单品API详解)
-        - [linkkit_answer_service](#linkkit_answer_service)
-        - [linkkit_cota_init](#linkkit_cota_init)
-        - [linkkit_dispatch](#linkkit_dispatch)
-        - [linkkit_end](#linkkit_end)
-        - [linkkit_fota_init](#linkkit_fota_init)
-        - [linkkit_get_value](#linkkit_get_value)
-        - [linkkit_invoke_cota_get_config](#linkkit_invoke_cota_get_config)
-        - [linkkit_invoke_cota_service](#linkkit_invoke_cota_service)
-        - [linkkit_invoke_fota_service](#linkkit_invoke_fota_service)
-        - [linkkit_invoke_raw_service](#linkkit_invoke_raw_service)
-        - [linkkit_is_end](#linkkit_is_end)
-        - [linkkit_is_try_leave](#linkkit_is_try_leave)
-        - [linkkit_post_property](#linkkit_post_property)
-        - [linkkit_set_opt](#linkkit_set_opt)
-        - [linkkit_set_tsl](#linkkit_set_tsl)
-        - [linkkit_set_value](#linkkit_set_value)
-        - [linkkit_start](#linkkit_start)
-        - [linkkit_trigger_event](#linkkit_trigger_event)
-        - [linkkit_trigger_extended_info_operate](#linkkit_trigger_extended_info_operate)
-        - [linkkit_try_leave](#linkkit_try_leave)
-        - [linkkit_yield](#linkkit_yield)
-    * [7.5 高级版(旧版)网关API详解](#7.5 高级版(旧版)网关API详解)
-        - [linkkit_gateway_delete_extinfos](#linkkit_gateway_delete_extinfos)
-        - [linkkit_gateway_exit](#linkkit_gateway_exit)
-        - [linkkit_gateway_fota_init](#linkkit_gateway_fota_init)
-        - [linkkit_gateway_get_default_params](#linkkit_gateway_get_default_params)
-        - [linkkit_gateway_get_devinfo](#linkkit_gateway_get_devinfo)
-        - [linkkit_gateway_get_num_devices](#linkkit_gateway_get_num_devices)
-        - [linkkit_gateway_init](#linkkit_gateway_init)
-        - [linkkit_gateway_invoke_fota_service](#linkkit_gateway_invoke_fota_service)
-        - [linkkit_gateway_post_extinfos](#linkkit_gateway_post_extinfos)
-        - [linkkit_gateway_post_property_json](#linkkit_gateway_post_property_json)
-        - [linkkit_gateway_post_property_json_sync](#linkkit_gateway_post_property_json_sync)
-        - [linkkit_gateway_post_rawdata](#linkkit_gateway_post_rawdata)
-        - [linkkit_gateway_set_event_callback](#linkkit_gateway_set_event_callback)
-        - [linkkit_gateway_setopt](#linkkit_gateway_setopt)
-        - [linkkit_gateway_start](#linkkit_gateway_start)
-        - [linkkit_gateway_stop](#linkkit_gateway_stop)
-        - [linkkit_gateway_subdev_create](#linkkit_gateway_subdev_create)
-        - [linkkit_gateway_subdev_destroy](#linkkit_gateway_subdev_destroy)
-        - [linkkit_gateway_subdev_login](#linkkit_gateway_subdev_login)
-        - [linkkit_gateway_subdev_logout](#linkkit_gateway_subdev_logout)
-        - [linkkit_gateway_subdev_register](#linkkit_gateway_subdev_register)
-        - [linkkit_gateway_subdev_unregister](#linkkit_gateway_subdev_unregister)
-        - [linkkit_gateway_trigger_event_json](#linkkit_gateway_trigger_event_json)
-        - [linkkit_gateway_trigger_event_json_sync](#linkkit_gateway_trigger_event_json_sync)
 
-
-# <a name="第七章 API说明">第七章 API说明</a>
+# 第七章 API说明
 
 > 本节说明 C-SDK 向客户提供的功能和对应的API, 用于让客户编写业务逻辑. 另外模组商/芯片商封装AT命令时, 也是基于这些API的
 >
@@ -147,9 +7,9 @@
 >>
 >> 如何使用这些API编写应用逻辑, 以代码 `examples/*/*.c` 的示例程序为准
 
-## <a name="7.1 API接口列表">7.1 API接口列表</a>
+## 7.1 API接口列表
 
-### <a name="基础API">基础API</a>
+### 基础API
 
 | 函数名                                          | 说明
 |-------------------------------------------------|---------------------------------------------------------------------
@@ -159,9 +19,9 @@
 | [IOT_DumpMemoryStats](#IOT_DumpMemoryStats)     | 调试函数, 打印内存的使用统计情况, 入参为1-5, 数字越大, 打印越详细
 | [IOT_Ioctl](#IOT_Ioctl)                         | 设置SDK运行时可配置选项, 详情见API注释
 
-用户可通过`IOT_Ioctl()`配置是否使用一型一密功能, 详细内容可查看 [第五章 典型场景示例](#第五章 典型场景示例)
+用户可通过`IOT_Ioctl()`配置是否使用一型一密功能详细内容第五章
 
-### <a name="MQTT功能API">MQTT功能API</a>
+### MQTT功能API
 
 | 函数名                                                      | 说明
 |-------------------------------------------------------------|---------------------------------------------------------
@@ -287,7 +147,7 @@
     IOT_MQTT_Destroy(&pclient);
 ```
 
-### <a name="OTA功能API">OTA功能API</a>
+### OTA功能API
 
 | 函数名                                              | 说明
 |-----------------------------------------------------|-----------------------------------------------------------------
@@ -300,12 +160,10 @@
 | [IOT_OTA_IsFetchFinish](#IOT_OTA_IsFetchFinish)     | OTA下载阶段, 判断迭代调用 [IOT_OTA_FetchYield](#IOT_OTA_FetchYield) 是否已经下载完所有的固件内容
 | [IOT_OTA_IsFetching](#IOT_OTA_IsFetching)           | OTA下载阶段, 判断固件下载是否仍在进行中, 尚未完成全部固件内容的下载
 | [IOT_OTA_ReportProgress](#IOT_OTA_ReportProgress)   | 可选API, OTA下载阶段, 调用此函数向服务端汇报已经下载了全部固件内容的百分之多少
-| [IOT_OTA_RequestImage](#IOT_OTA_RequestImage)       | 可选API, 向服务端请求固件下载
-| [IOT_OTA_GetConfig](#IOT_OTA_GetConfig)             | 可选API, 向服务端请求远程配置
 
 更多OTA相关功能说明可查看[OTA服务](https://living.aliyun.com/doc#ysuxe6.html)页面
 
-### <a name="CoAP功能API">CoAP功能API</a>
+### CoAP功能API
 
 | 函数名                                                      | 说明
 |-------------------------------------------------------------|---------------------------------------------------------
@@ -317,7 +175,7 @@
 | [IOT_CoAP_SendMessage](#IOT_CoAP_SendMessage)               | CoAP会话阶段, 连接已成功建立后调用, 组织一个完整的CoAP报文向服务器发送
 | [IOT_CoAP_Yield](#IOT_CoAP_Yield)                           | CoAP会话阶段, 连接已成功建立后调用, 检查和收取服务器对`CoAP Request`的回复报文
 
-### <a name="HTTP功能API">HTTP功能API</a>
+### HTTP功能API
 
 | 函数名                                                  | 说明
 |---------------------------------------------------------|-------------------------------------------------------------
@@ -327,7 +185,7 @@
 | [IOT_HTTP_SendMessage](#IOT_HTTP_SendMessage)           | Https会话阶段, 组织一个完整的HTTP报文向服务器发送,并同步获取HTTP回复报文
 | [IOT_HTTP_Disconnect](#IOT_HTTP_Disconnect)             | Https会话阶段, 关闭HTTP层面的连接, 但是仍然保持TLS层面的连接
 
-### <a name="设备影子API">设备影子API</a>
+### 设备影子API
 
 | 函数名                                                              | 说明
 |---------------------------------------------------------------------|-------------------------------------------------
@@ -343,479 +201,92 @@
 | [IOT_Shadow_DeleteAttribute](#IOT_Shadow_DeleteAttribute)           | 删除一个已被成功注册的数据属性
 | [IOT_Shadow_Yield](#IOT_Shadow_Yield)                               | MQTT的主循环函数, 调用后接受服务端的下推消息, 更新本地的数据属性
 
-### <a name="高级版(新版)API">高级版(新版)API</a>
-- 新版接口将不再区分单品场景还是网关场景
-    + 如果您的设备在两种角色间发生转换, 不需要像使用旧版接口那样, 重写所有的业务逻辑代码, 在两套风格的API之前切换
-    + 只需要使用这同一套并且数量远少于旧版的新版API即可, 甚至可以完成单品/网关的运行时转换, 而不必在编译时就决定该设备需要是单品还是网关
-
-- 目前已完整覆盖单品场景
-- 下期将完整覆盖网关场景
+### 物模型管理API
+> 物模型管理功能是指SDK能够使能IoT设备接受云端控制台或者手机公版app的控制, 进行属性/事件/服务维度的设置和监控, 在本文的其它地方, 有时也称为"高级版"
 
 | 函数名                                                  | 说明
-|---------------------------------------------------------|-------------------------------------------------------------
-| [IOT_Linkkit_Open](#IOT_Linkkit_Open)                   | 初始化本地资源, 在进行网络报文交互之前, 必须先调用此接口, 得到一个会话的句柄
-| [IOT_Linkkit_Ioctl](#IOT_Linkkit_Ioctl)                 | 在使用 [IOT_Linkkit_Open](#IOT_Linkkit_Open) 获得会话句柄后, 可使用该句柄和该接口对将要发起的会话, 进行参数调整
+|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------
+| [IOT_Linkkit_Open](#IOT_Linkkit_Open)                   | 创建本地资源, 在进行网络报文交互之前, 必须先调用此接口, 得到一个会话的句柄
 | [IOT_Linkkit_Connect](#IOT_Linkkit_Connect)             | 对主设备/网关来说, 将会建立设备与云端的通信. 对于子设备来说, 将向云端注册该子设备(若需要), 并添加主子设备拓扑关系
 | [IOT_Linkkit_Yield](#IOT_Linkkit_Yield)                 | 若SDK占有独立线程, 该函数内容为空, 否则表示将CPU交给SDK让其接收网络报文并将消息分发到用户的回调函数中
 | [IOT_Linkkit_Close](#IOT_Linkkit_Close)                 | 若入参中的会话句柄为主设备/网关, 则关闭网络连接并释放SDK为该会话所占用的所有资源
-| [IOT_Linkkit_TriggerEvent](#IOT_Linkkit_TriggerEvent)   | 向云端上报设备事件, 如错误码, 异常告警等
-| [IOT_Linkkit_Post](#IOT_Linkkit_Post)                   | 向云端发送消息, 包括属性上报/设备标签信息更新上报/设备标签信息删除上报/透传数据上报
+| [IOT_Linkkit_TriggerEvent](#IOT_Linkkit_TriggerEvent)   | 向云端发送**事件报文**, 如错误码, 异常告警等
+| [IOT_Linkkit_Report](#IOT_Linkkit_Report)               | 向云端发送**没有云端业务数据下发的上行报文**, 包括属性值/设备标签/二进制透传数据/子设备管理等各种报文
+| [IOT_Linkkit_Query](#IOT_Linkkit_Query)                 | 向云端发送**存在云端业务数据下发的查询报文**, 包括OTA状态查询/OTA固件下载/子设备拓扑查询/NTP时间查询等各种报文
 
-> 现对照 `examples/linkkit/newapi/solo.c` 例程分步骤讲解如何使用这几个API实现linkkit高级版上云功能
+| 函数名                                          | 说明
+|-------------------------------------------------|---------------------------------------------------------------------------------------------
+| [IOT_RegisterCallback](#IOT_RegisterCallback)   | 对SDK注册事件回调函数, 如云端连接成功/失败, 有属性设置/服务请求到达, 子设备管理报文答复等
+| [IOT_Ioctl](#IOT_Ioctl)                         | 对SDK进行各种参数运行时设置和获取, 以及运行状态的信息获取等, 实参可以是任何数据类型
 
-1. 初始化阶段, 调用`IOT_Linkkit_Open()`导入三元组, 获取一个设备标识
----
-```
-    iotx_linkkit_dev_meta_info_t master_meta_info;
-
-    memset(&master_meta_info, 0, sizeof(iotx_linkkit_dev_meta_info_t));
-    memcpy(master_meta_info.product_key, PRODUCT_KEY, strlen(PRODUCT_KEY));
-    memcpy(master_meta_info.product_secret, PRODUCT_SECRET, strlen(PRODUCT_SECRET));
-    memcpy(master_meta_info.device_name, DEVICE_NAME, strlen(DEVICE_NAME));
-    memcpy(master_meta_info.device_secret, DEVICE_SECRET, strlen(DEVICE_SECRET));
-
-    /* Create Master Device Resources */
-    user_example_ctx->master_devid = IOT_Linkkit_Open(IOTX_LINKKIT_DEV_TYPE_MASTER, &master_meta_info);
-    if (user_example_ctx->master_devid < 0) {
-        EXAMPLE_TRACE("IOT_Linkkit_Open Failed\n");
-        return -1;
-    }
-```
-
-2. 与云端建立的配置, 调用`IOT_Ioctl()`(通用接口)与`IOT_Linkkit_Ioctl()`(linkkit专用接口)进行相关配置, 详细情况可查看对应API说明
----
-```
-    /* Choose Login Server */
-    int domain_type = IOTX_CLOUD_DOMAIN_SH;
-    IOT_Ioctl(IOTX_IOCTL_SET_DOMAIN, (void *)&domain_type);
-
-    /* Choose Login Method */
-    int dynamic_register = 0;
-    IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
-
-    /* Choose Whether You Need Post Property Reply */
-    int post_property_reply = 0;
-    IOT_Linkkit_Ioctl(user_example_ctx->master_devid, IOTX_LINKKIT_CMD_OPTION_PROPERTY_POST_REPLY,
-                      (void *)&post_property_reply);
-
-    /* Choose Whether You Need Post Event Reply */
-    int post_event_reply = 0;
-    IOT_Linkkit_Ioctl(user_example_ctx->master_devid, IOTX_LINKKIT_CMD_OPTION_EVENT_POST_REPLY, (void *)&post_event_reply);
-```
-
-3. 主设备建立连接
----
-```
-    /* Start Connect Aliyun Server */
-    res = IOT_Linkkit_Connect(user_example_ctx->master_devid, &user_event_handler);
-    if (res < 0) {
-        EXAMPLE_TRACE("IOT_Linkkit_Connect Failed\n");
-        return -1;
-    }
-```
-
-4. 进入while()循环, 循环中包含`IOT_Linkkit_Yield()`用于接收网络报文并将消息分发到用户的回调函数中
----
-```
-    while (1) {
-        IOT_Linkkit_Yield(USER_EXAMPLE_YIELD_TIMEOUT_MS);
-        ...
-    }
-```
-
-5. 属性上报, 拓展信息上报和裸数据上都通过对`IOT_Linkkit_Post()`的封装实现, 对于JSON格式数据, 用户需自行进行组包处理
----
-```
-/* 属性上报 */
-void user_post_property(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    char *property_payload = "{\"LightSwitch\":1}";
-
-    res = IOT_Linkkit_Post(user_example_ctx->master_devid, IOTX_LINKKIT_MSG_POST_PROPERTY,
-                           (unsigned char *)property_payload, strlen(property_payload));
-    EXAMPLE_TRACE("Post Property Message ID: %d", res);
-}
-
-/* 拓展信息添加 */
-void user_deviceinfo_update(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    char *device_info_update = "[{\"attrKey\":\"abc\",\"attrValue\":\"hello,world\"}]";
-
-    res = IOT_Linkkit_Post(user_example_ctx->master_devid, IOTX_LINKKIT_MSG_DEVICEINFO_UPDATE,
-                           (unsigned char *)device_info_update, strlen(device_info_update));
-    EXAMPLE_TRACE("Device Info Update Message ID: %d", res);
-}
-
-/* 拓展信息删除 */
-void user_deviceinfo_delete(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    char *device_info_delete = "[{\"attrKey\":\"abc\"}]";
-
-    res = IOT_Linkkit_Post(user_example_ctx->master_devid, IOTX_LINKKIT_MSG_DEVICEINFO_DELETE,
-                           (unsigned char *)device_info_delete, strlen(device_info_delete));
-    EXAMPLE_TRACE("Device Info Delete Message ID: %d", res);
-}
-
-/* 裸数据上报 */
-void user_post_raw_data(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    unsigned char raw_data[7] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
-
-    res = IOT_Linkkit_Post(user_example_ctx->master_devid, IOTX_LINKKIT_MSG_POST_RAW_DATA,
-                           raw_data, 7);
-    EXAMPLE_TRACE("Post Raw Data Message ID: %d", res);
-}
-```
-
-5. 事件上报需调用`IOT_Linkkit_TriggerEvent()`接口, 数据格式为JSON
----
-```
-void user_post_event(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    char *event_id = "Error";
-    char *event_payload = "{\"ErrorCode\":0}";
-
-    res = IOT_Linkkit_TriggerEvent(user_example_ctx->master_devid, event_id, strlen(event_id),
-                                   event_payload, strlen(event_payload));
-    EXAMPLE_TRACE("Post Event Message ID: %d", res);
-}
-```
-
-### <a name="高级版(旧版)单品场景API">高级版(旧版)单品场景API</a>
-
-| 函数名                                                                              | 说明
-|-------------------------------------------------------------------------------------|---------------------------------
-| [linkkit_start](#linkkit_start)                                                     | 启动 linkkit 服务, 与云端建立连接并安装回调函数
-| [linkkit_end](#linkkit_end)                                                         | 停止 linkkit 服务, 与云端断开连接并回收资源
-| [linkkit_dispatch](#linkkit_dispatch)                                               | 事件分发函数, 触发 [linkkit_start](#linkkit_start) 安装的回调
-| [linkkit_yield](#linkkit_yield)                                                     | linkkit 主循环函数, 内含了心跳的维持, 服务器下行报文的收取等; 如果允许多线程, 请不要调用此函数
-| [linkkit_set_value](#linkkit_set_value)                                             | 根据identifier设置物对象的 TSL 属性
-| [linkkit_get_value](#linkkit_get_value)                                             | 根据identifier获取物对象的 TSL 属性
-| [linkkit_set_tsl](#linkkit_set_tsl)                                                 | 从本地读取 TSL 文件,生成物的对象并添加到 linkkit 中
-| [linkkit_answer_service](#linkkit_answer_service)                                   | 对云端服务请求进行回应
-| [linkkit_invoke_raw_service](#linkkit_invoke_raw_service)                           | 向云端发送裸数据
-| [linkkit_trigger_event](#linkkit_trigger_event)                                     | 上报设备事件到云端
-| [linkkit_fota_init](#linkkit_fota_init)                                             | 初始化 OTA-fota 服务, 并安装回调函数(需编译设置宏 OTA_ENABLED)
-| [linkkit_invoke_fota_service](#linkkit_invoke_fota_service)                         | 执行fota服务
-| [linkkit_cota_init](#linkkit_cota_init)                                             | 初始化 OTA-cota 服务, 并安装回调函数(需编译设置宏 OTA_ENABLED)
-| [linkkit_invoke_cota_get_config](#linkkit_invoke_cota_get_config)                   | 设备请求远程配置
-| [linkkit_invoke_cota_service](#linkkit_invoke_cota_service)                         | 执行cota服务
-| [linkkit_post_property](#linkkit_post_property)                                     | 上报设备属性到云端
-| [linkkit_set_opt](#linkkit_set_opt)                                                 | 设置设备属性和服务上报参数
-| [linkkit_try_leave](#linkkit_try_leave)                                             | 设置linkkit离开标志
-| [linkkit_is_try_leave](#linkkit_is_try_leave)                                       | 获取linkkit离开标志
-| [linkkit_is_end](#linkkit_is_end)                                                   | 获取linkkit结束标志
-| [linkkit_trigger_extended_info_operate](#linkkit_trigger_extended_info_operate)     | 设备拓展信息上报或删除
-
-> 现对照 `examples/linkkit/linkkit_example_solo.c` 例程分步骤讲解如何使用这几个API实现MQTT上云功能
-
-1. 用户只需要调用`linkkit_start()`便可以完成linkkit的初始化, 并与云端建立连接
----
-用户可配置是否从云端拉取TSL, 详细内容可查看 [第五章 典型场景示例](#第五章 典型场景示例)
-
-```
-    int get_tsl_from_cloud = 0;                        /* the param of whether it is get tsl from cloud */
-    linkkit_ops_t linkkit_ops = {
-        .on_connect           = on_connect,            /* connect handler */
-        .on_disconnect        = on_disconnect,         /* disconnect handler */
-        .raw_data_arrived     = raw_data_arrived,      /* receive raw data handler */
-        .thing_create         = thing_create,          /* thing created handler */
-        .thing_enable         = thing_enable,          /* thing enabled handler */
-        .thing_disable        = thing_disable,         /* thing disabled handler */
-        .thing_call_service   = thing_call_service,    /* self-defined service handler */
-        .thing_prop_changed   = thing_prop_changed,    /* property set handler */
-        .linkit_data_arrived  = linkit_data_arrived,   /* transparent transmission data handler */
-    };
-
-    EXAMPLE_TRACE("linkkit start");
-
-    if (-1 == linkkit_start(16, get_tsl_from_cloud, linkkit_loglevel_debug, &linkkit_ops, linkkit_cloud_domain_shanghai,
-                            &sample_ctx)) {
-        EXAMPLE_TRACE("linkkit start fail");
-        return -1;
-    }
-```
-
-2. 对于本地预置TSL的情况, 需要调用`linkkit_set_tsl()`导入TSL文件
----
-```
-    if (!get_tsl_from_cloud) {
-        /*
-         * if get_tsl_from_cloud = 0, set default tsl [TSL_STRING]
-         * please modify TSL_STRING by the TSL's defined.
-         */
-        linkkit_set_tsl(TSL_STRING, strlen(TSL_STRING));
-    }
-```
-
-3. 若需要使用FOTA和COTA功能, 可紧接在`linkkit_start()`后进行初始化
----
-```
-    linkkit_cota_init(linkkit_cota_callback);
-    linkkit_fota_init(linkkit_fota_callback);
-```
-
-4. 在单线程场景下, while循环中会包含`linkkit_dispatch()`和`linkkit_yield()`两个函数. 分别用于消息的处理分发和服务器下行数据的收取, 心跳的维持
----
-```
-    while (1) {
-        /*
-         * if linkkit is support Multi-thread, the linkkit_dispatch and linkkit_yield with callback by linkkit,
-         * else it need user to call these function to received data.
-         */
-#if (CONFIG_SDK_THREAD_COST == 0)
-        linkkit_dispatch();
-#endif
-        now = uptime_sec();
-        if (prev_sec == now) {
-#if (CONFIG_SDK_THREAD_COST == 0)
-            linkkit_yield(100);
-#else
-            HAL_SleepMs(100);
-#endif /* CONFIG_SDK_THREAD_COST */
-            continue;
-        }
-        ...
-    }
-```
-
-5. 如下代码段, 属性的上报可以通过`linkkit_set_value()`, `linkkit_post_property()`这两个函数的组合来完成, 云端返回的应答可在`post_property_cb()`中得到处理
----
-```
-    linkkit_set_value(linkkit_method_set_property_value, sample_ctx->thing, "WIFI_Band", band, NULL);
-    linkkit_post_property(sample_ctx->thing,"WIFI_Band",post_property_cb);
-
-    linkkit_set_value(linkkit_method_set_property_value, sample_ctx->thing, "WIFI_Channel", &channel, NULL);
-    linkkit_post_property(sample_ctx->thing,"WIFI_Channel",post_property_cb);
-
-    linkkit_set_value(linkkit_method_set_property_value, sample_ctx->thing, "WiFI_RSSI", &rssi, NULL);
-    linkkit_post_property(sample_ctx->thing,"WiFI_RSSI",post_property_cb);
-
-    linkkit_set_value(linkkit_method_set_property_value, sample_ctx->thing, "WiFI_SNR", &snr, NULL);
-    linkkit_post_property(sample_ctx->thing,"WiFI_SNR",post_property_cb);
-```
-
-6. 事件的上报可以通过`linkkit_set_value()`, `linkkit_trigger_event()`这两个函数的组合来完成, 云端返回的应答可在`post_property_cb()`中得到处理
----
-```
-int trigger_event(sample_context_t *sample)
-{
-    char event_output_identifier[64];
-    snprintf(event_output_identifier, sizeof(event_output_identifier), "%s.%s", EVENT_ERROR_IDENTIFIER, EVENT_ERROR_OUTPUT_INFO_IDENTIFIER);
-
-    int errorCode = 0;
-    linkkit_set_value(linkkit_method_set_event_output_value,
-                      sample->thing,
-                      event_output_identifier,
-                      &errorCode, NULL);
-
-    return linkkit_trigger_event(sample->thing, EVENT_ERROR_IDENTIFIER, post_property_cb);
-}
-```
-
-### <a name="高级版(旧版)网关场景API">高级版(旧版)网关场景API</a>
-| 函数名                                                                                  | 说明
-|-----------------------------------------------------------------------------------------|-----------------------------
-| [linkkit_gateway_get_default_params](#linkkit_gateway_get_default_params)               | 获取默认的网关配置参数
-| [linkkit_gateway_setopt](#linkkit_gateway_setopt)                                       | 修改网关配置参数
-| [linkkit_gateway_set_event_callback](#linkkit_gateway_set_event_callback)               | 注册网关事件回调函数, 加载用户数据
-| [linkkit_gateway_init](#linkkit_gateway_init)                                           | 网关初始化,
-| [linkkit_gateway_exit](#linkkit_gateway_exit)                                           | 网关反初始化
-| [linkkit_gateway_start](#linkkit_gateway_start)                                         | 启动网关服务, 与云端服务器建立连接
-| [linkkit_gateway_stop](#linkkit_gateway_stop)                                           | 停止网关服务, 与云端服务器断开连接
-| [linkkit_gateway_subdev_register](#linkkit_gateway_subdev_register)                     | 向云端注册productKey/deviceName指定的子设备, 并将子设备加入网关的拓扑关系
-| [linkkit_gateway_subdev_unregister](#linkkit_gateway_subdev_unregister)                 | 向云端注销productKey/deviceName指定的子设备, 并将子设备从网关的拓扑关系移除
-| [linkkit_gateway_subdev_create](#linkkit_gateway_subdev_create)                         | 创建子设备, 并注册用户回调函数, 载入用户数据
-| [linkkit_gateway_subdev_destroy](#linkkit_gateway_subdev_destroy)                       | 删除子设备, 回收资源
-| [linkkit_gateway_subdev_login](#linkkit_gateway_subdev_login)                           | 子设备上线, 云端将可以访问子设备
-| [linkkit_gateway_subdev_logout](#linkkit_gateway_subdev_logout)                         | 子设备下线, 云端将无法访问子设备
-| [linkkit_gateway_get_devinfo](#linkkit_gateway_get_devinfo)                             | 获取设备信息
-| [linkkit_gateway_trigger_event_json_sync](#linkkit_gateway_trigger_event_json_sync)     | 上报网关或子设备事件, 同步接口
-| [linkkit_gateway_trigger_event_json](#linkkit_gateway_trigger_event_json)               | 上报网关或子设备事件, 异步接口, 上报处理结束将调用用户回调函数
-| [linkkit_gateway_post_property_json_sync](#linkkit_gateway_post_property_json_sync)     | 上报网关或子设备属性, 同步接口
-| [linkkit_gateway_post_property_json](#linkkit_gateway_post_property_json)               | 上报网关或子设备属性, 异步接口, 上报处理结束将调用用户回调函数
-| [linkkit_gateway_post_rawdata](#linkkit_gateway_post_rawdata)                           | 上报网关或子设备的裸数据
-| [linkkit_gateway_fota_init](#linkkit_gateway_fota_init)                                 | FOTA服务初始化, 并注册回调函数
-| [linkkit_gateway_invoke_fota_service](#linkkit_gateway_invoke_fota_service)             | 执行FOTA服务
-| [linkkit_gateway_post_extinfos](#linkkit_gateway_post_extinfos)                         | 上报拓展信息, 拓展信息在控制台上以标签信息呈现
-| [linkkit_gateway_delete_extinfos](#linkkit_gateway_delete_extinfos)                     | 删除拓展信息,
-| [linkkit_gateway_get_num_devices](#linkkit_gateway_get_num_devices)                     | 获取注册到SDK的设备总数, 包括网关和所有子设备
-
-网关API详细调用方法请查看 `examples/linkkit/linkkit_example_gateway.c` 或者 [网关API使用说明](https://living.aliyun.com/doc#ig8qxy.html) 页面
-
-### <a name="主子设备相关(老版本接口, 不推荐使用)">主子设备相关(老版本接口, 不推荐使用)</a>
-
-| 函数名                                                                  | 说明
-|-------------------------------------------------------------------------|---------------------------------------------
-| [IOT_Gateway_Construct](#IOT_Gateway_Construct)                         | 建立一个主设备, 建立MQTT连接, 并返回被创建的会话句柄
-| [IOT_Gateway_Destroy](#IOT_Gateway_Destroy)                             | 摧毁一个主设备的MQTT连接, 销毁所有相关的数据结构, 释放内存, 断开连接
-| [IOT_Subdevice_Login](#IOT_Subdevice_Login)                             | 子设备上线, 通知云端建立子设备session
-| [IOT_Subdevice_Logout](#IOT_Subdevice_Logout)                           | 子设备下线, 销毁云端建立子设备session及所有相关的数据结构, 释放内存
-| [IOT_Gateway_Yield](#IOT_Gateway_Yield)                                 | MQTT的主循环函数, 调用后接受服务端的下推消息
-| [IOT_Gateway_Subscribe](#IOT_Gateway_Subscribe)                         | 通过MQTT连接向服务端发送订阅请求
-| [IOT_Gateway_Unsubscribe](#IOT_Gateway_Unsubscribe)                     | 通过MQTT连接向服务端发送取消订阅请求
-| [IOT_Gateway_Publish](#IOT_Gateway_Publish)                             | 通过MQTT连接服务端发送消息发布报文
-| [IOT_Gateway_RRPC_Register](#IOT_Gateway_RRPC_Register)                 | 注册设备的RRPC回调函数, 接收云端发起的RRPC请求
-| [IOT_Gateway_RRPC_Response](#IOT_Gateway_RRPC_Response)                 | 对云端的RRPC请求进行应答
-| [IOT_Gateway_Generate_Message_ID](#IOT_Gateway_Generate_Message_ID)     | 生成消息id
-| [IOT_Gateway_Get_TOPO](#IOT_Gateway_Get_TOPO)                           | 向topo/get topic发送包并等待回复(TOPIC_GET_REPLY 回复)
-| [IOT_Gateway_Get_Config](#IOT_Gateway_Get_Config)                       | 向conifg/get topic发送包并等待回复(TOPIC_CONFIG_REPLY 回复)
-| [IOT_Gateway_Publish_Found_List](#IOT_Gateway_Publish_Found_List)       | 发现设备列表上报
-
-### <a name="WiFi配网API">WiFi配网API</a>
-WiFi配网相关API说明请查看[WiFi设备端开发指南](https://living.aliyun.com/doc#wifi.html)。
-
-
-## <a name="7.2 API接口清单">7.2 API接口清单</a>
+## 7.2 API接口清单
 如下列出当前SDK代码提供的所有面向用户的API函数:
 
-### <a name="基础版API清单">基础版API清单</a>
+### 基础版API清单
 
     $ cd include
     $ grep -o "IOT_[A-Z][_a-zA-Z]*[^_]\> *(" iot_export.h exports/*.h|sed 's!.*:\(.*\)(!\1!'|cat -n
 
-     1  IOT_OpenLog
-     2  IOT_CloseLog
-     3  IOT_SetLogLevel
-     4  IOT_DumpMemoryStats
-     5  IOT_SetupConnInfo
-     6  IOT_Ioctl
-     7  IOT_CoAP_Init
-     8  IOT_CoAP_Deinit
-     9  IOT_CoAP_DeviceNameAuth
-    10  IOT_CoAP_Yield
-    11  IOT_CoAP_SendMessage
-    12  IOT_CoAP_GetMessagePayload
-    13  IOT_CoAP_GetMessageCode
-    14  IOT_HTTP_Init
-    15  IOT_HTTP_DeInit
-    16  IOT_HTTP_DeviceNameAuth
-    17  IOT_HTTP_SendMessage
-    18  IOT_HTTP_Disconnect
-    19  IOT_Linkkit_Open
-    20  IOT_Linkkit_Ioctl
-    21  IOT_Linkkit_Connect
-    22  IOT_Linkkit_Yield
-    23  IOT_Linkkit_Close
-    24  IOT_Linkkit_Post
-    25  IOT_Linkkit_TriggerEvent
-    26  IOT_MQTT_Construct
-    27  IOT_MQTT_Destroy
-    28  IOT_MQTT_Yield
-    29  IOT_MQTT_LogPost
-    30  IOT_MQTT_CheckStateNormal
-    31  IOT_MQTT_Subscribe
-    32  IOT_MQTT_Subscribe_Sync
-    33  IOT_MQTT_Unsubscribe
-    34  IOT_MQTT_Publish
-    35  IOT_OTA_Init
-    36  IOT_OTA_Deinit
-    37  IOT_OTA_ReportVersion
-    38  IOT_OTA_RequestImage
-    39  IOT_OTA_ReportProgress
-    40  IOT_OTA_GetConfig
-    41  IOT_OTA_IsFetching
-    42  IOT_OTA_IsFetchFinish
-    43  IOT_OTA_FetchYield
-    44  IOT_OTA_Ioctl
-    45  IOT_OTA_GetLastError
-    46  IOT_Shadow_Construct
-    47  IOT_Shadow_Destroy
-    48  IOT_Shadow_Yield
-    49  IOT_Shadow_RegisterAttribute
-    50  IOT_Shadow_DeleteAttribute
-    51  IOT_Shadow_PushFormat_Init
-    52  IOT_Shadow_PushFormat_Add
-    53  IOT_Shadow_PushFormat_Finalize
-    54  IOT_Shadow_Push
-    55  IOT_Shadow_Push_Async
-    56  IOT_Shadow_Pull
-    57  IOT_Gateway_Generate_Message_ID
-    58  IOT_Gateway_Construct
-    59  IOT_Gateway_Destroy
-    60  IOT_Subdevice_Register
-    61  IOT_Subdevice_Unregister
-    62  IOT_Subdevice_Login
-    63  IOT_Subdevice_Logout
-    64  IOT_Gateway_Get_TOPO
-    65  IOT_Gateway_Get_Config
-    66  IOT_Gateway_Publish_Found_List
-    67  IOT_Gateway_Yield
-    68  IOT_Gateway_Subscribe
-    69  IOT_Gateway_Unsubscribe
-    70  IOT_Gateway_Publish
-    71  IOT_Gateway_RRPC_Register
-    72  IOT_Gateway_RRPC_Response
+     1  IOT_RegisterCallback
+     2  IOT_SetLogLevel
+     3  IOT_DumpMemoryStats
+     4  IOT_SetupConnInfo
+     5  IOT_Ioctl
+     6  IOT_CoAP_Init
+     7  IOT_CoAP_Deinit
+     8  IOT_CoAP_DeviceNameAuth
+     9  IOT_CoAP_Yield
+    10  IOT_CoAP_SendMessage
+    11  IOT_CoAP_GetMessagePayload
+    12  IOT_CoAP_GetMessageCode
+    13  IOT_OpenLog
+    14  IOT_CloseLog
+    15  IOT_SetLogLevel
+    16  IOT_HTTP_Init
+    17  IOT_HTTP_DeInit
+    18  IOT_HTTP_DeviceNameAuth
+    19  IOT_HTTP_SendMessage
+    20  IOT_HTTP_Disconnect
+    21  IOT_Linkkit_Open
+    22  IOT_Linkkit_Connect
+    23  IOT_Linkkit_Yield
+    24  IOT_Linkkit_Close
+    25  IOT_Linkkit_Report
+    26  IOT_Linkkit_Query
+    27  IOT_Linkkit_TriggerEvent
+    28  IOT_MQTT_Construct
+    29  IOT_MQTT_Destroy
+    30  IOT_MQTT_Yield
+    31  IOT_MQTT_LogPost
+    32  IOT_MQTT_CheckStateNormal
+    33  IOT_MQTT_Subscribe
+    34  IOT_MQTT_Subscribe_Sync
+    35  IOT_MQTT_Unsubscribe
+    36  IOT_MQTT_Publish
+    37  IOT_MQTT_Publish_Simple
+    38  IOT_OTA_Init
+    39  IOT_OTA_Deinit
+    40  IOT_OTA_ReportVersion
+    41  IOT_OTA_ReportProgress
+    42  IOT_OTA_IsFetching
+    43  IOT_OTA_IsFetchFinish
+    44  IOT_OTA_FetchYield
+    45  IOT_OTA_Ioctl
+    46  IOT_OTA_GetLastError
+    47  IOT_Shadow_Construct
+    48  IOT_Shadow_Destroy
+    49  IOT_Shadow_Yield
+    50  IOT_Shadow_RegisterAttribute
+    51  IOT_Shadow_DeleteAttribute
+    52  IOT_Shadow_PushFormat_Init
+    53  IOT_Shadow_PushFormat_Add
+    54  IOT_Shadow_PushFormat_Finalize
+    55  IOT_Shadow_Push
+    56  IOT_Shadow_Push_Async
+    57  IOT_Shadow_Pull
 
-### <a name="高级版单品场景API清单">高级版单品场景API清单</a>
-
-    $ cd include
-    $ grep -o "linkkit_[_a-z]* *(" iot_export.h exports/*.h|sed 's!.*:\(.*\)(!\1!'|sort -u|grep -v gateway|cat -n
-
-     1  linkkit_answer_service
-     2  linkkit_cota_init
-     3  linkkit_dispatch
-     4  linkkit_end
-     5  linkkit_fota_init
-     6  linkkit_get_value
-     7  linkkit_invoke_cota_get_config
-     8  linkkit_invoke_cota_service
-     9  linkkit_invoke_fota_service
-    10  linkkit_invoke_raw_service
-    11  linkkit_is_end
-    12  linkkit_is_try_leave
-    13  linkkit_post_property
-    14  linkkit_set_opt
-    15  linkkit_set_tsl
-    16  linkkit_set_value
-    17  linkkit_start
-    18  linkkit_trigger_event
-    19  linkkit_trigger_extended_info_operate
-    20  linkkit_try_leave
-    21  linkkit_yield
-
-### <a name="高级版网关场景API清单">高级版网关场景API清单</a>
-
-    $ cd include
-    $ grep -o "linkkit_gateway_[_a-z]* *(" iot_export.h exports/*.h|sed 's!.*:\(.*\)(!\1!'|sort -u|cat -n
-
-     1  linkkit_gateway_delete_extinfos
-     2  linkkit_gateway_exit
-     3  linkkit_gateway_fota_init
-     4  linkkit_gateway_get_default_params
-     5  linkkit_gateway_get_devinfo
-     6  linkkit_gateway_get_num_devices
-     7  linkkit_gateway_init
-     8  linkkit_gateway_invoke_fota_service
-     9  linkkit_gateway_post_extinfos
-    10  linkkit_gateway_post_property_json
-    11  linkkit_gateway_post_property_json_sync
-    12  linkkit_gateway_post_rawdata
-    13  linkkit_gateway_set_event_callback
-    14  linkkit_gateway_setopt
-    15  linkkit_gateway_start
-    16  linkkit_gateway_stop
-    17  linkkit_gateway_subdev_create
-    18  linkkit_gateway_subdev_destroy
-    19  linkkit_gateway_subdev_login
-    20  linkkit_gateway_subdev_logout
-    21  linkkit_gateway_subdev_register
-    22  linkkit_gateway_subdev_unregister
-    23  linkkit_gateway_trigger_event_json
-    24  linkkit_gateway_trigger_event_json_sync
-
-## <a name="7.3 基础版API接口详解">7.3 基础版API接口详解</a>
-### <a name="IOT_OpenLog">IOT_OpenLog</a>
+## 7.3 基础版API接口详解
+### IOT_OpenLog
 
 原型
 ---
@@ -839,7 +310,7 @@ void IOT_OpenLog(const char *ident);
 
 -----
 
-### <a name="IOT_CloseLog">IOT_CloseLog</a>
+### IOT_CloseLog
 
 原型
 ---
@@ -863,7 +334,7 @@ void IOT_CloseLog(void);
 
 -----
 
-### <a name="IOT_SetLogLevel">IOT_SetLogLevel</a>
+### IOT_SetLogLevel
 
 原型
 ---
@@ -900,7 +371,7 @@ typedef enum _IOT_LogLevel {
 
 -----
 
-### <a name="IOT_DumpMemoryStats">IOT_DumpMemoryStats</a>
+### IOT_DumpMemoryStats
 
 原型
 ---
@@ -924,7 +395,7 @@ void IOT_DumpMemoryStats(IOT_LogLevel level);
 
 -----
 
-### <a name="IOT_SetupConnInfo">IOT_SetupConnInfo</a>
+### IOT_SetupConnInfo
 
 原型
 ---
@@ -971,7 +442,7 @@ typedef struct {
 ```
 
 -----
-### <a name="IOT_Ioctl">IOT_Ioctl</a>
+### IOT_Ioctl
 
 原型
 ---
@@ -1026,7 +497,7 @@ typedef enum {
 
 -----
 
-### <a name="IOT_CoAP_Init">IOT_CoAP_Init</a>
+### IOT_CoAP_Init
 
 原型
 ---
@@ -1071,7 +542,7 @@ typedef struct {
 
 -----
 
-### <a name="IOT_CoAP_Deinit">IOT_CoAP_Deinit</a>
+### IOT_CoAP_Deinit
 
 原型
 ---
@@ -1096,7 +567,7 @@ CoAP反初始化函数, 断开与云端的连接并释放所有指定Context中�
 
 -----
 
-### <a name="IOT_CoAP_DeviceNameAuth">IOT_CoAP_DeviceNameAuth</a>
+### IOT_CoAP_DeviceNameAuth
 
 原型
 ---
@@ -1127,7 +598,7 @@ int IOT_CoAP_DeviceNameAuth(iotx_coap_context_t *p_context)
 
 -----
 
-### <a name="IOT_CoAP_Yield">IOT_CoAP_Yield</a>
+### IOT_CoAP_Yield
 
 原型
 ---
@@ -1155,7 +626,7 @@ int IOT_CoAP_Yield(iotx_coap_context_t *p_context)
 
 -----
 
-### <a name="IOT_CoAP_SendMessage">IOT_CoAP_SendMessage</a>
+### IOT_CoAP_SendMessage
 
 原型
 ---
@@ -1208,7 +679,7 @@ typedef struct {
 + `user_data`: 用户数据, 在收到应答后, 会送回给用户
 + `resp_callback`: 用户注册的回调函数, 当收到该消息的应答时被调用
 
-### <a name="IOT_CoAP_GetMessagePayload">IOT_CoAP_GetMessagePayload</a>
+### IOT_CoAP_GetMessagePayload
 
 原型
 ---
@@ -1240,7 +711,7 @@ int IOT_CoAP_GetMessagePayload(void *p_message, unsigned char **pp_payload, int 
 
 -----
 
-### <a name="IOT_CoAP_GetMessageCode">IOT_CoAP_GetMessageCode</a>
+### IOT_CoAP_GetMessageCode
 
 原型
 ---
@@ -1286,7 +757,7 @@ typedef enum {
 
 -----
 
-### <a name="IOT_HTTP_Init">IOT_HTTP_Init</a>
+### IOT_HTTP_Init
 
 原型
 ---
@@ -1327,7 +798,7 @@ typedef struct {
 
 -----
 
-### <a name="IOT_HTTP_DeInit">IOT_HTTP_DeInit</a>
+### IOT_HTTP_DeInit
 
 原型
 ---
@@ -1352,7 +823,7 @@ HTTP反初始化函数, 断开与云端的连接并释放所有指定Context中�
 
 -----
 
-### <a name="IOT_HTTP_DeviceNameAuth">IOT_HTTP_DeviceNameAuth</a>
+### IOT_HTTP_DeviceNameAuth
 
 原型
 ```
@@ -1379,7 +850,7 @@ int IOT_HTTP_DeviceNameAuth(void *handle);
 
 -----
 
-### <a name="IOT_HTTP_SendMessage">IOT_HTTP_SendMessage</a>
+### IOT_HTTP_SendMessage
 
 原型
 ---
@@ -1432,7 +903,7 @@ typedef struct {
 
 -----
 
-### <a name="IOT_HTTP_Disconnect">IOT_HTTP_Disconnect</a>
+### IOT_HTTP_Disconnect
 
 原型
 ---
@@ -1457,7 +928,7 @@ void IOT_HTTP_Disconnect(void *handle)
 
 -----
 
-### <a name="IOT_MQTT_Construct">IOT_MQTT_Construct</a>
+### IOT_MQTT_Construct
 
 原型
 ---
@@ -1521,7 +992,7 @@ typedef struct {
 
 -----
 
-### <a name="IOT_MQTT_Destroy">IOT_MQTT_Destroy</a>
+### IOT_MQTT_Destroy
 
 原型
 ---
@@ -1549,7 +1020,7 @@ int IOT_MQTT_Destroy(void **phandle);
 
 -----
 
-### <a name="IOT_MQTT_Yield">IOT_MQTT_Yield</a>
+### IOT_MQTT_Yield
 
 原型
 ---
@@ -1577,7 +1048,7 @@ int IOT_MQTT_Yield(void *handle, int timeout_ms);
 
 -----
 
-### <a name="IOT_MQTT_LogPost">IOT_MQTT_LogPost</a>
+### IOT_MQTT_LogPost
 
 原型
 ---
@@ -1608,7 +1079,7 @@ int IOT_MQTT_LogPost(void *pHandle, const char *level, const char *module, const
 
 -----
 
-### <a name="IOT_MQTT_CheckStateNormal">IOT_MQTT_CheckStateNormal</a>
+### IOT_MQTT_CheckStateNormal
 
 原型
 ---
@@ -1636,7 +1107,7 @@ int IOT_MQTT_CheckStateNormal(void *handle);
 
 -----
 
-### <a name="IOT_MQTT_Subscribe">IOT_MQTT_Subscribe</a>
+### IOT_MQTT_Subscribe
 
 原型
 ---
@@ -1672,7 +1143,7 @@ int IOT_MQTT_Subscribe(void *handle,
 
 -----
 
-### <a name="IOT_MQTT_Subscribe_Sync">IOT_MQTT_Subscribe_Sync</a>
+### IOT_MQTT_Subscribe_Sync
 
 原型
 ---
@@ -1711,7 +1182,7 @@ int IOT_MQTT_Subscribe_Sync(void *handle,
 
 -----
 
-### <a name="IOT_MQTT_Unsubscribe">IOT_MQTT_Unsubscribe</a>
+### IOT_MQTT_Unsubscribe
 
 原型
 ---
@@ -1740,7 +1211,7 @@ int IOT_MQTT_Unsubscribe(void *handle, const char *topic_filter);
 
 -----
 
-### <a name="IOT_MQTT_Publish">IOT_MQTT_Publish</a>
+### IOT_MQTT_Publish
 
 原型
 ---
@@ -1770,7 +1241,7 @@ int IOT_MQTT_Publish(void *handle, const char *topic_name, iotx_mqtt_topic_info_
 
 -----
 
-### <a name="IOT_OTA_Init">IOT_OTA_Init</a>
+### IOT_OTA_Init
 
 原型
 ---
@@ -1800,7 +1271,7 @@ void *IOT_OTA_Init(const char *product_key, const char *device_name, void *ch_si
 
 -----
 
-### <a name="IOT_OTA_Deinit">IOT_OTA_Deinit</a>
+### IOT_OTA_Deinit
 
 原型
 ---
@@ -1828,7 +1299,7 @@ int IOT_OTA_Deinit(void *handle)
 
 -----
 
-### <a name="IOT_OTA_ReportVersion">IOT_OTA_ReportVersion</a>
+### IOT_OTA_ReportVersion
 
 原型
 ---
@@ -1857,36 +1328,7 @@ int IOT_OTA_ReportVersion(void *handle, const char *version);
 
 -----
 
-### <a name="IOT_OTA_RequestImage">IOT_OTA_RequestImage</a>
-
-原型
----
-```
-int IOT_OTA_RequestImage(void *handle, const char *version);
-```
-
-接口说明
----
-主动向云端请求新固件信息
-
-参数说明
----
-
-| 参数        | 数据类型        | 方向    | 说明
-|-------------|-----------------|---------|-------------
-| handle      | void *          | 输入    | OTA句柄
-| version     | const char *    | 输入    | 版本号
-
-返回值说明
----
-| 值      | 说明
-|---------|---------
-| 0       | 成功
-| < 0     | 失败
-
------
-
-### <a name="IOT_OTA_ReportProgress">IOT_OTA_ReportProgress</a>
+### IOT_OTA_ReportProgress
 
 原型
 ---
@@ -1936,38 +1378,7 @@ typedef enum {
 
 -----
 
-### <a name="IOT_OTA_GetConfig">IOT_OTA_GetConfig</a>
-
-原型
----
-```
-int IOT_OTA_GetConfig(void *handle, const char *configScope, const char *getType, const char *attributeKeys);
-```
-
-接口说明
----
-该接口用于向云端主动发起Config OTA, 即主动发起配置文件获取请求
-
-参数说明
----
-
-| 参数            | 数据类型        | 方向    | 说明
-|-----------------|-----------------|---------|-------------------------------------
-| handle          | void *          | 输入    | OTA句柄
-| config_scope    | const char *    | 输入    | 配置域, 当前为`product`
-| get_type        | const char *    | 输入    | 配置的数据类型, 当前为`file`
-| attributeKeys   | const char *    | 输入    | 配置的属性信息, 当前为空字符串即可
-
-返回值说明
----
-| 值      | 说明
-|---------|---------
-| 0       | 成功
-| < 0     | 失败
-
------
-
-### <a name="IOT_OTA_IsFetching">IOT_OTA_IsFetching</a>
+### IOT_OTA_IsFetching
 
 原型
 ---
@@ -1995,7 +1406,7 @@ int IOT_OTA_IsFetching(void *handle);
 
 -----
 
-### <a name="IOT_OTA_IsFetchFinish">IOT_OTA_IsFetchFinish</a>
+### IOT_OTA_IsFetchFinish
 
 原型
 ---
@@ -2023,12 +1434,12 @@ int IOT_OTA_IsFetchFinish(void *handle);
 
 -----
 
-### <a name="IOT_OTA_FetchYield">IOT_OTA_FetchYield</a>
+### IOT_OTA_FetchYield
 
 原型
 ---
 ```
-int IOT_OTA_FetchYield(void *handle, char *buf, uint32_t buf_len, uint32_t timeout_ms);
+int IOT_OTA_FetchYield(void *handle, char *buf, uint32_t buf_len, uint32_t timeout_s);
 ```
 
 接口说明
@@ -2053,7 +1464,7 @@ int IOT_OTA_FetchYield(void *handle, char *buf, uint32_t buf_len, uint32_t timeo
 
 -----
 
-### <a name="IOT_OTA_Ioctl">IOT_OTA_Ioctl</a>
+### IOT_OTA_Ioctl
 
 原型
 ---
@@ -2098,7 +1509,8 @@ typedef enum {
     IOT_OTAG_MD5SUM,           /* md5 in string format */
     IOT_OTAG_VERSION,          /* version in string format */
     IOT_OTAG_CHECK_FIRMWARE,    /* Check firmware is valid or not */
-    IOT_OTAG_CHECK_CONFIG       /* Check config file is valid or not */
+    IOT_OTAG_CHECK_CONFIG,      /* Check config file is valid or not */
+    IOT_OTAG_RESET_FETCHED_SIZE  /* reset the size_fetched parameter to be 0 */
 } IOT_OTA_CmdType_t;
 ```
 + `IOT_OTAG_COTA_CONFIG_ID`: 当前可升级配置文件ID
@@ -2114,10 +1526,11 @@ typedef enum {
 + `IOT_OTAG_VERSION`: 当前可升级固件版本号
 + `IOT_OTAG_CHECK_FIRMWARE`: 对已下载固件文件进行校验
 + `IOT_OTAG_CHECK_CONFIG`: 对已下载配置文件进行校验
++ `IOT_OTAG_RESET_FETCHED_SIZE`: 下载开始前, 将已下载的数据量大小size_fetched值清零
 
 -----
 
-### <a name="IOT_OTA_GetLastError">IOT_OTA_GetLastError</a>
+### IOT_OTA_GetLastError
 
 原型
 ---
@@ -2145,7 +1558,7 @@ int IOT_OTA_GetLastError(void *handle);
 
 -----
 
-### <a name="IOT_Shadow_Construct">IOT_Shadow_Construct</a>
+### IOT_Shadow_Construct
 
 原型
 ---
@@ -2173,7 +1586,7 @@ void *IOT_Shadow_Construct(iotx_shadow_para_pt pparams);
 
 -----
 
-### <a name="IOT_Shadow_Destroy">IOT_Shadow_Destroy</a>
+### IOT_Shadow_Destroy
 
 原型
 ---
@@ -2198,7 +1611,7 @@ iotx_err_t IOT_Shadow_Destroy(void *handle);
 
 -----
 
-### <a name="IOT_Shadow_Yield">IOT_Shadow_Yield</a>
+### IOT_Shadow_Yield
 
 原型
 ---
@@ -2224,7 +1637,7 @@ void IOT_Shadow_Yield(void *handle, uint32_t timeout_ms);
 
 -----
 
-### <a name="IOT_Shadow_RegisterAttribute">IOT_Shadow_RegisterAttribute</a>
+### IOT_Shadow_RegisterAttribute
 
 原型
 ---
@@ -2250,7 +1663,7 @@ iotx_err_t IOT_Shadow_RegisterAttribute(void *handle, iotx_shadow_attr_pt pattr)
 
 -----
 
-### <a name="IOT_Shadow_DeleteAttribute">IOT_Shadow_DeleteAttribute</a>
+### IOT_Shadow_DeleteAttribute
 
 原型
 ---
@@ -2276,7 +1689,7 @@ iotx_err_t IOT_Shadow_DeleteAttribute(void *handle, iotx_shadow_attr_pt pattr);
 
 -----
 
-### <a name="IOT_Shadow_PushFormat_Init">IOT_Shadow_PushFormat_Init</a>
+### IOT_Shadow_PushFormat_Init
 
 原型
 ---
@@ -2307,7 +1720,7 @@ iotx_err_t IOT_Shadow_PushFormat_Init(void *pshadow,
 
 -----
 
-### <a name="IOT_Shadow_PushFormat_Add">IOT_Shadow_PushFormat_Add</a>
+### IOT_Shadow_PushFormat_Add
 
 原型
 ---
@@ -2336,7 +1749,7 @@ iotx_err_t IOT_Shadow_PushFormat_Add(void *pshadow,
 
 -----
 
-### <a name="IOT_Shadow_PushFormat_Finalize">IOT_Shadow_PushFormat_Finalize</a>
+### IOT_Shadow_PushFormat_Finalize
 
 原型
 ---
@@ -2362,7 +1775,7 @@ iotx_err_t IOT_Shadow_PushFormat_Finalize(void *pshadow, format_data_pt pformat)
 
 -----
 
-### <a name="IOT_Shadow_Push">IOT_Shadow_Push</a>
+### IOT_Shadow_Push
 
 原型
 ---
@@ -2389,7 +1802,7 @@ iotx_err_t IOT_Shadow_Push(void *handle, char *data, uint32_t data_len, uint16_t
 
 -----
 
-### <a name="IOT_Shadow_Push_Async">IOT_Shadow_Push_Async</a>
+### IOT_Shadow_Push_Async
 
 原型
 ---
@@ -2427,7 +1840,7 @@ int IOT_Shadow_Push_Async(void *handle,
 
 -----
 
-### <a name="IOT_Shadow_Pull">IOT_Shadow_Pull</a>
+### IOT_Shadow_Pull
 
 原型
 ---
@@ -2452,7 +1865,7 @@ iotx_err_t IOT_Shadow_Pull(void *handle);
 
 -----
 
-### <a name="IOT_Gateway_Generate_Message_ID">IOT_Gateway_Generate_Message_ID</a>
+### IOT_Gateway_Generate_Message_ID
 
 原型
 ---
@@ -2476,7 +1889,7 @@ uint32_t IOT_Gateway_Generate_Message_ID(void);
 
 -----
 
-### <a name="IOT_Gateway_Construct">IOT_Gateway_Construct</a>
+### IOT_Gateway_Construct
 
 原型
 ---
@@ -2517,7 +1930,7 @@ typedef struct {
 
 -----
 
-### <a name="IOT_Gateway_Destroy">IOT_Gateway_Destroy</a>
+### IOT_Gateway_Destroy
 
 原型
 ---
@@ -2545,7 +1958,7 @@ int IOT_Gateway_Destroy(void **handle);
 
 -----
 
-### <a name="IOT_Subdevice_Register">IOT_Subdevice_Register</a>
+### IOT_Subdevice_Register
 
 原型
 ---
@@ -2592,7 +2005,7 @@ int IOT_Subdevice_Register(void *handle,
 
 -----
 
-### <a name="IOT_Subdevice_Unregister">IOT_Subdevice_Unregister</a>
+### IOT_Subdevice_Unregister
 
 原型
 ---
@@ -2622,7 +2035,7 @@ int IOT_Subdevice_Unregister(void* handle, const char* product_key, const char* 
 
 -----
 
-### <a name="IOT_Subdevice_Login">IOT_Subdevice_Login</a>
+### IOT_Subdevice_Login
 
 原型
 ---
@@ -2670,7 +2083,7 @@ int IOT_Subdevice_Login(void* handle,
 
 -----
 
-### <a name="IOT_Subdevice_Logout">IOT_Subdevice_Logout</a>
+### IOT_Subdevice_Logout
 
 原型
 ---
@@ -2700,7 +2113,7 @@ int IOT_Subdevice_Logout(void* handle, const char * product_key, const char * de
 
 -----
 
-### <a name="IOT_Gateway_Get_TOPO">IOT_Gateway_Get_TOPO</a>
+### IOT_Gateway_Get_TOPO
 
 原型
 ---
@@ -2731,7 +2144,7 @@ int IOT_Gateway_Get_TOPO(void* handle, char* get_topo_reply, uint32_t* length);
 
 -----
 
-### <a name="IOT_Gateway_Get_Config">IOT_Gateway_Get_Config</a>
+### IOT_Gateway_Get_Config
 
 原型
 ---
@@ -2763,7 +2176,7 @@ int IOT_Gateway_Get_Config(void *handle,
 
 -----
 
-### <a name="IOT_Gateway_Publish_Found_List">IOT_Gateway_Publish_Found_List</a>
+### IOT_Gateway_Publish_Found_List
 
 原型
 ---
@@ -2793,7 +2206,7 @@ int IOT_Gateway_Publish_Found_List(void* handle, const char* product_key, const 
 
 -----
 
-### <a name="IOT_Gateway_Yield">IOT_Gateway_Yield</a>
+### IOT_Gateway_Yield
 
 原型
 ---
@@ -2822,7 +2235,7 @@ int IOT_Gateway_Yield(void* handle, uint32_t timeout);
 
 -----
 
-### <a name="IOT_Gateway_Subscribe">IOT_Gateway_Subscribe</a>
+### IOT_Gateway_Subscribe
 
 原型
 ---
@@ -2857,7 +2270,7 @@ int IOT_Gateway_Subscribe(void* handle,
 
 -----
 
-### <a name="IOT_Gateway_Unsubscribe">IOT_Gateway_Unsubscribe</a>
+### IOT_Gateway_Unsubscribe
 
 原型
 ---
@@ -2886,7 +2299,7 @@ int IOT_Gateway_Unsubscribe(void* handle, const char *topic_filter);
 
 -----
 
-### <a name="IOT_Gateway_Publish">IOT_Gateway_Publish</a>
+### IOT_Gateway_Publish
 
 原型
 ---
@@ -2916,7 +2329,7 @@ int IOT_Gateway_Publish(void *handle, const char *topic_name, iotx_mqtt_topic_in
 
 -----
 
-### <a name="IOT_Gateway_RRPC_Register">IOT_Gateway_RRPC_Register</a>
+### IOT_Gateway_RRPC_Register
 
 原型
 ---
@@ -2950,7 +2363,7 @@ int IOT_Gateway_RRPC_Register(void* handle,
 
 -----
 
-### <a name="IOT_Gateway_RRPC_Response">IOT_Gateway_RRPC_Response</a>
+### IOT_Gateway_RRPC_Response
 
 原型
 ---
@@ -2986,8 +2399,9 @@ int IOT_Gateway_RRPC_Response(void* handle,
 
 -----
 
-## <a name="7.3 高级版(新版)API接口详解">7.3 高级版(新版)API接口详解</a>
-### <a name="IOT_Linkkit_Open">IOT_Linkkit_Open</a>
+## 7.3 高级版(新版)API接口详解
+
+### IOT_Linkkit_Open
 
 原型
 ---
@@ -2997,7 +2411,7 @@ int IOT_Linkkit_Open(iotx_linkkit_dev_type_t dev_type, iotx_linkkit_dev_meta_inf
 
 接口说明
 ---
-初始化设备资源, 在对设备进行操作之前, 必须先调用此接口
+初始化设备资源, 在对设备进行操作之前, 必须先调用此接口. 该接口调用成功的情况下会返回设备ID, 当使用其他接口时需要以设备ID为入参, 对指定的设备进行操作
 
 参数说明
 ---
@@ -3011,8 +2425,7 @@ int IOT_Linkkit_Open(iotx_linkkit_dev_type_t dev_type, iotx_linkkit_dev_meta_inf
 ---
 | 值      | 说明
 |---------|-----------------
-| 0       | 创建主设备成功
-| > 0     | 创建子设备成功
+| >= 0    | 创建设备成功
 | < 0     | 失败
 
 参数附加说明
@@ -3044,56 +2457,12 @@ typedef struct {
 
 -----
 
-### <a name="IOT_Linkkit_Ioctl">IOT_Linkkit_Ioctl</a>
+### IOT_Linkkit_Connect
 
 原型
 ---
 ```
-int IOT_Linkkit_Ioctl(int devid, iotx_linkkit_ioctl_cmd_t cmd, void *arg);
-```
-
-接口说明
----
-在使 [#IOT_Linkkit_Open](#IOT_Linkkit_Open) 建设备后, 可使用该接口对设备参数进行调整
-
-参数说明
----
-
-| 参数    | 数据类型                    | 方向        | 说明
-|---------|-----------------------------|-------------|---------------------
-| devid   | int                         | 输入        | 设备ID
-| cmd     | iotx_linkkit_ioctl_cmd_t    | 输入        | 需要执行的命令类型
-| arg     | void *                      | 输入/输出   | `cmd`命令的参数
-
-返回值说明
----
-| 值      | 说明
-|---------|---------
-| 0       | 成功
-| < 0     | 失败
-
-参数附加说明
----
-```
-typedef enum {
-    IOTX_LINKKIT_CMD_OPTION_PROPERTY_POST_REPLY,
-    IOTX_LINKKIT_CMD_OPTION_EVENT_POST_REPLY,
-    IOTX_LINKKIT_CMD_OPTION_PROPERTY_SET_REPLY,
-    IOTX_LINKKIT_CMD_MAX
-} iotx_linkkit_ioctl_cmd_t;
-```
-+ IOTX_LINKKIT_CMD_OPTION_PROPERTY_POST_REPLY: 在设备上报属性后, 是否需要云端的应答消息. `arg`数据类型为`int *`
-+ IOTX_LINKKIT_CMD_OPTION_EVENT_POST_REPLY: 在设备上报事件后, 是否需要云端的应答消息. `arg`数据类型为`int *`
-+ IOTX_LINKKIT_CMD_OPTION_PROPERTY_SET_REPLY: 在收到云端的属性设置后, 是否需要向云端发送应答消息. `arg`数据类型为`int *`
-
------
-
-### <a name="IOT_Linkkit_Connect">IOT_Linkkit_Connect</a>
-
-原型
----
-```
-int IOT_Linkkit_Connect(int devid, iotx_linkkit_event_handler_t *hdlrs);
+int IOT_Linkkit_Connect(int devid);
 ```
 
 接口说明
@@ -3106,7 +2475,6 @@ int IOT_Linkkit_Connect(int devid, iotx_linkkit_event_handler_t *hdlrs);
 | 参数    | 数据类型                        | 方向    | 说明
 |---------|---------------------------------|---------|-------------------------------------
 | devid   | int                             | 输入    | 设备ID
-| hdlrs   | iotx_linkkit_event_handler_t *  | 输出    | 用户回调函数(当设备为主设备时有效)
 
 返回值说明
 ---
@@ -3115,85 +2483,9 @@ int IOT_Linkkit_Connect(int devid, iotx_linkkit_event_handler_t *hdlrs);
 | 0       | 成功
 | < 0     | 失败
 
-参数附加说明
----
-```
-typedef struct {
-    int (* connected)(void);
-    int (* disconnected)(void);
-    int (* down_raw)(const int devid, const unsigned char *payload, const int payload_len);
-    int (* up_raw_reply)(const int devid, const unsigned char *payload, const int payload_len);
-    int (* async_service_request)(const int devid, const char *serviceid, const int serviceid_len, const char *request, const int request_len, char **response, int *response_len);
-    int (* sync_service_request)(const int devid, const char *serviceid, const int serviceid_len, const char *request, const int request_len, char **response, int *response_len);
-    int (* property_set)(const int devid, const char *request, const int request_len);
-    int (* property_get)(const int devid, const char *request, const int request_len, char **response, int *response_len);
-    int (* post_reply)(const int devid, const int msgid, const int code, const char *reply, const int reply_len);
-    int (* ntp_response)(const char *utc);
-    int (* permit_join)(void);
-    int (* initialized)(const int devid);
-} iotx_linkkit_event_handler_t;
-```
-+ int (* connected)(void);
-    - 当设备与云端建立连接后, 会触发此回调函数
-+ int (* disconnected)(void);
-    - 当设备与云端断开连接后, 会触发此回调函数
-+ int (* down_raw)(const int devid, const unsigned char *payload, const int payload_len);
-    - 当设备收到透传数据下发时, 会触发此回调
-    - `devid`: 设备ID
-    - `payload`: 透传数据buffer
-    - `paylaod_len`: 透传数据buffer长度
-+ int (* up_raw_reply)(const int devid, const unsigned char *payload, const int payload_len);
-    - 当用户向云端发送透传数据后, 收到透传数据应答会触发此回调函数
-    - `devid`: 设备ID
-    - `payload`: 透传数据buffer
-    - `payload_len`: 透传数据buffer长度
-+ int (* async_service_request)(const int devid, const char *serviceid, const int serviceid_len, const char *request, const int request_len, char **response, int *response_len);
-    - 当设备收到异步服务调用请求时, 会触发此回调函数
-    - `devid`: 设备ID
-    - `serviceid`: TSL异步服务ID, 由用户在云端控制台生成
-    - `serviceid_len`: 异步服务ID的长度
-    - `request`: 异步服务的输入参数, 由用户在云端控制台生成
-    - `request_len`: 异步服务的输入参数长度
-    - `response`: 用户需要回复云端的异步服务输出参数. 如果有输出参数需要回复给云端, 则用户应使用`HAL_Malloc`为`*response`分配空间用于存放输出参数, SDK在使用该buffer结束后, 会自动释放这块内存, 用户无需释放. 如果没有输出参数需要回复给云端, 忽略此参数
-    - `response_len`: 异步服务输出参数长度. 如果没有输出参数需要回复给云端, 忽略此参数
-+ int (* sync_service_request)(const int devid, const char *serviceid, const int serviceid_len, const char *request, const int request_len, char **response, int *response_len);
-    - 当设备收到同步服务调用请求时, 会触发此回调函数
-    - `devid`: 设备ID
-    - `serviceid`: TSL同步服务ID, 由用户在云端控制台生成
-    - `serviceid_len`: 同步服务ID的长度
-    - `request_len`: 同步服务的输入参数长度
-    - `response`: 用户需要回复云端的同步服务输出参数. 如果有输出参数需要回复给云端, 则用户应使用`HAL_Malloc`为`*response`分配空间用于存放输出参数, SDK在使用该buffer结束后, 会自动释放这块内存, 用户无需释放. 如果没有输出参数需要回复给云端, 忽略此参数
-    - `response_len`: 同步服务输出参数长度. 如果没有输出参数需要回复给云端, 忽略此参数
-+ int (* property_set)(const int devid, const char *request, const int request_len);
-    - 当设备收到属性设置请求时, 会触发此回调函数
-    - `devid`: 设备ID
-    - `request`: 属性设置请求消息, 为JSON数组格式, 数组含若干JSON对象, 每个JSON对象的Key为属性ID, Value为属性的值
-    - `request_len`: 属性设置请求消息的长度
-    - 需要注意的是, 云端下发该请求后, 在云端保存的相关属性值并不会改变, 除非用户显示调用 [#IOT_Linkkit_Post](#IOT_Linkkit_Post) 上报相关属性值
-+ int (* property_get)(const int devid, const char *request, const int request_len, char **response, int *response_len);
-    - 当设备收到获取属性请求时, 会触发此回调函数
-    - `devid`: 设备ID
-    - `request`: 获取属性值的请求消息, 为JSON数组格式, 数组含若干项JSON字符串, 每个字符串为需要获取值的属性ID
-    - `request_len`: 获取属性值的请求消息长度
-    - `response`: 用户需要回复的属性值消息. 如果属性值可以回复, 则用户应使用`HAL_Malloc`为`*response`分配空间用于存放属性值, SDK在使用该buffer结束后, 会自动释放这块内存, 用户无需释放. 如果没有属性值可以回复, 忽略此参数
-    - `response_len`: 回复的属性值消息长度
-+ int (* post_reply)(const int devid, const int msgid, const int code, const char *reply, const int reply_len);
-    - 当用户使用 [#IOT_Linkkit_Post](#IOT_Linkkit_Post) 或 [#IOT_Linkkit_TriggerEvent](#IOT_Linkkit_TriggerEvent) 发送消息后, 收到应答时, 会触发此回调函数
-    - `devid`: 设备ID
-    - `msgid`: 应答消息的ID, 与发送消息时产生的ID一致, 可用于消息匹配
-    - `code`: 云端返回的错误码, 可参考`云端接口说明`文档
-    - `reply`: 应答的payload, 可能为NULL
-    - `reply_len`: 应答的payload长度
-+ int (* ntp_response)(const char *utc);
-    - 当设备连接云端成功后, SDK会向云端请求UTC时间戳, 在SDK获取到时间戳后, 会触发此回调
-    - `utc`: 时间戳的值, 为字符串类型
-+ int (* initialized)(const int devid);
-    - 当设备完成初始化时, 会触发此回调
-    - `devid`: 设备ID
-
 -----
 
-### <a name="IOT_Linkkit_Yield">IOT_Linkkit_Yield</a>
+### IOT_Linkkit_Yield
 
 原型
 ---
@@ -3203,7 +2495,7 @@ void IOT_Linkkit_Yield(int timeout_ms);
 
 接口说明
 ---
-若SDK占有独立线程, 该函数内容为空, 否则表示将CPU交给SDK让其接收网络报文并将消息分发到用户的回调函数中
+若SDK占有独立线程, 该函数只将接收到的网络报文分发到用户的回调函数中, 否则表示将CPU交给SDK让其接收网络报文并将消息分发到用户的回调函数中
 
 参数说明
 ---
@@ -3218,7 +2510,7 @@ void IOT_Linkkit_Yield(int timeout_ms);
 
 -----
 
-### <a name="IOT_Linkkit_Close">IOT_Linkkit_Close</a>
+### IOT_Linkkit_Close
 
 原型
 ---
@@ -3246,58 +2538,7 @@ int IOT_Linkkit_Close(int devid);
 
 -----
 
-### <a name="IOT_Linkkit_Post">IOT_Linkkit_Post</a>
-
-原型
----
-```
-int IOT_Linkkit_Post(int devid,
-                        iotx_linkkit_msg_type_t msg_type,
-                        unsigned char *payload,
-                        int payload_len);
-```
-
-接口说明
----
-向云端发送消息, 包括属性上报/设备标签信息更新上报/设备标签信息删除上报/透传数据上报
-
-参数说明
----
-
-| 参数            | 数据类型                    | 方向    | 说明
-|-----------------|-----------------------------|---------|---------------------
-| devid           | int                         | 输入    | 设备ID
-| msg_type        | iotx_linkkit_msg_type_t     | 输入    | 需要上报的消息类型
-| payload         | unsigned char *             | 输入    | 消息Payload
-| payload_len     | int                         | 输入    | 消息Payload的长度
-
-返回值说明
----
-| 值      | 说明
-|---------|---------
-| 0       | 成功
-| >= 1    | 消息ID
-| < 0     | 失败
-
-参数附加说明
----
-```
-typedef enum {
-    IOTX_LINKKIT_MSG_POST_PROPERTY,
-    IOTX_LINKKIT_MSG_DEVICEINFO_UPDATE,
-    IOTX_LINKKIT_MSG_DEVICEINFO_DELETE,
-    IOTX_LINKKIT_MSG_POST_RAW_DATA,
-    IOTX_LINKKIT_MSG_MAX
-} iotx_linkkit_msg_type_t;
-```
-+ IOTX_LINKKIT_MSG_POST_PROPERTY: 设备属性数据上报
-+ IOTX_LINKKIT_MSG_DEVICEINFO_UPDATE: 设备标签更新信息上报
-+ IOTX_LINKKIT_MSG_DEVICEINFO_DELETE: 设备标签删除信息上报
-+ IOTX_LINKKIT_MSG_POST_RAW_DATA: 设备透传数据上报
-
------
-
-### <a name="IOT_Linkkit_TriggerEvent">IOT_Linkkit_TriggerEvent</a>
+### IOT_Linkkit_TriggerEvent
 
 原型
 ---
@@ -3329,11 +2570,676 @@ int IOT_Linkkit_TriggerEvent(int devid, char *eventid, int eventid_len, char *pa
 
 -----
 
-## <a name="7.4 高级版(旧版)单品API详解">7.4 高级版(旧版)单品API详解</a>
+### IOT_Linkkit_Report
+
+原型
+---
+```
+int IOT_Linkkit_Report(int devid,
+                        iotx_linkkit_msg_type_t msg_type,
+                        unsigned char *payload,
+                        int payload_len);
+```
+
+接口说明
+---
+向云端发送消息, 包括属性上报/设备标签信息更新上报/设备标签信息删除上报/透传数据上报/子设备登录/子设备登出
+
+参数说明
+---
+
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| msg_type        | iotx_linkkit_msg_type_t     | 输入    | 需要上报的消息类型
+| payload         | unsigned char *             | 输入    | 消息Payload
+| payload_len     | int                         | 输入    | 消息Payload的长度
+
+返回值说明
+---
+| 值      | 说明
+|---------|---------
+| 0       | 成功
+| >= 1    | 消息ID
+| < 0     | 失败
+
+参数附加说明
+---
+```
+typedef enum {
+    ITM_MSG_POST_PROPERTY,
+    ITM_MSG_DEVICEINFO_UPDATE,
+    ITM_MSG_DEVICEINFO_DELETE,
+    ITM_MSG_POST_RAW_DATA,
+    ITM_MSG_LOGIN,
+    ITM_MSG_LOGOUT,
+    ...
+    ...
+
+    IOTX_LINKKIT_MSG_MAX
+} iotx_linkkit_msg_type_t;
+```
++ ITM_MSG_POST_PROPERTY: 设备属性数据上报
++ ITM_MSG_DEVICEINFO_UPDATE: 设备标签更新信息上报
++ ITM_MSG_DEVICEINFO_DELETE: 设备标签删除信息上报
++ ITM_MSG_POST_RAW_DATA: 设备透传数据上报
++ ITM_MSG_LOGIN: 子设备登录
++ ITM_MSG_LOGOUT: 子设备登出
+
+-----
+
+### IOT_Linkkit_Query
+
+原型
+---
+```
+int IOT_Linkkit_Query(int devid,
+                        iotx_linkkit_msg_type_t msg_type,
+                        unsigned char *payload,
+                        int payload_len);
+```
+
+接口说明
+---
+向云端查询数据, 包括查询时间戳/查询设备的拓扑关系列表/查询FOTA升级的固件数据/查询COTA升级的Config文件数据/查询是否有可用的新固件/查询是否有可用的Config文件
+
+参数说明
+---
+
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| msg_type        | iotx_linkkit_msg_type_t     | 输入    | 需要上报的消息类型
+| payload         | unsigned char *             | 输入    | 消息Payload
+| payload_len     | int                         | 输入    | 消息Payload的长度
+
+返回值说明
+---
+| 值      | 说明
+|---------|---------
+| 0       | 成功
+| >= 1    | 消息ID
+| < 0     | 失败
+
+参数附加说明
+---
+```
+typedef enum {
+    ...
+    ...
+    ITM_MSG_QUERY_TIMESTAMP,
+    ITM_MSG_QUERY_TOPOLIST,
+    ITM_MSG_QUERY_FOTA_DATA,
+    ITM_MSG_QUERY_COTA_DATA,
+    ITM_MSG_REQUEST_COTA,
+    ITM_MSG_REQUEST_FOTA_IMAGE,
+
+    IOTX_LINKKIT_MSG_MAX
+} iotx_linkkit_msg_type_t;
+```
++ ITM_MSG_QUERY_TIMESTAMP: 查询时间戳
++ ITM_MSG_QUERY_TOPOLIST: 查询设备的拓扑关系列表
++ ITM_MSG_QUERY_FOTA_DATA: 查询FOTA升级的固件数据
++ ITM_MSG_QUERY_COTA_DATA: 查询COTA升级的远程配置数据
++ ITM_MSG_REQUEST_COTA: 查询是否有可用的新固件
++ ITM_MSG_REQUEST_FOTA_IMAGE: 查询是否有可用的远程配置数据
+
+-----
+
+### IOT_RegisterCallback
+
+原型
+---
+```
+#define IOT_RegisterCallback(evt, cb)           iotx_register_for_##evt(cb);
+
+```
+
+接口说明
+---
+该接口用于注册事件的回调函数, 当Linkkit SDK产生事件时, 会调用对应的回调函数
+
+参数说明
+---
+
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| evt           | iotx_ioctl_event_t         | 输入    | 事件名称
+| cb            | 根据evt的不同而各有不同        | 输入    | 回调函数
+
+-----
+
+返回值说明
+---
+无返回值
+
+参数附加说明
+---
+```
+typedef enum {
+    ...
+    ITE_CONNECT_SUCC,
+    ...
+    ITE_DISCONNECTED,
+    ITE_RAWDATA_ARRIVED,
+    ITE_SERVICE_REQUST,
+    ITE_PROPERTY_SET,
+    ITE_PROPERTY_GET,
+    ITE_REPORT_REPLY,
+    ITE_TRIGGER_EVENT_REPLY,
+    ITE_TIMESTAMP_REPLY,
+    ITE_TOPOLIST_REPLY,
+    ITE_PERMIT_JOIN,
+    ITE_INITIALIZE_COMPLETED,
+    ITE_FOTA,
+    ITE_COTA
+} iotx_ioctl_event_t;
+```
+
+| 事件 | 回调函数原型 | 事件触发条件说明 |
+|------|-----------|--------|----
+| [ITE_CONNECT_SUCC](#ITE_CONNECT_SUCC) | int callback(void); | 与云端连接成功时 |
+| [ITE_DISCONNECTED](#ITE_DISCONNECTED) | int callback(void); | 与云端连接断开时 |
+| [ITE_RAWDATA_ARRIVED](#ITE_RAWDATA_ARRIVED) | int callback(const int devid, const unsigned char *payload, const int payload_len);  | Linkkit收到收到raw data数据时 |
+| [ITE_SERVICE_REQUST](#ITE_SERVICE_REQUST) | int callback(const int devid, const char *serviceid, const int serviceid_len, const char *request, const int request_len, char **response, int *response_len);  | Linkkit收到收到服务(同步/异步)调用请求时 |
+| [ITE_PROPERTY_SET](#ITE_PROPERTY_SET) | int callback(const int devid, const char *request, const int request_len); | Linkkit收到收到属性设置请求时 |
+| [ITE_PROPERTY_GET](#ITE_PROPERTY_GET) | int callback(const int devid, const char *request, const int request_len, char **response, int *response_len); | Linkkit收到收到属性获取的请求时 |
+| [ITE_REPORT_REPLY](#ITE_REPORT_REPLY) | int callback(const int devid, const int msgid, const int code, const char *reply, const int reply_len); | Linkkit收到收到上报消息的应答时 |
+| [ITE_TRIGGER_EVENT_REPLY](#ITE_TRIGGER_EVENT_REPLY) | int callback(const int devid, const int msgid, const int code, const char *eventid, const int eventid_len, const char *message, const int message_len); | Linkkit收到收到事件上报消息的应答时 |
+| [ITE_TIMESTAMP_REPLY](#ITE_TIMESTAMP_REPLY) | int callback(const char *timestamp); | 当Linkkit收到收到查询时间戳请求的应答时 |
+| [ITE_TOPOLIST_REPLY](#ITE_TOPOLIST_REPLY) | int callback(const int devid, const int msgid, const int code, const char * payload, const int payload_len); | Linkkit收到收到查询拓扑关系请求的应答时 |
+| [ITE_PERMIT_JOIN](#ITE_PERMIT_JOIN) | int callback(const char * product_key, const int time); | Linkkit收到允许子设备入网的请求时
+| [ITE_INITIALIZE_COMPLETED](#ITE_INITIALIZE_COMPLETED) | int callback(const int devid); | 设备初始化完成时 |
+| [ITE_FOTA](#ITE_FOTA) | int callback(int type, const char *version); | Linkkit收到可用固件的通知时 |
+| [ITE_COTA](#ITE_COTA) | int callback(int type, const char *config_id, int config_size, const char *get_type, const char *sign, const char *sign_method, const char *url); | Linkkit收到可用远程配置文件的通知时 |
+
+### ITE_CONNECT_SUCC事件
+
+原型
+---
+```
+int callback(void);
+```
+
+接口说明
+---
+当Linkkit与云端连接成功时, 会触发此事件
+
+参数说明
+---
+无
+
+-----
+
+返回值说明
+---
+| 值 | 说明 |
+|---|---|---
+| 0 | 事件处理成功 |
+| -1 | 事件处理失败 |
+
+### ITE_DISCONNECTED事件
+
+原型
+---
+```
+int callback(void);
+```
+
+接口说明
+---
+当Linkkit与云端连接断开时, 会触发此事件
+
+参数说明
+---
+无
+
+返回值说明
+---
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_RAWDATA_ARRIVED事件
+
+原型
+---
+```
+int callback(const int devid, const unsigned char *payload, const int payload_len);
+```
+
+接口说明
+---
+当Linkkit收到透传数据时, 会触发此事件并调用回调函数
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| payload         | const unsigned char *       | 输入    | 透传数据payload
+| payload_len     | const int                   | 输入    | payload的长度
+
+返回值说明
+---
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_SERVICE_REQUST事件
+
+原型
+---
+```
+int callback(const int devid, const char *serviceid, const int serviceid_len, const char *request, const int request_len, char **response, int *response_len);
+```
+
+接口说明
+---
+当Linkkit收到异步或同步的服务调用时, 会触发此事件并调用回调函数. 其中, 如果服务有输出参数需要发送回云端, 用户需要对`*response`使用`HAL_Malloc`分配一块内存, 将需要发送给云端的消息填入其中, 并将输出参数的长度填入`*response_len`中, Linkkit会负责释放这块内存. 具体操作可参考示例程序`linkkit_example_solo.c`
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| serviceid       | const char *                | 输入    | 服务ID
+| serviceid_len   | const int                   | 输入    | serviceid的长度
+| request         | const char *                | 输入    | 服务的输入参数
+| request_len     | const int                   | 输入    | 服务的输入参数长度
+| response        | char **                     | 输出    | 服务的输出参数
+| response_len    | int *                       | 输出    | 服务的输出参数长度
+
+返回值说明
+---
+返回值需要注意的是, 当***response**存在的情况下, 返回0或-1会将此次服务调用的成功与否一并发送给云端
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_PROPERTY_SET事件
+
+原型
+---
+```
+int callback(const int devid, const char *request, const int request_len);
+```
+
+接口说明
+---
+当Linkkit收到属性设置的请求时, 会触发此事件并调用回调函数
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| request         | const char *                | 输入    | 属性设置的payload
+| request_len     | const int                   | 输入    | payload的长度
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_PROPERTY_GET事件
+
+原型
+---
+```
+int callback(const int devid, const char *request, const int request_len, char **response, int *response_len);
+```
+
+接口说明
+---
+当Linkkit收到属性获取的请求时, 会触发此事件并调用回调函数. 其中, `request`会包含所有发送方需要知道的属性ID, 用户需要对`*response`使用`HAL_Malloc`分配一块内存并将所有请求的属性ID和它们的值填到`*response`中, 将`*response`的长度填到`*response_len`中, Linkkit会负责释放这块内存. 具体操作可参考示例程序`linkkit_example_solo.c`
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| request         | const char *                | 输入    | 属性获取请求的payload
+| request_len     | const int                   | 输入    | payload的长度
+| response        | char **                     | 输出    | 所有被请求的属性值的集合
+| response_len    | int *                       | 输出    | *response的长度
+
+返回值说明
+---
+返回值需要注意的是, 当***response**存在的情况下, 返回0或-1会将此次服务调用的成功与否一并发送给云端
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_REPORT_REPLY事件
+
+原型
+---
+```
+int callback(const int devid, const int msgid, const int code, const char *reply, const int reply_len);
+```
+
+接口说明
+---
+当Linkkit收到属性上报/设备标签更新/设备标签删除的应答时, 会触发此事件并调用回调函数
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| msgid           | const int                   | 输入    | 消息ID
+| code            | const int                   | 输入    | 云端返回的错误码
+| reply           | const char *                | 输入    | 错误码的描述信息
+| reply_len       | const int                   | 输入    | 错误码描述信息的长度
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_TRIGGER_EVENT_REPLY事件
+
+原型
+---
+```
+int callback(const int devid, const int msgid, const int code, const char *eventid, const int eventid_len, const char *message, const int message_len);
+```
+
+接口说明
+---
+当Linkkit收到事件上报的应答时, 会触发此事件并调用回调函数
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| msgid           | const int                   | 输入    | 消息ID
+| code            | const int                   | 输入    | 云端返回的错误码
+| eventid         | const char *                | 输入    | 事件ID
+| eventid_len     | const int                   | 输入    | 事件ID的长度
+| message         | const char *                | 输入    | 事件错误码的描述信息
+| message_len     | const int                   | 输入    | message的长度
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_TIMESTAMP_REPLY事件
+
+原型
+---
+```
+int callback(const char *timestamp);
+```
+
+接口说明
+---
+当Linkkit收到查询时间戳的应答时, 会触发此事件并调用回调函数
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| timestamp       | const char *                | 输入     | 时间戳字符串
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_TOPOLIST_REPLY事件
+
+原型
+---
+```
+int callback(const int devid, const int msgid, const int code, const char * payload, const int payload_len);
+```
+
+接口说明
+---
+当Linkkit收到查询时间戳的应答时, 会触发此事件并调用回调函数
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+| msgid           | const int                   | 输入    | 消息ID
+| code            | const int                   | 输入    | 云端返回的错误码
+| payload         | const char *                | 输入    | 拓扑关系列表
+| payload_len     | const int                   | 输入    | payload的长度
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_PERMIT_JOIN事件
+
+原型
+---
+```
+int callback(const char * product_key, const int time);
+```
+
+接口说明
+---
+当Linkkit收到允许子设备入网的请求时, 会触发此事件并调用回调函数
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| product_key     | const char *                | 输入    | 子设备的Product Key, 如果该字段为字符串"NULL", 则允许任何子设备接入
+| time            | const int                   | 输入    | 允许子设备接入的时间窗口
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_INITIALIZE_COMPLETED事件
+
+原型
+---
+```
+int callback(const int devid);
+```
+
+接口说明
+---
+当使用`IOT_Linkkit_Connect`连接网络的设备初始化完成时, 会触发此事件并调用回调函数
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| devid           | int                         | 输入    | 设备ID
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_FOTA事件
+
+原型
+---
+```
+int callback(int type, const char *version);
+```
+
+接口说明
+---
+当Linkkit收到可用固件的通知时, 会触发此事件并调用回调函数. 用户在收到新固件通知后, 可使用`IOT_Linkkit_Query`的`ITM_MSG_QUERY_FOTA_DATA`消息获取新固件
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| type            | int                         | 输入    | FOTA的消息类型, 目前只有值为`0`的一种消息, 即新固件到达
+| version         | const char *                | 输入    | 可用的固件版本号
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### ITE_COTA事件
+
+原型
+---
+```
+int callback(int type, const char *config_id, int config_size, const char *get_type, const char *sign, const char *sign_method, const char *url);
+```
+
+接口说明
+---
+当Linkkit收到可用配置文件的通知时, 会触发此事件并调用回调函数. 用户在收到新固件通知后, 可使用`IOT_Linkkit_Query`的`ITM_MSG_QUERY_COTA_DATA`消息获取新固件
+
+参数说明
+---
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|---------|---------------------
+| type            | int                         | 输入    | COTA的消息类型, 目前只有值为`0`的一种消息, 即存在可用的配置文件
+| config_id       | const char *                | 输入    | 配置文件ID
+| config_size     | int                         | 输入    | 配置文件大小
+| get_type        | const char *                | 输入    | 配置文件数据类型
+| sign            | const char *                | 输入    | 配置文件的签名值
+| sign_method     | const char *                | 输入    | 配置文件的签名方法
+| url             | const char *                | 输入    | 配置文件的下载地址
+
+返回值说明
+---
+
+| 值 | 说明 |
+|---|---|---
+|0|事件处理成功|
+|-1|事件处理失败|
+
+-----
+
+### IOT_Ioctl
+
+原型
+---
+```
+int IOT_Ioctl(int option, void *data);
+```
+
+接口说明
+---
+用于配置SDK的一些全局选项, 在使用Linkkit高级版时, 需要在`IOT_Linkkit_Connect`前使用
+
+参数说明
+---
+
+| 参数            | 数据类型                    | 方向    | 说明
+|-----------------|-----------------------------|-------------|---------------------
+| option          | int                         | 输入        | 需要进行的操作
+| data            | void *                      | 输入/输出    | option需要的输入/输出参数
+
+返回值说明
+---
+| 值      | 说明
+|---------|---------
+| >= 0    | 成功
+| < 0     | 失败
+
+参数附加说明
+---
+`option`选项如下:
+```
+typedef enum {
+    IOTX_IOCTL_SET_REGION,
+    IOTX_IOCTL_GET_REGION,
+    IOTX_IOCTL_SET_MQTT_DOMAIN,
+    IOTX_IOCTL_SET_HTTP_DOMAIN,
+    IOTX_IOCTL_SET_DYNAMIC_REGISTER,
+    IOTX_IOCTL_GET_DYNAMIC_REGISTER,
+    IOTX_IOCTL_RECV_PROP_REPLY,
+    IOTX_IOCTL_RECV_EVENT_REPLY,
+    IOTX_IOCTL_SEND_PROP_SET_REPLY,
+    IOTX_IOCTL_SET_SUBDEV_SIGN,
+    IOTX_IOCTL_GET_SUBDEV_LOGIN
+} iotx_ioctl_option_t;
+```
++ IOTX_IOCTL_SET_REGION: 设置登录服务器区域, `data`的数据类型为`int *`, 取值见`iot_export.h`中的`iotx_cloud_region_types_t`枚举量
++ IOTX_IOCTL_GET_REGION: 获取当前登录服务器区域, `data`的数据类型为`int *`
++ IOTX_IOCTL_SET_MQTT_DOMAIN: 当`IOTX_IOCTL_SET_REGION`没有需要的服务器区域时, 设置登录MQTT服务器的区域. `data`的数据类型为`char *`
++ IOTX_IOCTL_SET_HTTP_DOMAIN: 当`IOTX_IOCTL_SET_REGION`没有需要的服务器区域时, 设置登录HTTP服务器的区域. `data`的数据类型为`char *`
++ IOTX_IOCTL_SET_DYNAMIC_REGISTER: 设置是否需要使用一型一密, `data`的数据类型为`int *`. 当data的值为1时, 使用一型一密. 当data的值为0时, 不使用一型一密
++ IOTX_IOCTL_GET_DYNAMIC_REGISTER: 获取当前是否使用一型一密
++ IOTX_IOCTL_RECV_PROP_REPLY: 废弃, 与`IOTX_IOCTL_RECV_EVENT_REPLY`功能相同
++ IOTX_IOCTL_RECV_EVENT_REPLY: 控制当用户上报属性和事件时, 是否需要云端的应答消息, `data`的数据类型为`int *`. 当data的值为1时, 需要云端返回应答消息. 当data的值为0时, 不需要云端返回应答消息
++ IOTX_IOCTL_SEND_PROP_SET_REPLY: 控制当SDK收到云端的设置属性的消息时, 是否需要向云端发送应答消息, `data`的数据类型为`int *`. 当data的值为1时, SDK需要向云端发送设置属性的应答消息. 当data的值为0时, SDK不需要向云端发送设置属性的应答消息
++ IOTX_IOCTL_SET_SUBDEV_SIGN: 预留
++ IOTX_IOCTL_GET_SUBDEV_LOGIN: 预留
+
+-----
+
+## 7.4 高级版(旧版)单品API详解
 
 > 本节介绍的API适用于您的设备不具有对子设备的管理能力的场景, 参看 [单品](#单品) 的名词解释部分
 
-### <a name="linkkit_answer_service">linkkit_answer_service</a>
+### linkkit_answer_service
 
 原型
 ---
@@ -3364,7 +3270,7 @@ int deprecated linkkit_answer_service(const void *thing_id, const char *service_
 
 -----
 
-### <a name="linkkit_cota_init">linkkit_cota_init</a>
+### linkkit_cota_init
 
 原型
 ---
@@ -3414,7 +3320,7 @@ typedef void (*handle_service_cota_callback_fp_t)(
 
 -----
 
-### <a name="linkkit_dispatch">linkkit_dispatch</a>
+### linkkit_dispatch
 
 原型
 ---
@@ -3438,7 +3344,7 @@ void *linkkit_dispatch(void);
 
 -----
 
-### <a name="linkkit_end">linkkit_end</a>
+### linkkit_end
 
 原型
 ---
@@ -3463,7 +3369,7 @@ int deprecated linkkit_end(void);
 
 -----
 
-### <a name="linkkit_fota_init">linkkit_fota_init</a>
+### linkkit_fota_init
 
 原型
 ---
@@ -3503,7 +3409,7 @@ typedef void (*handle_service_fota_callback_fp_t)(
 
 -----
 
-### <a name="linkkit_get_value">linkkit_get_value</a>
+### linkkit_get_value
 
 原型
 ---
@@ -3555,7 +3461,7 @@ typedef enum {
 
 -----
 
-### <a name="linkkit_invoke_cota_get_config">linkkit_invoke_cota_get_config</a>
+### linkkit_invoke_cota_get_config
 
 原型
 ---
@@ -3590,7 +3496,7 @@ int deprecated linkkit_invoke_cota_get_config(
 
 -----
 
-### <a name="linkkit_invoke_cota_service">linkkit_invoke_cota_service</a>
+### linkkit_invoke_cota_service
 
 原型
 ---
@@ -3619,7 +3525,7 @@ int deprecated linkkit_invoke_cota_service(void *data_buf, int data_buf_length);
 
 -----
 
-### <a name="linkkit_invoke_fota_service">linkkit_invoke_fota_service</a>
+### linkkit_invoke_fota_service
 
 原型
 ---
@@ -3648,7 +3554,7 @@ int deprecated linkkit_invoke_fota_service(void *data_buf, int data_buf_length);
 
 -----
 
-### <a name="linkkit_invoke_raw_service">linkkit_invoke_raw_service</a>
+### linkkit_invoke_raw_service
 
 原型
 ---
@@ -3683,7 +3589,7 @@ int deprecated linkkit_invoke_raw_service(
 
 -----
 
-### <a name="linkkit_is_end">linkkit_is_end</a>
+### linkkit_is_end
 
 原型
 ---
@@ -3708,7 +3614,7 @@ int deprecated linkkit_is_end();
 
 -----
 
-### <a name="linkkit_is_try_leave">linkkit_is_try_leave</a>
+### linkkit_is_try_leave
 
 原型
 ---
@@ -3733,7 +3639,7 @@ int deprecated linkkit_is_try_leave(void)
 
 -----
 
-### <a name="linkkit_post_property">linkkit_post_property</a>
+### linkkit_post_property
 
 原型
 ---
@@ -3765,7 +3671,7 @@ int deprecated linkkit_post_property(const void *thing_id,
 
 -----
 
-### <a name="linkkit_set_opt">linkkit_set_opt</a>
+### linkkit_set_opt
 
 原型
 ---
@@ -3808,7 +3714,7 @@ typedef enum {
 
 -----
 
-### <a name="linkkit_set_tsl">linkkit_set_tsl</a>
+### linkkit_set_tsl
 
 原型
 ---
@@ -3837,7 +3743,7 @@ void *linkkit_set_tsl(const char *tsl, int tsl_len);
 
 -----
 
-### <a name="linkkit_set_value">linkkit_set_value</a>
+### linkkit_set_value
 
 原型
 ---
@@ -3873,7 +3779,7 @@ int deprecated linkkit_set_value(linkkit_method_set_t method_set,
 
 -----
 
-### <a name="linkkit_start">linkkit_start</a>
+### linkkit_start
 
 原型
 ---
@@ -3910,7 +3816,7 @@ int deprecated linkkit_start(int max_buffered_msg,
 
 -----
 
-### <a name="linkkit_trigger_event">linkkit_trigger_event</a>
+### linkkit_trigger_event
 
 原型
 ---
@@ -3942,7 +3848,7 @@ int deprecated linkkit_trigger_event(const void *thing_id,
 
 -----
 
-### <a name="linkkit_trigger_extended_info_operate">linkkit_trigger_extended_info_operate</a>
+### linkkit_trigger_extended_info_operate
 
 原型
 ---
@@ -3975,7 +3881,7 @@ int deprecated linkkit_trigger_extended_info_operate(
 
 -----
 
-### <a name="linkkit_try_leave">linkkit_try_leave</a>
+### linkkit_try_leave
 
 原型
 ---
@@ -3997,7 +3903,7 @@ void deprecated linkkit_try_leave(void);
 
 -----
 
-### <a name="linkkit_yield">linkkit_yield</a>
+### linkkit_yield
 
 原型
 ---
@@ -4024,11 +3930,11 @@ int deprecated linkkit_yield(int timeout_ms);
 
 -----
 
-## <a name="7.5 高级版(旧版)网关API详解">7.5 高级版(旧版)网关API详解</a>
+## 7.5 高级版(旧版)网关API详解
 
 > 本节介绍的API适用于您的设备具有对子设备的管理能力的场景, 参看 [网关](#网关) 的名词解释部分
 
-### <a name="linkkit_gateway_delete_extinfos">linkkit_gateway_delete_extinfos</a>
+### linkkit_gateway_delete_extinfos
 
 原型
 ---
@@ -4066,7 +3972,7 @@ typedef struct {
 
 -----
 
-### <a name="linkkit_gateway_exit">linkkit_gateway_exit</a>
+### linkkit_gateway_exit
 
 原型
 ---
@@ -4091,7 +3997,7 @@ void
 
 -----
 
-### <a name="linkkit_gateway_fota_init">linkkit_gateway_fota_init</a>
+### linkkit_gateway_fota_init
 
 原型
 ---
@@ -4128,7 +4034,7 @@ typedef enum {
 
 -----
 
-### <a name="linkkit_gateway_get_default_params">linkkit_gateway_get_default_params</a>
+### linkkit_gateway_get_default_params
 
 原型
 ---
@@ -4196,7 +4102,7 @@ enum {
 
 -----
 
-### <a name="linkkit_gateway_get_devinfo">linkkit_gateway_get_devinfo</a>
+### linkkit_gateway_get_devinfo
 
 原型
 ---
@@ -4242,7 +4148,7 @@ enum {
 
 -----
 
-### <a name="linkkit_gateway_get_num_devices">linkkit_gateway_get_num_devices</a>
+### linkkit_gateway_get_num_devices
 
 原型
 ---
@@ -4264,7 +4170,7 @@ void
 
 -----
 
-### <a name="linkkit_gateway_init">linkkit_gateway_init</a>
+### linkkit_gateway_init
 
 原型
 ---
@@ -4291,7 +4197,7 @@ int linkkit_gateway_init(linkkit_params_t *initParams);
 
 -----
 
-### <a name="linkkit_gateway_invoke_fota_service">linkkit_gateway_invoke_fota_service</a>
+### linkkit_gateway_invoke_fota_service
 
 原型
 ---
@@ -4319,7 +4225,7 @@ int linkkit_gateway_invoke_fota_service(void* data_buf, int data_buf_length);
 
 -----
 
-### <a name="linkkit_gateway_post_extinfos">linkkit_gateway_post_extinfos</a>
+### linkkit_gateway_post_extinfos
 
 原型
 ---
@@ -4349,7 +4255,7 @@ int linkkit_gateway_post_extinfos(int devid, linkkit_extinfo_t *extinfos, int nb
 
 -----
 
-### <a name="linkkit_gateway_post_property_json">linkkit_gateway_post_property_json</a>
+### linkkit_gateway_post_property_json
 
 原型
 ---
@@ -4381,7 +4287,7 @@ int linkkit_gateway_post_property_json(int devid, char *property, int timeout_ms
 
 -----
 
-### <a name="linkkit_gateway_post_property_json_sync">linkkit_gateway_post_property_json_sync</a>
+### linkkit_gateway_post_property_json_sync
 
 原型
 ---
@@ -4397,7 +4303,7 @@ int linkkit_gateway_post_property_json_sync(int devid, char *property, int timeo
 ---
 | 参数        | 数据类型| 方向    | 说明
 |-------------|---------|---------|-------------
-| devid       | int     | 输入    | 设备ID
+| devid       | int     | 输入    | 设备ID, 其中devid为0表示网关自身, 为自然数时表示子设备, 在子设备创建时得到
 | property    | char *  | 输入    | 属性字符串
 | timeout_ms  | int     | 输入    | 超时时间
 
@@ -4410,7 +4316,7 @@ int linkkit_gateway_post_property_json_sync(int devid, char *property, int timeo
 
 -----
 
-### <a name="linkkit_gateway_post_rawdata">linkkit_gateway_post_rawdata</a>
+### linkkit_gateway_post_rawdata
 
 原型
 ---
@@ -4439,7 +4345,7 @@ int linkkit_gateway_post_rawdata(int devid, void *data, int len);
 
 -----
 
-### <a name="linkkit_gateway_set_event_callback">linkkit_gateway_set_event_callback</a>
+### linkkit_gateway_set_event_callback
 
 原型
 ---
@@ -4468,7 +4374,7 @@ int linkkit_gateway_set_event_callback(linkkit_params_t *params, int (*event_cb)
 
 -----
 
-### <a name="linkkit_gateway_setopt">linkkit_gateway_setopt</a>
+### linkkit_gateway_setopt
 
 原型
 ---
@@ -4510,7 +4416,7 @@ enum {
 
 -----
 
-### <a name="linkkit_gateway_start">linkkit_gateway_start</a>
+### linkkit_gateway_start
 
 原型
 ---
@@ -4538,7 +4444,7 @@ int linkkit_gateway_start(linkkit_cbs_t *cbs, void *ctx);
 
 -----
 
-### <a name="linkkit_gateway_stop">linkkit_gateway_stop</a>
+### linkkit_gateway_stop
 
 原型
 ---
@@ -4565,7 +4471,7 @@ int linkkit_gateway_stop(int devid);
 
 -----
 
-### <a name="linkkit_gateway_subdev_create">linkkit_gateway_subdev_create</a>
+### linkkit_gateway_subdev_create
 
 原型
 ---
@@ -4663,7 +4569,7 @@ typedef struct {
 
 -----
 
-### <a name="linkkit_gateway_subdev_destroy">linkkit_gateway_subdev_destroy</a>
+### linkkit_gateway_subdev_destroy
 
 原型
 ---
@@ -4690,7 +4596,7 @@ int linkkit_gateway_subdev_destroy(int devid);
 
 -----
 
-### <a name="linkkit_gateway_subdev_login">linkkit_gateway_subdev_login</a>
+### linkkit_gateway_subdev_login
 
 原型
 ---
@@ -4717,7 +4623,7 @@ int linkkit_gateway_subdev_login(int devid);
 
 -----
 
-### <a name="linkkit_gateway_subdev_logout">linkkit_gateway_subdev_logout</a>
+### linkkit_gateway_subdev_logout
 
 原型
 ---
@@ -4744,7 +4650,7 @@ int linkkit_gateway_subdev_logout(int devid);
 
 -----
 
-### <a name="linkkit_gateway_subdev_register">linkkit_gateway_subdev_register</a>
+### linkkit_gateway_subdev_register
 
 原型
 ---
@@ -4762,7 +4668,7 @@ int linkkit_gateway_subdev_register(char *productKey, char *deviceName, char *de
 |-----------------|---------|---------|-----------------------------
 | productKey      | char *  | 输入    | 子设备ProductKey字符串
 | deviceName      | char *  | 输入    | 子设备DeviceName字符串
-| deviceSecret    | char *  | 输入    | 子设备DeviceSecret字符串
+| deviceSecret    | char *  | 输入    | 子设备DeviceSecret字符串, 若要使用动态注册功能, 此入参应为NULL或者空字符串
 
 返回值说明
 ---
@@ -4773,7 +4679,7 @@ int linkkit_gateway_subdev_register(char *productKey, char *deviceName, char *de
 
 -----
 
-### <a name="linkkit_gateway_subdev_unregister">linkkit_gateway_subdev_unregister</a>
+### linkkit_gateway_subdev_unregister
 
 原型
 ---
@@ -4801,7 +4707,7 @@ int linkkit_gateway_subdev_unregister(char *productKey, char *deviceName);
 
 -----
 
-### <a name="linkkit_gateway_trigger_event_json">linkkit_gateway_trigger_event_json</a>
+### linkkit_gateway_trigger_event_json
 
 原型
 ---
@@ -4834,7 +4740,7 @@ int linkkit_gateway_trigger_event_json(int devid, char *identifier, char *event,
 
 -----
 
-### <a name="linkkit_gateway_trigger_event_json_sync">linkkit_gateway_trigger_event_json_sync</a>
+### linkkit_gateway_trigger_event_json_sync
 
 原型
 ---

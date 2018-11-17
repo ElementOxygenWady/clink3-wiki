@@ -30,16 +30,24 @@
     * [B.8 本地通信问题](#B.8 本地通信问题)
     * [B.9 WiFi配网问题](#B.9 WiFi配网问题)
     * [B.10 CoAP上云问题](#B.10 CoAP上云问题)
-        - [认证连接](#认证连接)
+        - [为什么有时认证会超时失败](#为什么有时认证会超时失败)
+        - [认证连接的地址](#认证连接的地址)
         - [报文上行](#报文上行)
         - [关于 IOT_CoAP_Yield](#关于 IOT_CoAP_Yield)
     * [B.11 HTTP上云问题](#B.11 HTTP上云问题)
         - [认证连接](#认证连接)
+    * [B.12 TLS连接问题](#B.12 TLS连接问题)
+        - [设备端TLS密码算法](#设备端TLS密码算法)
+        - [云端TLS密码算法](#云端TLS密码算法)
 
 
 # <a name="附录B 典型咨询问题">附录B 典型咨询问题</a>
 ## <a name="B.1 基础问题">B.1 基础问题</a>
 ### <a name="获取技术支持">获取技术支持</a>
+
+如果您在使用官方SDK的过程中遇到问题, 通过本文档又难以自查, 可通过 [工单系统](https://selfservice.console.aliyun.com/ticket/createIndex) 链接提工单, 会有专业的技术支持团队为您服务
+---
+*注: 工单系统是使用SDK的客户除本文档外获取技术支持的统一入口, 请勿尝试其它途径*
 
 ### <a name="信息安全">信息安全</a>
 使用C-SDK连接物联网平台, 传输的安全性怎么保证
@@ -341,7 +349,24 @@ MQTT长连接时, 云端如何侦测到设备离线的
 
 ## <a name="B.10 CoAP上云问题">B.10 CoAP上云问题</a>
 
-### <a name="认证连接">认证连接</a>
+### <a name="为什么有时认证会超时失败">为什么有时认证会超时失败</a>
+认证超时失败, 目前总结下来分为下述两种情况
+
+连接失败的时候, ssl->state为MBEDTLS_SSL_SERVER_CHANGE_CIPHER_SPEC的情况
+---
+
+在出现问题的一次测试中通过tcpdump进行抓包, 结果通过wireshark展示如下图. 其中client(ip地址为30.5.88.208)发出了握手数据包(包括client key exchange, change cipher spec, encrypted handshake message),但是服务端并没有回复change cipher spec的数据包, 从而导致coap连云卡在这一步. 卡在这一步后, 但如果等待2s后没有等到数据, 客户端会再进行两次尝试超时等待(4s,  8s);如果3次都等不到服务端发来的change cipher spec的数据包, 则退出handshake过程, 导致连接失败
+由上分析可知, 这个问题的根因是在服务端.
+
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/cipher_spec.png>)
+
+连接失败的时候, ssl->state为MBEDTLS_SSL_HANDSHAKE_OVER的情况
+---
+ 在出现问题的一次测试中通过tcpdump进行抓包, 结果通过wireshark展示如下图. 服务端(106.15.213.197)发来的certificate数据包的顺序出现了错乱, server_hello_done这个certificate数据包并不是作为最后一个certicate包, 而是作为倒数第二个(对比上图即能发现). 在这种情况下, 客户端解析服务端的certificate信息失败, 重新发送client hello消息等待server端回复. 客户端尝试过进行三次尝试超时等待(2s, 4s,  8s)后还没收到数据包, 就主动放弃, 导致连接失败. 由上分析可知, 这个问题的根因是在服务端未能正确返回握手信息
+![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/handshak_over.jpg>)
+
+
+### <a name="认证连接的地址">认证连接的地址</a>
 CoAP上云连接的云端URI是什么
 ---
 + 在调用 [IOT_CoAP_Init](#IOT_CoAP_Init) 的时候, 可以设置其参数 `iotx_coap_config_t` 里面的 `p_url`
@@ -376,4 +401,70 @@ HTTPS进行设备认证时, Server会返回的错误码及其含义
     + 解决方法: 每次认证获得的token是有48小时有效期的, 过期前可以反复使用, 无需每次都去认证获取新的token
 + **400:** authorized failure(认证失败)
     + 服务器认为鉴权参数是不合法的, 鉴权失败
-    + 解决方法: 检查I`OTX_PRODUCT_KEY`, `IOTX_DEVICE_NAME`, `IOTX_DEVICE_SECRET`, `IOTX_DEVICE_ID`是不是从控制台获得的正确参数
+    + 解决方法: 检查`IOTX_PRODUCT_KEY`, `IOTX_DEVICE_NAME`, `IOTX_DEVICE_SECRET`, `IOTX_DEVICE_ID`是不是从控制台获得的正确参数
+
+## <a name="B.12 TLS连接问题">B.12 TLS连接问题</a>
+### <a name="设备端TLS密码算法">设备端TLS密码算法</a>
+
+目前C-SDK连接云端用到的默认TLS算法是: **`TLS-RSA-WITH-AES-256-CBC-SHA256`**
+
+### <a name="云端TLS密码算法">云端TLS密码算法</a>
+
+目前阿里云IoT平台支持的TLS算法清单如下:
+
++ `TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384`
++ `TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384`
++ `TLS_RSA_WITH_AES_256_CBC_SHA256`
++ `TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384`
++ `TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384`
++ `TLS_DHE_RSA_WITH_AES_256_CBC_SHA256`
++ `TLS_DHE_DSS_WITH_AES_256_CBC_SHA256`
++ `TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA`
++ `TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA`
++ `TLS_RSA_WITH_AES_256_CBC_SHA`
++ `TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA`
++ `TLS_ECDH_RSA_WITH_AES_256_CBC_SHA`
++ `TLS_DHE_RSA_WITH_AES_256_CBC_SHA`
++ `TLS_DHE_DSS_WITH_AES_256_CBC_SHA`
++ `TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256`
++ `TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256`
++ `TLS_RSA_WITH_AES_128_CBC_SHA256`
++ `TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256`
++ `TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256`
++ `TLS_DHE_RSA_WITH_AES_128_CBC_SHA256`
++ `TLS_DHE_DSS_WITH_AES_128_CBC_SHA256`
++ `TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA`
++ `TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA`
++ `TLS_RSA_WITH_AES_128_CBC_SHA`
++ `TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA`
++ `TLS_ECDH_RSA_WITH_AES_128_CBC_SHA`
++ `TLS_DHE_RSA_WITH_AES_128_CBC_SHA`
++ `TLS_DHE_DSS_WITH_AES_128_CBC_SHA`
++ `TLS_ECDHE_ECDSA_WITH_RC4_128_SHA`
++ `TLS_ECDHE_RSA_WITH_RC4_128_SHA`
++ `SSL_RSA_WITH_RC4_128_SHA`
++ `TLS_ECDH_ECDSA_WITH_RC4_128_SHA`
++ `TLS_ECDH_RSA_WITH_RC4_128_SHA`
++ `TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384`
++ `TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256`
++ `TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384`
++ `TLS_RSA_WITH_AES_256_GCM_SHA384`
++ `TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384`
++ `TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384`
++ `TLS_DHE_RSA_WITH_AES_256_GCM_SHA384`
++ `TLS_DHE_DSS_WITH_AES_256_GCM_SHA384`
++ `TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256`
++ `TLS_RSA_WITH_AES_128_GCM_SHA256`
++ `TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256`
++ `TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256`
++ `TLS_DHE_RSA_WITH_AES_128_GCM_SHA256`
++ `TLS_DHE_DSS_WITH_AES_128_GCM_SHA256`
++ `TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA`
++ `TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA`
++ `SSL_RSA_WITH_3DES_EDE_CBC_SHA`
++ `TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA`
++ `TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA`
++ `SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA`
++ `SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA`
++ `SSL_RSA_WITH_RC4_128_MD5`
++ `TLS_EMPTY_RENEGOTIATION_INFO_SCSV`

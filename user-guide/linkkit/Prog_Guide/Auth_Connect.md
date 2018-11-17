@@ -1,6 +1,13 @@
+# <a name="目录">目录</a>
++ [MQTT站点配置](#MQTT站点配置)
++ [单品动态注册/一型一密](#单品动态注册/一型一密)
+    * [动态注册/一型一密的概念](#动态注册/一型一密的概念)
+    * [相关API和例程](#相关API和例程)
+    * [完整过程示例](#完整过程示例)
+        - [基础版示例](#基础版示例)
+        - [高级版示例](#高级版示例)
 
-# 第五章 典型场景示例
-## 5.1 MQTT站点配置
+# <a name="MQTT站点配置">MQTT站点配置</a>
 在使用阿里云物联网套件连接阿里云时, 可指定MQTT连接的服务器站点, 配置方法如下:
 
 ---
@@ -18,7 +25,7 @@
         /* Japan */
         IOTX_CLOUD_REGION_JAPAN,
 
-        /* America */
+        /* America(sillicon valley) */
         IOTX_CLOUD_REGION_USA_WEST,
 
         /* Germany */
@@ -31,7 +38,7 @@
         IOTX_CLOUD_DOMAIN_MAX
     } iotx_cloud_region_types_t;
 
-+ 首先使用 [IOT_Ioctl](#IOT_Ioctl) 的 `IOTX_IOCTL_SET_DOMAIN` 选项, 配合上面的枚举值, 设置要连接的站点
++ 首先使用 [IOT_Ioctl](#IOT_Ioctl) 的 `IOTX_IOCTL_SET_REGION` 选项, 配合上面的枚举值, 设置要连接的站点
 + 然后使用 [IOT_MQTT_Construct](#IOT_MQTT_Construct) 或者 [IOT_Linkkit_Connect](#IOT_Linkkit_Connect) 来建立设备到阿里云的连接
 
 例如:
@@ -39,7 +46,22 @@
 
     /* Choose Login Server */
     int domain_type = IOTX_CLOUD_REGION_SHANGHAI;
-    IOT_Ioctl(IOTX_IOCTL_SET_DOMAIN, (void *)&domain_type);
+    IOT_Ioctl(IOTX_IOCTL_SET_REGION, (void *)&domain_type);
+
+SDK同时还支持手动配置站点域名, 对于枚举类型`iotx_cloud_region_types_t`中未定义的地区站点, 可通过[IOT_Ioctl](#IOT_Ioctl)的其他选项进行设置
+
++ 使用[IOT_Ioctl](#IOT_Ioctl)的`IOTX_IOCTL_SET_MQTT_DOMAIN`选项手动配置MQTT服务器域名
++ 使用[IOT_Ioctl](#IOT_Ioctl)的`IOTX_IOCTL_SET_HTTP_DOMAIN`选项手动配置HTTP服务器域名
+
+例如, 通过以下方法将连接站点配置为美国(弗吉尼亚):
+---
+
+    #define USA_EAST_DOMAIN_MQTT     "iot-as-mqtt.us-east-1.aliyuncs.com"
+    #define USA_EAST_DOMAIN_HTTP     "iot-auth.us-east-1.aliyuncs.com"
+
+    IOT_Ioctl(IOTX_IOCTL_SET_MQTT_DOMAIN, (void *)USA_EAST_DOMAIN_MQTT);
+    IOT_Ioctl(IOTX_IOCTL_SET_HTTP_DOMAIN, (void *)USA_EAST_DOMAIN_HTTP);
+
 
 **注意事项: 如果在阿里云物联网控制台申请的三元组与连接时使用的域名不符合, 连接站点时会出现认证错误(错误码-35)**
 
@@ -60,19 +82,19 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 
 然后重新编译固件烧录即可
 
-## 5.2 单品动态注册/一型一密
-### 动态注册/一型一密的概念
+# <a name="单品动态注册/一型一密">单品动态注册/一型一密</a>
+## <a name="动态注册/一型一密的概念">动态注册/一型一密的概念</a>
 > 我们知道设备三元组包含productKey, deviceName和deviceSecret
 >
 > 每个设备有自己的设备密钥(deviceSecret), 在生产设备时, 需要将设备三元组烧录进设备中, 由于每台设备的设备密钥不同, 所以烧录时需要单独进行配置
 
 为了简化此流程, 引入产品密钥(productSecret)
 
-将原来需要烧录的每个设备唯一的设备密钥换成每个产品唯一的产品密钥, 在设备连网认证时, 再用产品证书(productKey和productSecret)向云端动态获取设备密钥(deviceSecret)
+将原来需要烧录的每个设备唯一的设备密钥(deviceSecret)换成每个产品唯一的产品密钥, 在设备连网认证时, 再用产品证书(productKey和productSecret)向云端动态获取设备密钥(deviceSecret)
 
 **需要注意的是, 使用一型一密获取设备密钥只能获取一次, 当设备端尝试再次使用一型一密时, 云端会拒绝设备端的请求**
 
-### 相关API和例程
+## <a name="相关API和例程">相关API和例程</a>
 
 无论使用高级版还是基础版, 在linkkit启动(高级版为`linkkit_start`, `linkkit_gateway_start`或`IOT_Linkkit_Connect`, 基础版为`IOT_SetupConnInfo`)之前, 使用以下接口配置是否需要使用一型一密:
 ```
@@ -81,9 +103,9 @@ int dynamic_register = 1; /* 0: 不使用一型一密, 1: 使用一型一密 */
 IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
 ```
 
-### 完整过程示例
+## <a name="完整过程示例">完整过程示例</a>
 
-#### 基础版示例
+### <a name="基础版示例">基础版示例</a>
 
 访问`物联网套件控制台`, 选择要打开一型一密功能的产品, 进入`产品详情`, 如下图所示:
 
@@ -205,7 +227,7 @@ SDK会调用`HAL_Kv_Get`将之持久化. 若用户尝试对同一设备第二次
 [inf] _fetch_dynreg_http_resp(110): Http Response Payload: {"code":6289,"message":"device is already active"}
 ```
 
-#### 高级版示例
+### <a name="高级版示例">高级版示例</a>
 
 访问`物联网套件控制台`, 选择要打开一型一密功能的产品, 进入`产品详情`, 如下图所示:
 
@@ -327,153 +349,16 @@ SDK会调用`HAL_Kv_Get`将之持久化. 若用户尝试对同一设备第二次
 ```
 [inf] _fetch_dynreg_http_resp(110): Http Response Payload: {"code":6289,"message":"device is already active"}
 ```
-## 5.3 物模型管理功能
-> 物模型管理功能是指SDK能够使能IoT设备接受云端控制台或者手机公版app的控制, 进行属性/事件/服务维度的设置和监控, 在本文的其它地方, 有时也称为"高级版"
 
-与物模型功能相关的API有如下这些
----
+# 支持智能生活开放平台动态连云
 
-| 函数名                                                  | 说明
-|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------
-| [IOT_Linkkit_Open](#IOT_Linkkit_Open)                   | 创建本地资源, 在进行网络报文交互之前, 必须先调用此接口, 得到一个会话的句柄
-| [IOT_Linkkit_Connect](#IOT_Linkkit_Connect)             | 对主设备/网关来说, 将会建立设备与云端的通信. 对于子设备来说, 将向云端注册该子设备(若需要), 并添加主子设备拓扑关系
-| [IOT_Linkkit_Yield](#IOT_Linkkit_Yield)                 | 若SDK占有独立线程, 该函数内容为空, 否则表示将CPU交给SDK让其接收网络报文并将消息分发到用户的回调函数中
-| [IOT_Linkkit_Close](#IOT_Linkkit_Close)                 | 若入参中的会话句柄为主设备/网关, 则关闭网络连接并释放SDK为该会话所占用的所有资源
-| [IOT_Linkkit_TriggerEvent](#IOT_Linkkit_TriggerEvent)   | 向云端发送**事件报文**, 如错误码, 异常告警等
-| [IOT_Linkkit_Report](#IOT_Linkkit_Report)               | 向云端发送**没有云端业务数据下发的上行报文**, 包括属性值/设备标签/二进制透传数据/子设备管理等各种报文
-| [IOT_Linkkit_Query](#IOT_Linkkit_Query)                 | 向云端发送**存在云端业务数据下发的查询报文**, 包括OTA状态查询/OTA固件下载/子设备拓扑查询/NTP时间查询等各种报文
+在**智能生活开放平台**海外设备激活联网时, 将统一连接到新加坡激活中心, 平台会将设备自动分配到就近的数据节点, 如: 在美国激活的设备, 会自动连接美国的服务器
 
-| 函数名                                          | 说明
-|-------------------------------------------------|---------------------------------------------------------------------------------------------
-| [IOT_RegisterCallback](#IOT_RegisterCallback)   | 对SDK注册事件回调函数, 如云端连接成功/失败, 有属性设置/服务请求到达, 子设备管理报文答复等
-| [IOT_Ioctl](#IOT_Ioctl)                         | 对SDK进行各种参数运行时设置和获取, 以及运行状态的信息获取等, 实参可以是任何数据类型
-
-> 现对照 `examples/linkkit/linkkit_example_solo.c` 例程分步骤讲解如何使用这几个API实现物模型管理功能
-
-1. 初始化阶段, 调用`IOT_Linkkit_Open()`导入三元组, 获取一个设备标识
----
-```
-    iotx_linkkit_dev_meta_info_t master_meta_info;
-
-    memset(&master_meta_info, 0, sizeof(iotx_linkkit_dev_meta_info_t));
-    memcpy(master_meta_info.product_key, PRODUCT_KEY, strlen(PRODUCT_KEY));
-    memcpy(master_meta_info.product_secret, PRODUCT_SECRET, strlen(PRODUCT_SECRET));
-    memcpy(master_meta_info.device_name, DEVICE_NAME, strlen(DEVICE_NAME));
-    memcpy(master_meta_info.device_secret, DEVICE_SECRET, strlen(DEVICE_SECRET));
-
-    /* Create Master Device Resources */
-    user_example_ctx->master_devid = IOT_Linkkit_Open(IOTX_LINKKIT_DEV_TYPE_MASTER, &master_meta_info);
-    if (user_example_ctx->master_devid < 0) {
-        EXAMPLE_TRACE("IOT_Linkkit_Open Failed\n");
-        return -1;
-    }
-```
-
-2. 与云端建立的配置, 调用`IOT_Ioctl()`(通用接口)与`IOT_Linkkit_Ioctl()`(linkkit专用接口)进行相关配置, 详细情况可查看对应API说明
----
+SDK只要做下面的2个配置就可以支持**智能生活开放平台**动态连云模式:
+1. 修改`make.setting`的`FEATURE_MQTT_DIRECT`配置为`n`, 这样便启用了https认证模式
+2. 将连接站点配置为新加坡站点:
 ```
     /* Choose Login Server */
-    int domain_type = IOTX_CLOUD_DOMAIN_SH;
-    IOT_Ioctl(IOTX_IOCTL_SET_DOMAIN, (void *)&domain_type);
-
-    /* Choose Login Method */
-    int dynamic_register = 0;
-    IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
-
-    /* Choose Whether You Need Post Property Reply */
-    int post_property_reply = 0;
-    IOT_Linkkit_Ioctl(user_example_ctx->master_devid, IOTX_LINKKIT_CMD_OPTION_PROPERTY_POST_REPLY,
-                      (void *)&post_property_reply);
-
-    /* Choose Whether You Need Post Event Reply */
-    int post_event_reply = 0;
-    IOT_Linkkit_Ioctl(user_example_ctx->master_devid, IOTX_LINKKIT_CMD_OPTION_EVENT_POST_REPLY, (void *)&post_event_reply);
-```
-
-3. 主设备建立连接
----
-```
-    /* Start Connect Aliyun Server */
-    res = IOT_Linkkit_Connect(user_example_ctx->master_devid);
-    if (res < 0) {
-        EXAMPLE_TRACE("IOT_Linkkit_Connect Failed\n");
-        return -1;
-    }
-```
-
-4. 进入while()循环, 循环中包含`IOT_Linkkit_Yield()`用于接收网络报文并将消息分发到用户的回调函数中
----
-```
-    while (1) {
-        IOT_Linkkit_Yield(USER_EXAMPLE_YIELD_TIMEOUT_MS);
-        ...
-    }
-```
-
-5. 属性上报, 拓展信息上报和裸数据上都通过对`IOT_Linkkit_Post()`的封装实现, 对于JSON格式数据, 用户需自行进行组包处理
----
-```
-/* 属性上报 */
-void user_post_property(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    char *property_payload = "{\"LightSwitch\":1}";
-
-    res = IOT_Linkkit_Post(user_example_ctx->master_devid, IOTX_LINKKIT_MSG_POST_PROPERTY,
-                           (unsigned char *)property_payload, strlen(property_payload));
-    EXAMPLE_TRACE("Post Property Message ID: %d", res);
-}
-
-/* 拓展信息添加 */
-void user_deviceinfo_update(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    char *device_info_update = "[{\"attrKey\":\"abc\",\"attrValue\":\"hello,world\"}]";
-
-    res = IOT_Linkkit_Post(user_example_ctx->master_devid, IOTX_LINKKIT_MSG_DEVICEINFO_UPDATE,
-                           (unsigned char *)device_info_update, strlen(device_info_update));
-    EXAMPLE_TRACE("Device Info Update Message ID: %d", res);
-}
-
-/* 拓展信息删除 */
-void user_deviceinfo_delete(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    char *device_info_delete = "[{\"attrKey\":\"abc\"}]";
-
-    res = IOT_Linkkit_Post(user_example_ctx->master_devid, IOTX_LINKKIT_MSG_DEVICEINFO_DELETE,
-                           (unsigned char *)device_info_delete, strlen(device_info_delete));
-    EXAMPLE_TRACE("Device Info Delete Message ID: %d", res);
-}
-
-/* 裸数据上报 */
-void user_post_raw_data(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    unsigned char raw_data[7] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
-
-    res = IOT_Linkkit_Post(user_example_ctx->master_devid, IOTX_LINKKIT_MSG_POST_RAW_DATA,
-                           raw_data, 7);
-    EXAMPLE_TRACE("Post Raw Data Message ID: %d", res);
-}
-```
-
-5. 事件上报需调用`IOT_Linkkit_TriggerEvent()`接口, 数据格式为JSON
----
-```
-void user_post_event(void)
-{
-    int res = 0;
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-    char *event_id = "Error";
-    char *event_payload = "{\"ErrorCode\":0}";
-
-    res = IOT_Linkkit_TriggerEvent(user_example_ctx->master_devid, event_id, strlen(event_id),
-                                   event_payload, strlen(event_payload));
-    EXAMPLE_TRACE("Post Event Message ID: %d", res);
-}
+    int domain_type = IOTX_CLOUD_REGION_SINGAPORE;
+    IOT_Ioctl(IOTX_IOCTL_SET_REGION, (void *)&domain_type);
 ```
