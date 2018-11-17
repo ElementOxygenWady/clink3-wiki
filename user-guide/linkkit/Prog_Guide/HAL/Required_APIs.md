@@ -371,11 +371,11 @@
 
 ## <a name="6.3 HAL层接口详解">6.3 HAL层接口详解</a>
 
-+ [基础功能相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/HAL/Basic_Requires)
-+ [多线程相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/HAL/MultiThread_Requires)
-+ [MQTT上云相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/HAL/MQTT_Requires)
-+ [CoAP上云相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/HAL/CoAP_Requires)
-+ [OTA固件升级相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/HAL/OTA_Requires)
-+ [HTTP2流式传输相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/HAL/HTTP2_Requires)
-+ [WiFi配网相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/HAL/Awss_Requires)
-+ [本地通信相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/HAL/Alcs_Requires)
++ [基础功能相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires)
++ [多线程相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MultiThread_Requires)
++ [MQTT上云相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires)
++ [CoAP上云相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires)
++ [OTA固件升级相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/OTA_Requires)
++ [HTTP2流式传输相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires)
++ [WiFi配网相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires)
++ [本地通信相关HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Alcs_Requires)

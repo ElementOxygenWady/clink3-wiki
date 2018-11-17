@@ -289,27 +289,27 @@ IOT_Linkkit_Connect订阅了固件升级有关的topic, 因此服务端在发布
 ## <a name="用基础版接口实现OTA功能涉及的API">用基础版接口实现OTA功能涉及的API</a>
 | 函数名                                                                                                                                              | 说明
 |-----------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------
-| [IOT_OTA_Init](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_Init)                        | OTA实例的构造函数, 创建一个OTA会话的句柄并返回
-| [IOT_OTA_Deinit](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_Deinit)                    | OTA实例的摧毁函数, 销毁所有相关的数据结构
-| [IOT_OTA_Ioctl](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_Ioctl)                      | OTA实例的输入输出函数, 根据不同的命令字可以设置OTA会话的属性, 或者获取OTA会话的状态
-| [IOT_OTA_GetLastError](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_GetLastError)        | OTA会话阶段, 若某个 IOT_OTA_XXX() 函数返回错误, 调用此接口可获得最近一次的详细错误码
-| [IOT_OTA_ReportVersion](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_ReportVersion)      | OTA会话阶段, 向服务端汇报当前的固件版本号
-| [IOT_OTA_FetchYield](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_FetchYield)            | OTA下载阶段, 在指定的`timeout`时间内, 从固件服务器下载一段固件内容, 保存在入参buffer中
-| [IOT_OTA_IsFetchFinish](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_IsFetchFinish)      | OTA下载阶段, 判断迭代调用 [IOT_OTA_FetchYield](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_FetchYield) 是否已经下载完所有的固件内容
-| [IOT_OTA_IsFetching](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_IsFetching)            | OTA下载阶段, 判断固件下载是否仍在进行中, 尚未完成全部固件内容的下载
-| [IOT_OTA_ReportProgress](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/OTA_Provides#IOT_OTA_ReportProgress)    | 可选API, OTA下载阶段, 调用此函数向服务端汇报已经下载了全部固件内容的百分之多少
+| [IOT_OTA_Init](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_Init)                        | OTA实例的构造函数, 创建一个OTA会话的句柄并返回
+| [IOT_OTA_Deinit](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_Deinit)                    | OTA实例的摧毁函数, 销毁所有相关的数据结构
+| [IOT_OTA_Ioctl](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_Ioctl)                      | OTA实例的输入输出函数, 根据不同的命令字可以设置OTA会话的属性, 或者获取OTA会话的状态
+| [IOT_OTA_GetLastError](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_GetLastError)        | OTA会话阶段, 若某个 IOT_OTA_XXX() 函数返回错误, 调用此接口可获得最近一次的详细错误码
+| [IOT_OTA_ReportVersion](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_ReportVersion)      | OTA会话阶段, 向服务端汇报当前的固件版本号
+| [IOT_OTA_FetchYield](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_FetchYield)            | OTA下载阶段, 在指定的`timeout`时间内, 从固件服务器下载一段固件内容, 保存在入参buffer中
+| [IOT_OTA_IsFetchFinish](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_IsFetchFinish)      | OTA下载阶段, 判断迭代调用 [IOT_OTA_FetchYield](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_FetchYield) 是否已经下载完所有的固件内容
+| [IOT_OTA_IsFetching](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_IsFetching)            | OTA下载阶段, 判断固件下载是否仍在进行中, 尚未完成全部固件内容的下载
+| [IOT_OTA_ReportProgress](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides#IOT_OTA_ReportProgress)    | 可选API, OTA下载阶段, 调用此函数向服务端汇报已经下载了全部固件内容的百分之多少
 
 ## <a name="用高级版接口实现OTA功能涉及的API">用高级版接口实现OTA功能涉及的API</a>
 
 | 函数名                                                  | 说明
 |---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------
-| [IOT_Linkkit_Open](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Open)                   | 创建本地资源, 在进行网络报文交互之前, 必须先调用此接口, 得到一个会话的句柄
-| [IOT_Linkkit_Connect](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Connect)             | 对主设备/网关来说, 将会建立设备与云端的通信. 对于子设备来说, 将向云端注册该子设备(若需要), 并添加主子设备拓扑关系
-| [IOT_Linkkit_Yield](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Yield)                 | 若SDK占有独立线程, 该函数只将接收到的网络报文分发到用户的回调函数中, 否则表示将CPU交给SDK让其接收网络报文并将消息分发到用户的回调函数中
-| [IOT_Linkkit_Close](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Close)                 | 若入参中的会话句柄为主设备/网关, 则关闭网络连接并释放SDK为该会话所占用的所有资源
-| [IOT_Linkkit_TriggerEvent](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_TriggerEvent)   | 向云端发送**事件报文**, 如错误码, 异常告警等
-| [IOT_Linkkit_Report](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Report)               | 向云端发送**没有云端业务数据下发的上行报文**, 包括属性值/设备标签/二进制透传数据/子设备管理等各种报文
-| [IOT_Linkkit_Query](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Query)                 | 向云端发送**存在云端业务数据下发的查询报文**, 包括OTA状态查询/OTA固件下载/子设备拓扑查询/NTP时间查询等各种报文
+| [IOT_Linkkit_Open](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Open)                   | 创建本地资源, 在进行网络报文交互之前, 必须先调用此接口, 得到一个会话的句柄
+| [IOT_Linkkit_Connect](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Connect)             | 对主设备/网关来说, 将会建立设备与云端的通信. 对于子设备来说, 将向云端注册该子设备(若需要), 并添加主子设备拓扑关系
+| [IOT_Linkkit_Yield](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Yield)                 | 若SDK占有独立线程, 该函数只将接收到的网络报文分发到用户的回调函数中, 否则表示将CPU交给SDK让其接收网络报文并将消息分发到用户的回调函数中
+| [IOT_Linkkit_Close](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Close)                 | 若入参中的会话句柄为主设备/网关, 则关闭网络连接并释放SDK为该会话所占用的所有资源
+| [IOT_Linkkit_TriggerEvent](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_TriggerEvent)   | 向云端发送**事件报文**, 如错误码, 异常告警等
+| [IOT_Linkkit_Report](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Report)               | 向云端发送**没有云端业务数据下发的上行报文**, 包括属性值/设备标签/二进制透传数据/子设备管理等各种报文
+| [IOT_Linkkit_Query](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Query)                 | 向云端发送**存在云端业务数据下发的查询报文**, 包括OTA状态查询/OTA固件下载/子设备拓扑查询/NTP时间查询等各种报文
 
 
 # <a name="需要实现的HAL">需要实现的HAL</a>
