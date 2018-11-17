@@ -4,8 +4,8 @@
 > * [AWSS用户API] (#AWSS用户API)
 > * [AWSS用户API详解] (#AWSS用户API详解)
 > * [AWSS示例] (#AWSS示例)
-> * [需要实现的HAL API] (#需要实现的HAL API)
-> * [HAL API详解] (#HAL API详解)
+> * [需要实现的HAL接口] (#需要实现的HAL接口)
+> * [HAL接口详解] (#HAL接口详解)
 > * [常见问题分析] (#常见问题分析)
 
 ------
@@ -125,7 +125,7 @@ if (INVALID_SSID(ssid) || INVALID_BSSID(bssid) || AP_NOT_EXIST(ssid, bssid) {
 }
 ```
 ------
-## <a name="需要实现的HAL API">需要实现的HAL API</a>
+## <a name="需要实现的HAL接口">需要实现的HAL接口</a>
 以下函数在**AliOS Things**已经实现, 如果希望单独使用**SDK**, 则需要用户对接**
 
 | 函数名                                      | 说明
@@ -168,8 +168,8 @@ if (INVALID_SSID(ssid) || INVALID_BSSID(bssid) || AP_NOT_EXIST(ssid, bssid) {
 | [HAL_Wifi_Get_IP](#HAL_Wifi_Get_IP)         | 获取设备的**IP**地址, 点分十进制格式保存在字符串数组出参, 二进制格式则作为返回值, 并以网络字节序(大端)表达
 | [HAL_Wifi_Get_Mac](#HAL_Wifi_Get_Mac)         | 获取设备的**MAC**地址, 格式应当是**"XX:XX:XX:XX:XX:XX"**
 ---
-## <a name="HAL API详解">HAL API详解</a>
-HAL API的详细说明, 参阅"阿里巴巴智能生活平台配网开发说明文档 v1.0.0"
+## <a name="HAL接口详解">HAL接口详解</a>
+HAL接口的详细说明, 参阅"阿里巴巴智能生活平台配网开发说明文档 v1.0.0"
 
 > [阿里巴巴智能生活平台配网开发说明文档.pdf](http://git.cn-hangzhou.oss-cdn.aliyun-inc.com/uploads/Apsaras64/pub/921ab25e3e51aec5eb0633ffde17f91a/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%99%BA%E8%83%BD%E7%94%9F%E6%B4%BB%E5%B9%B3%E5%8F%B0%E9%85%8D%E7%BD%91%E5%BC%80%E5%8F%91%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.pdf)
 
