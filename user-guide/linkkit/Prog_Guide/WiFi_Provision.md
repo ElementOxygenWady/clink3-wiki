@@ -1,15 +1,5 @@
-# <a name="目录">目录</a>
 ------
-> * [配网的定义] (#配网的定义)
-> * [AWSS用户API] (#AWSS用户API)
-> * [AWSS用户API详解] (#AWSS用户API详解)
-> * [AWSS示例] (#AWSS示例)
-> * [需要实现的HAL接口] (#需要实现的HAL接口)
-> * [HAL接口详解] (#HAL接口详解)
-> * [常见问题分析] (#常见问题分析)
-
-------
-## <a name="配网的定义"> 配网的定义 </a>
+##  配网的定义 
 ![image](http://git.cn-hangzhou.oss-cdn.aliyun-inc.com/uploads/Apsaras64/pub/4b7616e37b9b2eecbd2d3664190d018e/image.png)
 用户拿到一个新设备时, 需要添加设备来建立用户和设备的绑定关系, 而添加设备的整个流程分成三个步骤, 如上图所示:
 > - -用户添加设备前置步骤
@@ -20,7 +10,7 @@
 
 ------
 
-## <a name="AWSS用户API">AWSS用户API</a>
+## AWSS用户API
 | 函数名                                                      | 说明
 |-------------------------------------------------------------|---------------------------------------------------------
 | [awss_start](#awss_start)                     | 启动**AWSS**服务(未使能), **AWSS**采用**AES128**保证数据安全, 加解密依赖于设备四元组, 启动**AWSS**服务之前先确认设备四元组(`DeviceName + DeviceSecret + ProductKey + ProductSecret`)已经成功烧录
@@ -29,8 +19,8 @@
 | [awss_report_reset](#awss_report_reset)                       | **AWSS**上报设备恢复出厂设置到云端, 云端解除设备与用户的绑定关系
 ------
 
-## <a name="AWSS用户API详解">AWSS用户API详解</a>
-### <a name="awss_start">awss_start</a>
+## AWSS用户API详解
+### awss_start
 
 原型
 ---
@@ -49,7 +39,7 @@ int awss_start();
 | 0       | 成功
 | < 0     | 失败
 ---
-### <a name="awss_config_press">awss_config_press</a>
+### awss_config_press
 
 原型
 ---
@@ -69,7 +59,7 @@ int awss_config_press();
 | < 0     | 失败
 ---
 
-### <a name="awss_stop">awss_stop</a>
+### awss_stop
 
 原型
 ---
@@ -88,7 +78,7 @@ int awss_stop();
 | 0       | 成功
 | < 0     | 失败
 ---
-### <a name="awss_report_set">awss_report_set</a>
+### awss_report_set
 
 原型
 ---
@@ -109,7 +99,7 @@ int awss_report_set();
 | < 0     | 失败
 ---
 
-## <a name="AWSS示例">AWSS示例</a>
+## AWSS示例
 ------
 ```
 uint8_t bssid[ETH_ALEN] = {0};
@@ -125,7 +115,7 @@ if (INVALID_SSID(ssid) || INVALID_BSSID(bssid) || AP_NOT_EXIST(ssid, bssid) {
 }
 ```
 ------
-## <a name="需要实现的HAL接口">需要实现的HAL接口</a>
+## 需要实现的HAL接口
 以下函数在**AliOS Things**已经实现, 如果希望单独使用**SDK**, 则需要用户对接**
 
 | 函数名                                      | 说明
@@ -168,16 +158,4 @@ if (INVALID_SSID(ssid) || INVALID_BSSID(bssid) || AP_NOT_EXIST(ssid, bssid) {
 | [HAL_Wifi_Get_IP](#HAL_Wifi_Get_IP)         | 获取设备的**IP**地址, 点分十进制格式保存在字符串数组出参, 二进制格式则作为返回值, 并以网络字节序(大端)表达
 | [HAL_Wifi_Get_Mac](#HAL_Wifi_Get_Mac)         | 获取设备的**MAC**地址, 格式应当是**"XX:XX:XX:XX:XX:XX"**
 ---
-## <a name="HAL接口详解">HAL接口详解</a>
-HAL接口的详细说明, 参阅"阿里巴巴智能生活平台配网开发说明文档 v1.0.0"
 
-> [阿里巴巴智能生活平台配网开发说明文档.pdf](http://git.cn-hangzhou.oss-cdn.aliyun-inc.com/uploads/Apsaras64/pub/921ab25e3e51aec5eb0633ffde17f91a/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%99%BA%E8%83%BD%E7%94%9F%E6%B4%BB%E5%B9%B3%E5%8F%B0%E9%85%8D%E7%BD%91%E5%BC%80%E5%8F%91%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.pdf)
-
-------
-
-## <a name="常见问题分析">常见问题分析</a>
-常见问题分析参阅"阿里巴巴智能生活开放平台产品对接问题定位说明文档"
-
-> [阿里巴巴智能生活开放平台产品对接问题定位说明文档.pdf](http://git.cn-hangzhou.oss-cdn.aliyun-inc.com/uploads/Apsaras64/pub/845272021667ce0dd8882cebfee552f6/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%99%BA%E8%83%BD%E7%94%9F%E6%B4%BB%E5%BC%80%E6%94%BE%E5%B9%B3%E5%8F%B0%E4%BA%A7%E5%93%81%E5%AF%B9%E6%8E%A5%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.pdf)
-
-------
