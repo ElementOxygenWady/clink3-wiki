@@ -1,6 +1,17 @@
+# <a name="目录">目录</a>
++ [第五章 典型场景示例](#第五章 典型场景示例)
+    * [5.1 MQTT站点配置](#5.1 MQTT站点配置)
+    * [5.2 单品动态注册/一型一密](#5.2 单品动态注册/一型一密)
+        - [动态注册/一型一密的概念](#动态注册/一型一密的概念)
+        - [相关API和例程](#相关API和例程)
+        - [完整过程示例](#完整过程示例)
+            + [基础版示例](#基础版示例)
+            + [高级版示例](#高级版示例)
+    * [5.3 物模型管理功能](#5.3 物模型管理功能)
 
-# 第五章 典型场景示例
-## 5.1 MQTT站点配置
+
+# <a name="第五章 典型场景示例">第五章 典型场景示例</a>
+## <a name="5.1 MQTT站点配置">5.1 MQTT站点配置</a>
 在使用阿里云物联网套件连接阿里云时, 可指定MQTT连接的服务器站点, 配置方法如下:
 
 ---
@@ -60,8 +71,8 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 
 然后重新编译固件烧录即可
 
-## 5.2 单品动态注册/一型一密
-### 动态注册/一型一密的概念
+## <a name="5.2 单品动态注册/一型一密">5.2 单品动态注册/一型一密</a>
+### <a name="动态注册/一型一密的概念">动态注册/一型一密的概念</a>
 > 我们知道设备三元组包含productKey, deviceName和deviceSecret
 >
 > 每个设备有自己的设备密钥(deviceSecret), 在生产设备时, 需要将设备三元组烧录进设备中, 由于每台设备的设备密钥不同, 所以烧录时需要单独进行配置
@@ -72,7 +83,7 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 
 **需要注意的是, 使用一型一密获取设备密钥只能获取一次, 当设备端尝试再次使用一型一密时, 云端会拒绝设备端的请求**
 
-### 相关API和例程
+### <a name="相关API和例程">相关API和例程</a>
 
 无论使用高级版还是基础版, 在linkkit启动(高级版为`linkkit_start`, `linkkit_gateway_start`或`IOT_Linkkit_Connect`, 基础版为`IOT_SetupConnInfo`)之前, 使用以下接口配置是否需要使用一型一密:
 ```
@@ -81,9 +92,9 @@ int dynamic_register = 1; /* 0: 不使用一型一密, 1: 使用一型一密 */
 IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
 ```
 
-### 完整过程示例
+### <a name="完整过程示例">完整过程示例</a>
 
-#### 基础版示例
+#### <a name="基础版示例">基础版示例</a>
 
 访问`物联网套件控制台`, 选择要打开一型一密功能的产品, 进入`产品详情`, 如下图所示:
 
@@ -205,7 +216,7 @@ SDK会调用`HAL_Kv_Get`将之持久化. 若用户尝试对同一设备第二次
 [inf] _fetch_dynreg_http_resp(110): Http Response Payload: {"code":6289,"message":"device is already active"}
 ```
 
-#### 高级版示例
+#### <a name="高级版示例">高级版示例</a>
 
 访问`物联网套件控制台`, 选择要打开一型一密功能的产品, 进入`产品详情`, 如下图所示:
 
@@ -327,7 +338,7 @@ SDK会调用`HAL_Kv_Get`将之持久化. 若用户尝试对同一设备第二次
 ```
 [inf] _fetch_dynreg_http_resp(110): Http Response Payload: {"code":6289,"message":"device is already active"}
 ```
-## 5.3 物模型管理功能
+## <a name="5.3 物模型管理功能">5.3 物模型管理功能</a>
 > 物模型管理功能是指SDK能够使能IoT设备接受云端控制台或者手机公版app的控制, 进行属性/事件/服务维度的设置和监控, 在本文的其它地方, 有时也称为"高级版"
 
 与物模型功能相关的API有如下这些

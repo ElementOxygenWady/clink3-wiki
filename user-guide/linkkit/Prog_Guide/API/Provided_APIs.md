@@ -1,5 +1,153 @@
+# <a name="目录">目录</a>
++ [第七章 API说明](#第七章 API说明)
+    * [7.1 API接口列表](#7.1 API接口列表)
+        - [基础API](#基础API)
+        - [MQTT功能API](#MQTT功能API)
+        - [OTA功能API](#OTA功能API)
+        - [CoAP功能API](#CoAP功能API)
+        - [HTTP功能API](#HTTP功能API)
+        - [设备影子API](#设备影子API)
+        - [物模型管理API](#物模型管理API)
+    * [7.2 API接口清单](#7.2 API接口清单)
+        - [基础版API清单](#基础版API清单)
+    * [7.3 基础版API接口详解](#7.3 基础版API接口详解)
+        - [IOT_OpenLog](#IOT_OpenLog)
+        - [IOT_CloseLog](#IOT_CloseLog)
+        - [IOT_SetLogLevel](#IOT_SetLogLevel)
+        - [IOT_DumpMemoryStats](#IOT_DumpMemoryStats)
+        - [IOT_SetupConnInfo](#IOT_SetupConnInfo)
+        - [IOT_Ioctl](#IOT_Ioctl)
+        - [IOT_CoAP_Init](#IOT_CoAP_Init)
+        - [IOT_CoAP_Deinit](#IOT_CoAP_Deinit)
+        - [IOT_CoAP_DeviceNameAuth](#IOT_CoAP_DeviceNameAuth)
+        - [IOT_CoAP_Yield](#IOT_CoAP_Yield)
+        - [IOT_CoAP_SendMessage](#IOT_CoAP_SendMessage)
+        - [IOT_CoAP_GetMessagePayload](#IOT_CoAP_GetMessagePayload)
+        - [IOT_CoAP_GetMessageCode](#IOT_CoAP_GetMessageCode)
+        - [IOT_HTTP_Init](#IOT_HTTP_Init)
+        - [IOT_HTTP_DeInit](#IOT_HTTP_DeInit)
+        - [IOT_HTTP_DeviceNameAuth](#IOT_HTTP_DeviceNameAuth)
+        - [IOT_HTTP_SendMessage](#IOT_HTTP_SendMessage)
+        - [IOT_HTTP_Disconnect](#IOT_HTTP_Disconnect)
+        - [IOT_MQTT_Construct](#IOT_MQTT_Construct)
+        - [IOT_MQTT_Destroy](#IOT_MQTT_Destroy)
+        - [IOT_MQTT_Yield](#IOT_MQTT_Yield)
+        - [IOT_MQTT_LogPost](#IOT_MQTT_LogPost)
+        - [IOT_MQTT_CheckStateNormal](#IOT_MQTT_CheckStateNormal)
+        - [IOT_MQTT_Subscribe](#IOT_MQTT_Subscribe)
+        - [IOT_MQTT_Subscribe_Sync](#IOT_MQTT_Subscribe_Sync)
+        - [IOT_MQTT_Unsubscribe](#IOT_MQTT_Unsubscribe)
+        - [IOT_MQTT_Publish](#IOT_MQTT_Publish)
+        - [IOT_OTA_Init](#IOT_OTA_Init)
+        - [IOT_OTA_Deinit](#IOT_OTA_Deinit)
+        - [IOT_OTA_ReportVersion](#IOT_OTA_ReportVersion)
+        - [IOT_OTA_ReportProgress](#IOT_OTA_ReportProgress)
+        - [IOT_OTA_IsFetching](#IOT_OTA_IsFetching)
+        - [IOT_OTA_IsFetchFinish](#IOT_OTA_IsFetchFinish)
+        - [IOT_OTA_FetchYield](#IOT_OTA_FetchYield)
+        - [IOT_OTA_Ioctl](#IOT_OTA_Ioctl)
+        - [IOT_OTA_GetLastError](#IOT_OTA_GetLastError)
+        - [IOT_Shadow_Construct](#IOT_Shadow_Construct)
+        - [IOT_Shadow_Destroy](#IOT_Shadow_Destroy)
+        - [IOT_Shadow_Yield](#IOT_Shadow_Yield)
+        - [IOT_Shadow_RegisterAttribute](#IOT_Shadow_RegisterAttribute)
+        - [IOT_Shadow_DeleteAttribute](#IOT_Shadow_DeleteAttribute)
+        - [IOT_Shadow_PushFormat_Init](#IOT_Shadow_PushFormat_Init)
+        - [IOT_Shadow_PushFormat_Add](#IOT_Shadow_PushFormat_Add)
+        - [IOT_Shadow_PushFormat_Finalize](#IOT_Shadow_PushFormat_Finalize)
+        - [IOT_Shadow_Push](#IOT_Shadow_Push)
+        - [IOT_Shadow_Push_Async](#IOT_Shadow_Push_Async)
+        - [IOT_Shadow_Pull](#IOT_Shadow_Pull)
+        - [IOT_Gateway_Generate_Message_ID](#IOT_Gateway_Generate_Message_ID)
+        - [IOT_Gateway_Construct](#IOT_Gateway_Construct)
+        - [IOT_Gateway_Destroy](#IOT_Gateway_Destroy)
+        - [IOT_Subdevice_Register](#IOT_Subdevice_Register)
+        - [IOT_Subdevice_Unregister](#IOT_Subdevice_Unregister)
+        - [IOT_Subdevice_Login](#IOT_Subdevice_Login)
+        - [IOT_Subdevice_Logout](#IOT_Subdevice_Logout)
+        - [IOT_Gateway_Get_TOPO](#IOT_Gateway_Get_TOPO)
+        - [IOT_Gateway_Get_Config](#IOT_Gateway_Get_Config)
+        - [IOT_Gateway_Publish_Found_List](#IOT_Gateway_Publish_Found_List)
+        - [IOT_Gateway_Yield](#IOT_Gateway_Yield)
+        - [IOT_Gateway_Subscribe](#IOT_Gateway_Subscribe)
+        - [IOT_Gateway_Unsubscribe](#IOT_Gateway_Unsubscribe)
+        - [IOT_Gateway_Publish](#IOT_Gateway_Publish)
+        - [IOT_Gateway_RRPC_Register](#IOT_Gateway_RRPC_Register)
+        - [IOT_Gateway_RRPC_Response](#IOT_Gateway_RRPC_Response)
+    * [7.3 高级版(新版)API接口详解](#7.3 高级版(新版)API接口详解)
+        - [IOT_Linkkit_Open](#IOT_Linkkit_Open)
+        - [IOT_Linkkit_Connect](#IOT_Linkkit_Connect)
+        - [IOT_Linkkit_Yield](#IOT_Linkkit_Yield)
+        - [IOT_Linkkit_Close](#IOT_Linkkit_Close)
+        - [IOT_Linkkit_TriggerEvent](#IOT_Linkkit_TriggerEvent)
+        - [IOT_Linkkit_Report](#IOT_Linkkit_Report)
+        - [IOT_Linkkit_Query](#IOT_Linkkit_Query)
+        - [IOT_RegisterCallback](#IOT_RegisterCallback)
+        - [ITE_CONNECT_SUCC事件](#ITE_CONNECT_SUCC事件)
+        - [ITE_DISCONNECTED事件](#ITE_DISCONNECTED事件)
+        - [ITE_RAWDATA_ARRIVED事件](#ITE_RAWDATA_ARRIVED事件)
+        - [ITE_SERVICE_REQUST事件](#ITE_SERVICE_REQUST事件)
+        - [ITE_PROPERTY_SET事件](#ITE_PROPERTY_SET事件)
+        - [ITE_PROPERTY_GET事件](#ITE_PROPERTY_GET事件)
+        - [ITE_REPORT_REPLY事件](#ITE_REPORT_REPLY事件)
+        - [ITE_TRIGGER_EVENT_REPLY事件](#ITE_TRIGGER_EVENT_REPLY事件)
+        - [ITE_TIMESTAMP_REPLY事件](#ITE_TIMESTAMP_REPLY事件)
+        - [ITE_TOPOLIST_REPLY事件](#ITE_TOPOLIST_REPLY事件)
+        - [ITE_PERMIT_JOIN事件](#ITE_PERMIT_JOIN事件)
+        - [ITE_INITIALIZE_COMPLETED事件](#ITE_INITIALIZE_COMPLETED事件)
+        - [ITE_FOTA事件](#ITE_FOTA事件)
+        - [ITE_COTA事件](#ITE_COTA事件)
+        - [IOT_Ioctl](#IOT_Ioctl)
+    * [7.4 高级版(旧版)单品API详解](#7.4 高级版(旧版)单品API详解)
+        - [linkkit_answer_service](#linkkit_answer_service)
+        - [linkkit_cota_init](#linkkit_cota_init)
+        - [linkkit_dispatch](#linkkit_dispatch)
+        - [linkkit_end](#linkkit_end)
+        - [linkkit_fota_init](#linkkit_fota_init)
+        - [linkkit_get_value](#linkkit_get_value)
+        - [linkkit_invoke_cota_get_config](#linkkit_invoke_cota_get_config)
+        - [linkkit_invoke_cota_service](#linkkit_invoke_cota_service)
+        - [linkkit_invoke_fota_service](#linkkit_invoke_fota_service)
+        - [linkkit_invoke_raw_service](#linkkit_invoke_raw_service)
+        - [linkkit_is_end](#linkkit_is_end)
+        - [linkkit_is_try_leave](#linkkit_is_try_leave)
+        - [linkkit_post_property](#linkkit_post_property)
+        - [linkkit_set_opt](#linkkit_set_opt)
+        - [linkkit_set_tsl](#linkkit_set_tsl)
+        - [linkkit_set_value](#linkkit_set_value)
+        - [linkkit_start](#linkkit_start)
+        - [linkkit_trigger_event](#linkkit_trigger_event)
+        - [linkkit_trigger_extended_info_operate](#linkkit_trigger_extended_info_operate)
+        - [linkkit_try_leave](#linkkit_try_leave)
+        - [linkkit_yield](#linkkit_yield)
+    * [7.5 高级版(旧版)网关API详解](#7.5 高级版(旧版)网关API详解)
+        - [linkkit_gateway_delete_extinfos](#linkkit_gateway_delete_extinfos)
+        - [linkkit_gateway_exit](#linkkit_gateway_exit)
+        - [linkkit_gateway_fota_init](#linkkit_gateway_fota_init)
+        - [linkkit_gateway_get_default_params](#linkkit_gateway_get_default_params)
+        - [linkkit_gateway_get_devinfo](#linkkit_gateway_get_devinfo)
+        - [linkkit_gateway_get_num_devices](#linkkit_gateway_get_num_devices)
+        - [linkkit_gateway_init](#linkkit_gateway_init)
+        - [linkkit_gateway_invoke_fota_service](#linkkit_gateway_invoke_fota_service)
+        - [linkkit_gateway_post_extinfos](#linkkit_gateway_post_extinfos)
+        - [linkkit_gateway_post_property_json](#linkkit_gateway_post_property_json)
+        - [linkkit_gateway_post_property_json_sync](#linkkit_gateway_post_property_json_sync)
+        - [linkkit_gateway_post_rawdata](#linkkit_gateway_post_rawdata)
+        - [linkkit_gateway_set_event_callback](#linkkit_gateway_set_event_callback)
+        - [linkkit_gateway_setopt](#linkkit_gateway_setopt)
+        - [linkkit_gateway_start](#linkkit_gateway_start)
+        - [linkkit_gateway_stop](#linkkit_gateway_stop)
+        - [linkkit_gateway_subdev_create](#linkkit_gateway_subdev_create)
+        - [linkkit_gateway_subdev_destroy](#linkkit_gateway_subdev_destroy)
+        - [linkkit_gateway_subdev_login](#linkkit_gateway_subdev_login)
+        - [linkkit_gateway_subdev_logout](#linkkit_gateway_subdev_logout)
+        - [linkkit_gateway_subdev_register](#linkkit_gateway_subdev_register)
+        - [linkkit_gateway_subdev_unregister](#linkkit_gateway_subdev_unregister)
+        - [linkkit_gateway_trigger_event_json](#linkkit_gateway_trigger_event_json)
+        - [linkkit_gateway_trigger_event_json_sync](#linkkit_gateway_trigger_event_json_sync)
 
-# 第七章 API说明
+
+# <a name="第七章 API说明">第七章 API说明</a>
 
 > 本节说明 C-SDK 向客户提供的功能和对应的API, 用于让客户编写业务逻辑. 另外模组商/芯片商封装AT命令时, 也是基于这些API的
 >
@@ -7,9 +155,9 @@
 >>
 >> 如何使用这些API编写应用逻辑, 以代码 `examples/*/*.c` 的示例程序为准
 
-## 7.1 API接口列表
+## <a name="7.1 API接口列表">7.1 API接口列表</a>
 
-### 基础API
+### <a name="基础API">基础API</a>
 
 | 函数名                                          | 说明
 |-------------------------------------------------|---------------------------------------------------------------------
@@ -21,7 +169,7 @@
 
 用户可通过`IOT_Ioctl()`配置是否使用一型一密功能详细内容第五章
 
-### MQTT功能API
+### <a name="MQTT功能API">MQTT功能API</a>
 
 | 函数名                                                      | 说明
 |-------------------------------------------------------------|---------------------------------------------------------
@@ -147,7 +295,7 @@
     IOT_MQTT_Destroy(&pclient);
 ```
 
-### OTA功能API
+### <a name="OTA功能API">OTA功能API</a>
 
 | 函数名                                              | 说明
 |-----------------------------------------------------|-----------------------------------------------------------------
@@ -163,7 +311,7 @@
 
 更多OTA相关功能说明可查看[OTA服务](https://living.aliyun.com/doc#ysuxe6.html)页面
 
-### CoAP功能API
+### <a name="CoAP功能API">CoAP功能API</a>
 
 | 函数名                                                      | 说明
 |-------------------------------------------------------------|---------------------------------------------------------
@@ -175,7 +323,7 @@
 | [IOT_CoAP_SendMessage](#IOT_CoAP_SendMessage)               | CoAP会话阶段, 连接已成功建立后调用, 组织一个完整的CoAP报文向服务器发送
 | [IOT_CoAP_Yield](#IOT_CoAP_Yield)                           | CoAP会话阶段, 连接已成功建立后调用, 检查和收取服务器对`CoAP Request`的回复报文
 
-### HTTP功能API
+### <a name="HTTP功能API">HTTP功能API</a>
 
 | 函数名                                                  | 说明
 |---------------------------------------------------------|-------------------------------------------------------------
@@ -185,7 +333,7 @@
 | [IOT_HTTP_SendMessage](#IOT_HTTP_SendMessage)           | Https会话阶段, 组织一个完整的HTTP报文向服务器发送,并同步获取HTTP回复报文
 | [IOT_HTTP_Disconnect](#IOT_HTTP_Disconnect)             | Https会话阶段, 关闭HTTP层面的连接, 但是仍然保持TLS层面的连接
 
-### 设备影子API
+### <a name="设备影子API">设备影子API</a>
 
 | 函数名                                                              | 说明
 |---------------------------------------------------------------------|-------------------------------------------------
@@ -201,7 +349,7 @@
 | [IOT_Shadow_DeleteAttribute](#IOT_Shadow_DeleteAttribute)           | 删除一个已被成功注册的数据属性
 | [IOT_Shadow_Yield](#IOT_Shadow_Yield)                               | MQTT的主循环函数, 调用后接受服务端的下推消息, 更新本地的数据属性
 
-### 物模型管理API
+### <a name="物模型管理API">物模型管理API</a>
 > 物模型管理功能是指SDK能够使能IoT设备接受云端控制台或者手机公版app的控制, 进行属性/事件/服务维度的设置和监控, 在本文的其它地方, 有时也称为"高级版"
 
 | 函数名                                                  | 说明
@@ -219,10 +367,10 @@
 | [IOT_RegisterCallback](#IOT_RegisterCallback)   | 对SDK注册事件回调函数, 如云端连接成功/失败, 有属性设置/服务请求到达, 子设备管理报文答复等
 | [IOT_Ioctl](#IOT_Ioctl)                         | 对SDK进行各种参数运行时设置和获取, 以及运行状态的信息获取等, 实参可以是任何数据类型
 
-## 7.2 API接口清单
+## <a name="7.2 API接口清单">7.2 API接口清单</a>
 如下列出当前SDK代码提供的所有面向用户的API函数:
 
-### 基础版API清单
+### <a name="基础版API清单">基础版API清单</a>
 
     $ cd include
     $ grep -o "IOT_[A-Z][_a-zA-Z]*[^_]\> *(" iot_export.h exports/*.h|sed 's!.*:\(.*\)(!\1!'|cat -n
@@ -285,8 +433,8 @@
     56  IOT_Shadow_Push_Async
     57  IOT_Shadow_Pull
 
-## 7.3 基础版API接口详解
-### IOT_OpenLog
+## <a name="7.3 基础版API接口详解">7.3 基础版API接口详解</a>
+### <a name="IOT_OpenLog">IOT_OpenLog</a>
 
 原型
 ---
@@ -310,7 +458,7 @@ void IOT_OpenLog(const char *ident);
 
 -----
 
-### IOT_CloseLog
+### <a name="IOT_CloseLog">IOT_CloseLog</a>
 
 原型
 ---
@@ -334,7 +482,7 @@ void IOT_CloseLog(void);
 
 -----
 
-### IOT_SetLogLevel
+### <a name="IOT_SetLogLevel">IOT_SetLogLevel</a>
 
 原型
 ---
@@ -371,7 +519,7 @@ typedef enum _IOT_LogLevel {
 
 -----
 
-### IOT_DumpMemoryStats
+### <a name="IOT_DumpMemoryStats">IOT_DumpMemoryStats</a>
 
 原型
 ---
@@ -395,7 +543,7 @@ void IOT_DumpMemoryStats(IOT_LogLevel level);
 
 -----
 
-### IOT_SetupConnInfo
+### <a name="IOT_SetupConnInfo">IOT_SetupConnInfo</a>
 
 原型
 ---
@@ -442,7 +590,7 @@ typedef struct {
 ```
 
 -----
-### IOT_Ioctl
+### <a name="IOT_Ioctl">IOT_Ioctl</a>
 
 原型
 ---
@@ -497,7 +645,7 @@ typedef enum {
 
 -----
 
-### IOT_CoAP_Init
+### <a name="IOT_CoAP_Init">IOT_CoAP_Init</a>
 
 原型
 ---
@@ -542,7 +690,7 @@ typedef struct {
 
 -----
 
-### IOT_CoAP_Deinit
+### <a name="IOT_CoAP_Deinit">IOT_CoAP_Deinit</a>
 
 原型
 ---
@@ -567,7 +715,7 @@ CoAP反初始化函数, 断开与云端的连接并释放所有指定Context中�
 
 -----
 
-### IOT_CoAP_DeviceNameAuth
+### <a name="IOT_CoAP_DeviceNameAuth">IOT_CoAP_DeviceNameAuth</a>
 
 原型
 ---
@@ -598,7 +746,7 @@ int IOT_CoAP_DeviceNameAuth(iotx_coap_context_t *p_context)
 
 -----
 
-### IOT_CoAP_Yield
+### <a name="IOT_CoAP_Yield">IOT_CoAP_Yield</a>
 
 原型
 ---
@@ -626,7 +774,7 @@ int IOT_CoAP_Yield(iotx_coap_context_t *p_context)
 
 -----
 
-### IOT_CoAP_SendMessage
+### <a name="IOT_CoAP_SendMessage">IOT_CoAP_SendMessage</a>
 
 原型
 ---
@@ -679,7 +827,7 @@ typedef struct {
 + `user_data`: 用户数据, 在收到应答后, 会送回给用户
 + `resp_callback`: 用户注册的回调函数, 当收到该消息的应答时被调用
 
-### IOT_CoAP_GetMessagePayload
+### <a name="IOT_CoAP_GetMessagePayload">IOT_CoAP_GetMessagePayload</a>
 
 原型
 ---
@@ -711,7 +859,7 @@ int IOT_CoAP_GetMessagePayload(void *p_message, unsigned char **pp_payload, int 
 
 -----
 
-### IOT_CoAP_GetMessageCode
+### <a name="IOT_CoAP_GetMessageCode">IOT_CoAP_GetMessageCode</a>
 
 原型
 ---
@@ -757,7 +905,7 @@ typedef enum {
 
 -----
 
-### IOT_HTTP_Init
+### <a name="IOT_HTTP_Init">IOT_HTTP_Init</a>
 
 原型
 ---
@@ -798,7 +946,7 @@ typedef struct {
 
 -----
 
-### IOT_HTTP_DeInit
+### <a name="IOT_HTTP_DeInit">IOT_HTTP_DeInit</a>
 
 原型
 ---
@@ -823,7 +971,7 @@ HTTP反初始化函数, 断开与云端的连接并释放所有指定Context中�
 
 -----
 
-### IOT_HTTP_DeviceNameAuth
+### <a name="IOT_HTTP_DeviceNameAuth">IOT_HTTP_DeviceNameAuth</a>
 
 原型
 ```
@@ -850,7 +998,7 @@ int IOT_HTTP_DeviceNameAuth(void *handle);
 
 -----
 
-### IOT_HTTP_SendMessage
+### <a name="IOT_HTTP_SendMessage">IOT_HTTP_SendMessage</a>
 
 原型
 ---
@@ -903,7 +1051,7 @@ typedef struct {
 
 -----
 
-### IOT_HTTP_Disconnect
+### <a name="IOT_HTTP_Disconnect">IOT_HTTP_Disconnect</a>
 
 原型
 ---
@@ -928,7 +1076,7 @@ void IOT_HTTP_Disconnect(void *handle)
 
 -----
 
-### IOT_MQTT_Construct
+### <a name="IOT_MQTT_Construct">IOT_MQTT_Construct</a>
 
 原型
 ---
@@ -992,7 +1140,7 @@ typedef struct {
 
 -----
 
-### IOT_MQTT_Destroy
+### <a name="IOT_MQTT_Destroy">IOT_MQTT_Destroy</a>
 
 原型
 ---
@@ -1020,7 +1168,7 @@ int IOT_MQTT_Destroy(void **phandle);
 
 -----
 
-### IOT_MQTT_Yield
+### <a name="IOT_MQTT_Yield">IOT_MQTT_Yield</a>
 
 原型
 ---
@@ -1048,7 +1196,7 @@ int IOT_MQTT_Yield(void *handle, int timeout_ms);
 
 -----
 
-### IOT_MQTT_LogPost
+### <a name="IOT_MQTT_LogPost">IOT_MQTT_LogPost</a>
 
 原型
 ---
@@ -1079,7 +1227,7 @@ int IOT_MQTT_LogPost(void *pHandle, const char *level, const char *module, const
 
 -----
 
-### IOT_MQTT_CheckStateNormal
+### <a name="IOT_MQTT_CheckStateNormal">IOT_MQTT_CheckStateNormal</a>
 
 原型
 ---
@@ -1107,7 +1255,7 @@ int IOT_MQTT_CheckStateNormal(void *handle);
 
 -----
 
-### IOT_MQTT_Subscribe
+### <a name="IOT_MQTT_Subscribe">IOT_MQTT_Subscribe</a>
 
 原型
 ---
@@ -1143,7 +1291,7 @@ int IOT_MQTT_Subscribe(void *handle,
 
 -----
 
-### IOT_MQTT_Subscribe_Sync
+### <a name="IOT_MQTT_Subscribe_Sync">IOT_MQTT_Subscribe_Sync</a>
 
 原型
 ---
@@ -1182,7 +1330,7 @@ int IOT_MQTT_Subscribe_Sync(void *handle,
 
 -----
 
-### IOT_MQTT_Unsubscribe
+### <a name="IOT_MQTT_Unsubscribe">IOT_MQTT_Unsubscribe</a>
 
 原型
 ---
@@ -1211,7 +1359,7 @@ int IOT_MQTT_Unsubscribe(void *handle, const char *topic_filter);
 
 -----
 
-### IOT_MQTT_Publish
+### <a name="IOT_MQTT_Publish">IOT_MQTT_Publish</a>
 
 原型
 ---
@@ -1241,7 +1389,7 @@ int IOT_MQTT_Publish(void *handle, const char *topic_name, iotx_mqtt_topic_info_
 
 -----
 
-### IOT_OTA_Init
+### <a name="IOT_OTA_Init">IOT_OTA_Init</a>
 
 原型
 ---
@@ -1271,7 +1419,7 @@ void *IOT_OTA_Init(const char *product_key, const char *device_name, void *ch_si
 
 -----
 
-### IOT_OTA_Deinit
+### <a name="IOT_OTA_Deinit">IOT_OTA_Deinit</a>
 
 原型
 ---
@@ -1299,7 +1447,7 @@ int IOT_OTA_Deinit(void *handle)
 
 -----
 
-### IOT_OTA_ReportVersion
+### <a name="IOT_OTA_ReportVersion">IOT_OTA_ReportVersion</a>
 
 原型
 ---
@@ -1328,7 +1476,7 @@ int IOT_OTA_ReportVersion(void *handle, const char *version);
 
 -----
 
-### IOT_OTA_ReportProgress
+### <a name="IOT_OTA_ReportProgress">IOT_OTA_ReportProgress</a>
 
 原型
 ---
@@ -1378,7 +1526,7 @@ typedef enum {
 
 -----
 
-### IOT_OTA_IsFetching
+### <a name="IOT_OTA_IsFetching">IOT_OTA_IsFetching</a>
 
 原型
 ---
@@ -1406,7 +1554,7 @@ int IOT_OTA_IsFetching(void *handle);
 
 -----
 
-### IOT_OTA_IsFetchFinish
+### <a name="IOT_OTA_IsFetchFinish">IOT_OTA_IsFetchFinish</a>
 
 原型
 ---
@@ -1434,7 +1582,7 @@ int IOT_OTA_IsFetchFinish(void *handle);
 
 -----
 
-### IOT_OTA_FetchYield
+### <a name="IOT_OTA_FetchYield">IOT_OTA_FetchYield</a>
 
 原型
 ---
@@ -1464,7 +1612,7 @@ int IOT_OTA_FetchYield(void *handle, char *buf, uint32_t buf_len, uint32_t timeo
 
 -----
 
-### IOT_OTA_Ioctl
+### <a name="IOT_OTA_Ioctl">IOT_OTA_Ioctl</a>
 
 原型
 ---
@@ -1530,7 +1678,7 @@ typedef enum {
 
 -----
 
-### IOT_OTA_GetLastError
+### <a name="IOT_OTA_GetLastError">IOT_OTA_GetLastError</a>
 
 原型
 ---
@@ -1558,7 +1706,7 @@ int IOT_OTA_GetLastError(void *handle);
 
 -----
 
-### IOT_Shadow_Construct
+### <a name="IOT_Shadow_Construct">IOT_Shadow_Construct</a>
 
 原型
 ---
@@ -1586,7 +1734,7 @@ void *IOT_Shadow_Construct(iotx_shadow_para_pt pparams);
 
 -----
 
-### IOT_Shadow_Destroy
+### <a name="IOT_Shadow_Destroy">IOT_Shadow_Destroy</a>
 
 原型
 ---
@@ -1611,7 +1759,7 @@ iotx_err_t IOT_Shadow_Destroy(void *handle);
 
 -----
 
-### IOT_Shadow_Yield
+### <a name="IOT_Shadow_Yield">IOT_Shadow_Yield</a>
 
 原型
 ---
@@ -1637,7 +1785,7 @@ void IOT_Shadow_Yield(void *handle, uint32_t timeout_ms);
 
 -----
 
-### IOT_Shadow_RegisterAttribute
+### <a name="IOT_Shadow_RegisterAttribute">IOT_Shadow_RegisterAttribute</a>
 
 原型
 ---
@@ -1663,7 +1811,7 @@ iotx_err_t IOT_Shadow_RegisterAttribute(void *handle, iotx_shadow_attr_pt pattr)
 
 -----
 
-### IOT_Shadow_DeleteAttribute
+### <a name="IOT_Shadow_DeleteAttribute">IOT_Shadow_DeleteAttribute</a>
 
 原型
 ---
@@ -1689,7 +1837,7 @@ iotx_err_t IOT_Shadow_DeleteAttribute(void *handle, iotx_shadow_attr_pt pattr);
 
 -----
 
-### IOT_Shadow_PushFormat_Init
+### <a name="IOT_Shadow_PushFormat_Init">IOT_Shadow_PushFormat_Init</a>
 
 原型
 ---
@@ -1720,7 +1868,7 @@ iotx_err_t IOT_Shadow_PushFormat_Init(void *pshadow,
 
 -----
 
-### IOT_Shadow_PushFormat_Add
+### <a name="IOT_Shadow_PushFormat_Add">IOT_Shadow_PushFormat_Add</a>
 
 原型
 ---
@@ -1749,7 +1897,7 @@ iotx_err_t IOT_Shadow_PushFormat_Add(void *pshadow,
 
 -----
 
-### IOT_Shadow_PushFormat_Finalize
+### <a name="IOT_Shadow_PushFormat_Finalize">IOT_Shadow_PushFormat_Finalize</a>
 
 原型
 ---
@@ -1775,7 +1923,7 @@ iotx_err_t IOT_Shadow_PushFormat_Finalize(void *pshadow, format_data_pt pformat)
 
 -----
 
-### IOT_Shadow_Push
+### <a name="IOT_Shadow_Push">IOT_Shadow_Push</a>
 
 原型
 ---
@@ -1802,7 +1950,7 @@ iotx_err_t IOT_Shadow_Push(void *handle, char *data, uint32_t data_len, uint16_t
 
 -----
 
-### IOT_Shadow_Push_Async
+### <a name="IOT_Shadow_Push_Async">IOT_Shadow_Push_Async</a>
 
 原型
 ---
@@ -1840,7 +1988,7 @@ int IOT_Shadow_Push_Async(void *handle,
 
 -----
 
-### IOT_Shadow_Pull
+### <a name="IOT_Shadow_Pull">IOT_Shadow_Pull</a>
 
 原型
 ---
@@ -1865,7 +2013,7 @@ iotx_err_t IOT_Shadow_Pull(void *handle);
 
 -----
 
-### IOT_Gateway_Generate_Message_ID
+### <a name="IOT_Gateway_Generate_Message_ID">IOT_Gateway_Generate_Message_ID</a>
 
 原型
 ---
@@ -1889,7 +2037,7 @@ uint32_t IOT_Gateway_Generate_Message_ID(void);
 
 -----
 
-### IOT_Gateway_Construct
+### <a name="IOT_Gateway_Construct">IOT_Gateway_Construct</a>
 
 原型
 ---
@@ -1930,7 +2078,7 @@ typedef struct {
 
 -----
 
-### IOT_Gateway_Destroy
+### <a name="IOT_Gateway_Destroy">IOT_Gateway_Destroy</a>
 
 原型
 ---
@@ -1958,7 +2106,7 @@ int IOT_Gateway_Destroy(void **handle);
 
 -----
 
-### IOT_Subdevice_Register
+### <a name="IOT_Subdevice_Register">IOT_Subdevice_Register</a>
 
 原型
 ---
@@ -2005,7 +2153,7 @@ int IOT_Subdevice_Register(void *handle,
 
 -----
 
-### IOT_Subdevice_Unregister
+### <a name="IOT_Subdevice_Unregister">IOT_Subdevice_Unregister</a>
 
 原型
 ---
@@ -2035,7 +2183,7 @@ int IOT_Subdevice_Unregister(void* handle, const char* product_key, const char* 
 
 -----
 
-### IOT_Subdevice_Login
+### <a name="IOT_Subdevice_Login">IOT_Subdevice_Login</a>
 
 原型
 ---
@@ -2083,7 +2231,7 @@ int IOT_Subdevice_Login(void* handle,
 
 -----
 
-### IOT_Subdevice_Logout
+### <a name="IOT_Subdevice_Logout">IOT_Subdevice_Logout</a>
 
 原型
 ---
@@ -2113,7 +2261,7 @@ int IOT_Subdevice_Logout(void* handle, const char * product_key, const char * de
 
 -----
 
-### IOT_Gateway_Get_TOPO
+### <a name="IOT_Gateway_Get_TOPO">IOT_Gateway_Get_TOPO</a>
 
 原型
 ---
@@ -2144,7 +2292,7 @@ int IOT_Gateway_Get_TOPO(void* handle, char* get_topo_reply, uint32_t* length);
 
 -----
 
-### IOT_Gateway_Get_Config
+### <a name="IOT_Gateway_Get_Config">IOT_Gateway_Get_Config</a>
 
 原型
 ---
@@ -2176,7 +2324,7 @@ int IOT_Gateway_Get_Config(void *handle,
 
 -----
 
-### IOT_Gateway_Publish_Found_List
+### <a name="IOT_Gateway_Publish_Found_List">IOT_Gateway_Publish_Found_List</a>
 
 原型
 ---
@@ -2206,7 +2354,7 @@ int IOT_Gateway_Publish_Found_List(void* handle, const char* product_key, const 
 
 -----
 
-### IOT_Gateway_Yield
+### <a name="IOT_Gateway_Yield">IOT_Gateway_Yield</a>
 
 原型
 ---
@@ -2235,7 +2383,7 @@ int IOT_Gateway_Yield(void* handle, uint32_t timeout);
 
 -----
 
-### IOT_Gateway_Subscribe
+### <a name="IOT_Gateway_Subscribe">IOT_Gateway_Subscribe</a>
 
 原型
 ---
@@ -2270,7 +2418,7 @@ int IOT_Gateway_Subscribe(void* handle,
 
 -----
 
-### IOT_Gateway_Unsubscribe
+### <a name="IOT_Gateway_Unsubscribe">IOT_Gateway_Unsubscribe</a>
 
 原型
 ---
@@ -2299,7 +2447,7 @@ int IOT_Gateway_Unsubscribe(void* handle, const char *topic_filter);
 
 -----
 
-### IOT_Gateway_Publish
+### <a name="IOT_Gateway_Publish">IOT_Gateway_Publish</a>
 
 原型
 ---
@@ -2329,7 +2477,7 @@ int IOT_Gateway_Publish(void *handle, const char *topic_name, iotx_mqtt_topic_in
 
 -----
 
-### IOT_Gateway_RRPC_Register
+### <a name="IOT_Gateway_RRPC_Register">IOT_Gateway_RRPC_Register</a>
 
 原型
 ---
@@ -2363,7 +2511,7 @@ int IOT_Gateway_RRPC_Register(void* handle,
 
 -----
 
-### IOT_Gateway_RRPC_Response
+### <a name="IOT_Gateway_RRPC_Response">IOT_Gateway_RRPC_Response</a>
 
 原型
 ---
@@ -2399,9 +2547,9 @@ int IOT_Gateway_RRPC_Response(void* handle,
 
 -----
 
-## 7.3 高级版(新版)API接口详解
+## <a name="7.3 高级版(新版)API接口详解">7.3 高级版(新版)API接口详解</a>
 
-### IOT_Linkkit_Open
+### <a name="IOT_Linkkit_Open">IOT_Linkkit_Open</a>
 
 原型
 ---
@@ -2457,7 +2605,7 @@ typedef struct {
 
 -----
 
-### IOT_Linkkit_Connect
+### <a name="IOT_Linkkit_Connect">IOT_Linkkit_Connect</a>
 
 原型
 ---
@@ -2485,7 +2633,7 @@ int IOT_Linkkit_Connect(int devid);
 
 -----
 
-### IOT_Linkkit_Yield
+### <a name="IOT_Linkkit_Yield">IOT_Linkkit_Yield</a>
 
 原型
 ---
@@ -2510,7 +2658,7 @@ void IOT_Linkkit_Yield(int timeout_ms);
 
 -----
 
-### IOT_Linkkit_Close
+### <a name="IOT_Linkkit_Close">IOT_Linkkit_Close</a>
 
 原型
 ---
@@ -2538,7 +2686,7 @@ int IOT_Linkkit_Close(int devid);
 
 -----
 
-### IOT_Linkkit_TriggerEvent
+### <a name="IOT_Linkkit_TriggerEvent">IOT_Linkkit_TriggerEvent</a>
 
 原型
 ---
@@ -2570,7 +2718,7 @@ int IOT_Linkkit_TriggerEvent(int devid, char *eventid, int eventid_len, char *pa
 
 -----
 
-### IOT_Linkkit_Report
+### <a name="IOT_Linkkit_Report">IOT_Linkkit_Report</a>
 
 原型
 ---
@@ -2628,7 +2776,7 @@ typedef enum {
 
 -----
 
-### IOT_Linkkit_Query
+### <a name="IOT_Linkkit_Query">IOT_Linkkit_Query</a>
 
 原型
 ---
@@ -2686,7 +2834,7 @@ typedef enum {
 
 -----
 
-### IOT_RegisterCallback
+### <a name="IOT_RegisterCallback">IOT_RegisterCallback</a>
 
 原型
 ---
@@ -2753,7 +2901,7 @@ typedef enum {
 | [ITE_FOTA](#ITE_FOTA) | int callback(int type, const char *version); | Linkkit收到可用固件的通知时 |
 | [ITE_COTA](#ITE_COTA) | int callback(int type, const char *config_id, int config_size, const char *get_type, const char *sign, const char *sign_method, const char *url); | Linkkit收到可用远程配置文件的通知时 |
 
-### ITE_CONNECT_SUCC事件
+### <a name="ITE_CONNECT_SUCC事件">ITE_CONNECT_SUCC事件</a>
 
 原型
 ---
@@ -2778,7 +2926,7 @@ int callback(void);
 | 0 | 事件处理成功 |
 | -1 | 事件处理失败 |
 
-### ITE_DISCONNECTED事件
+### <a name="ITE_DISCONNECTED事件">ITE_DISCONNECTED事件</a>
 
 原型
 ---
@@ -2803,7 +2951,7 @@ int callback(void);
 
 -----
 
-### ITE_RAWDATA_ARRIVED事件
+### <a name="ITE_RAWDATA_ARRIVED事件">ITE_RAWDATA_ARRIVED事件</a>
 
 原型
 ---
@@ -2832,7 +2980,7 @@ int callback(const int devid, const unsigned char *payload, const int payload_le
 
 -----
 
-### ITE_SERVICE_REQUST事件
+### <a name="ITE_SERVICE_REQUST事件">ITE_SERVICE_REQUST事件</a>
 
 原型
 ---
@@ -2867,7 +3015,7 @@ int callback(const int devid, const char *serviceid, const int serviceid_len, co
 
 -----
 
-### ITE_PROPERTY_SET事件
+### <a name="ITE_PROPERTY_SET事件">ITE_PROPERTY_SET事件</a>
 
 原型
 ---
@@ -2897,7 +3045,7 @@ int callback(const int devid, const char *request, const int request_len);
 
 -----
 
-### ITE_PROPERTY_GET事件
+### <a name="ITE_PROPERTY_GET事件">ITE_PROPERTY_GET事件</a>
 
 原型
 ---
@@ -2930,7 +3078,7 @@ int callback(const int devid, const char *request, const int request_len, char *
 
 -----
 
-### ITE_REPORT_REPLY事件
+### <a name="ITE_REPORT_REPLY事件">ITE_REPORT_REPLY事件</a>
 
 原型
 ---
@@ -2962,7 +3110,7 @@ int callback(const int devid, const int msgid, const int code, const char *reply
 
 -----
 
-### ITE_TRIGGER_EVENT_REPLY事件
+### <a name="ITE_TRIGGER_EVENT_REPLY事件">ITE_TRIGGER_EVENT_REPLY事件</a>
 
 原型
 ---
@@ -2996,7 +3144,7 @@ int callback(const int devid, const int msgid, const int code, const char *event
 
 -----
 
-### ITE_TIMESTAMP_REPLY事件
+### <a name="ITE_TIMESTAMP_REPLY事件">ITE_TIMESTAMP_REPLY事件</a>
 
 原型
 ---
@@ -3024,7 +3172,7 @@ int callback(const char *timestamp);
 
 -----
 
-### ITE_TOPOLIST_REPLY事件
+### <a name="ITE_TOPOLIST_REPLY事件">ITE_TOPOLIST_REPLY事件</a>
 
 原型
 ---
@@ -3056,7 +3204,7 @@ int callback(const int devid, const int msgid, const int code, const char * payl
 
 -----
 
-### ITE_PERMIT_JOIN事件
+### <a name="ITE_PERMIT_JOIN事件">ITE_PERMIT_JOIN事件</a>
 
 原型
 ---
@@ -3085,7 +3233,7 @@ int callback(const char * product_key, const int time);
 
 -----
 
-### ITE_INITIALIZE_COMPLETED事件
+### <a name="ITE_INITIALIZE_COMPLETED事件">ITE_INITIALIZE_COMPLETED事件</a>
 
 原型
 ---
@@ -3113,7 +3261,7 @@ int callback(const int devid);
 
 -----
 
-### ITE_FOTA事件
+### <a name="ITE_FOTA事件">ITE_FOTA事件</a>
 
 原型
 ---
@@ -3142,7 +3290,7 @@ int callback(int type, const char *version);
 
 -----
 
-### ITE_COTA事件
+### <a name="ITE_COTA事件">ITE_COTA事件</a>
 
 原型
 ---
@@ -3176,7 +3324,7 @@ int callback(int type, const char *config_id, int config_size, const char *get_t
 
 -----
 
-### IOT_Ioctl
+### <a name="IOT_Ioctl">IOT_Ioctl</a>
 
 原型
 ---
@@ -3235,11 +3383,11 @@ typedef enum {
 
 -----
 
-## 7.4 高级版(旧版)单品API详解
+## <a name="7.4 高级版(旧版)单品API详解">7.4 高级版(旧版)单品API详解</a>
 
 > 本节介绍的API适用于您的设备不具有对子设备的管理能力的场景, 参看 [单品](#单品) 的名词解释部分
 
-### linkkit_answer_service
+### <a name="linkkit_answer_service">linkkit_answer_service</a>
 
 原型
 ---
@@ -3270,7 +3418,7 @@ int deprecated linkkit_answer_service(const void *thing_id, const char *service_
 
 -----
 
-### linkkit_cota_init
+### <a name="linkkit_cota_init">linkkit_cota_init</a>
 
 原型
 ---
@@ -3320,7 +3468,7 @@ typedef void (*handle_service_cota_callback_fp_t)(
 
 -----
 
-### linkkit_dispatch
+### <a name="linkkit_dispatch">linkkit_dispatch</a>
 
 原型
 ---
@@ -3344,7 +3492,7 @@ void *linkkit_dispatch(void);
 
 -----
 
-### linkkit_end
+### <a name="linkkit_end">linkkit_end</a>
 
 原型
 ---
@@ -3369,7 +3517,7 @@ int deprecated linkkit_end(void);
 
 -----
 
-### linkkit_fota_init
+### <a name="linkkit_fota_init">linkkit_fota_init</a>
 
 原型
 ---
@@ -3409,7 +3557,7 @@ typedef void (*handle_service_fota_callback_fp_t)(
 
 -----
 
-### linkkit_get_value
+### <a name="linkkit_get_value">linkkit_get_value</a>
 
 原型
 ---
@@ -3461,7 +3609,7 @@ typedef enum {
 
 -----
 
-### linkkit_invoke_cota_get_config
+### <a name="linkkit_invoke_cota_get_config">linkkit_invoke_cota_get_config</a>
 
 原型
 ---
@@ -3496,7 +3644,7 @@ int deprecated linkkit_invoke_cota_get_config(
 
 -----
 
-### linkkit_invoke_cota_service
+### <a name="linkkit_invoke_cota_service">linkkit_invoke_cota_service</a>
 
 原型
 ---
@@ -3525,7 +3673,7 @@ int deprecated linkkit_invoke_cota_service(void *data_buf, int data_buf_length);
 
 -----
 
-### linkkit_invoke_fota_service
+### <a name="linkkit_invoke_fota_service">linkkit_invoke_fota_service</a>
 
 原型
 ---
@@ -3554,7 +3702,7 @@ int deprecated linkkit_invoke_fota_service(void *data_buf, int data_buf_length);
 
 -----
 
-### linkkit_invoke_raw_service
+### <a name="linkkit_invoke_raw_service">linkkit_invoke_raw_service</a>
 
 原型
 ---
@@ -3589,7 +3737,7 @@ int deprecated linkkit_invoke_raw_service(
 
 -----
 
-### linkkit_is_end
+### <a name="linkkit_is_end">linkkit_is_end</a>
 
 原型
 ---
@@ -3614,7 +3762,7 @@ int deprecated linkkit_is_end();
 
 -----
 
-### linkkit_is_try_leave
+### <a name="linkkit_is_try_leave">linkkit_is_try_leave</a>
 
 原型
 ---
@@ -3639,7 +3787,7 @@ int deprecated linkkit_is_try_leave(void)
 
 -----
 
-### linkkit_post_property
+### <a name="linkkit_post_property">linkkit_post_property</a>
 
 原型
 ---
@@ -3671,7 +3819,7 @@ int deprecated linkkit_post_property(const void *thing_id,
 
 -----
 
-### linkkit_set_opt
+### <a name="linkkit_set_opt">linkkit_set_opt</a>
 
 原型
 ---
@@ -3714,7 +3862,7 @@ typedef enum {
 
 -----
 
-### linkkit_set_tsl
+### <a name="linkkit_set_tsl">linkkit_set_tsl</a>
 
 原型
 ---
@@ -3743,7 +3891,7 @@ void *linkkit_set_tsl(const char *tsl, int tsl_len);
 
 -----
 
-### linkkit_set_value
+### <a name="linkkit_set_value">linkkit_set_value</a>
 
 原型
 ---
@@ -3779,7 +3927,7 @@ int deprecated linkkit_set_value(linkkit_method_set_t method_set,
 
 -----
 
-### linkkit_start
+### <a name="linkkit_start">linkkit_start</a>
 
 原型
 ---
@@ -3816,7 +3964,7 @@ int deprecated linkkit_start(int max_buffered_msg,
 
 -----
 
-### linkkit_trigger_event
+### <a name="linkkit_trigger_event">linkkit_trigger_event</a>
 
 原型
 ---
@@ -3848,7 +3996,7 @@ int deprecated linkkit_trigger_event(const void *thing_id,
 
 -----
 
-### linkkit_trigger_extended_info_operate
+### <a name="linkkit_trigger_extended_info_operate">linkkit_trigger_extended_info_operate</a>
 
 原型
 ---
@@ -3881,7 +4029,7 @@ int deprecated linkkit_trigger_extended_info_operate(
 
 -----
 
-### linkkit_try_leave
+### <a name="linkkit_try_leave">linkkit_try_leave</a>
 
 原型
 ---
@@ -3903,7 +4051,7 @@ void deprecated linkkit_try_leave(void);
 
 -----
 
-### linkkit_yield
+### <a name="linkkit_yield">linkkit_yield</a>
 
 原型
 ---
@@ -3930,11 +4078,11 @@ int deprecated linkkit_yield(int timeout_ms);
 
 -----
 
-## 7.5 高级版(旧版)网关API详解
+## <a name="7.5 高级版(旧版)网关API详解">7.5 高级版(旧版)网关API详解</a>
 
 > 本节介绍的API适用于您的设备具有对子设备的管理能力的场景, 参看 [网关](#网关) 的名词解释部分
 
-### linkkit_gateway_delete_extinfos
+### <a name="linkkit_gateway_delete_extinfos">linkkit_gateway_delete_extinfos</a>
 
 原型
 ---
@@ -3972,7 +4120,7 @@ typedef struct {
 
 -----
 
-### linkkit_gateway_exit
+### <a name="linkkit_gateway_exit">linkkit_gateway_exit</a>
 
 原型
 ---
@@ -3997,7 +4145,7 @@ void
 
 -----
 
-### linkkit_gateway_fota_init
+### <a name="linkkit_gateway_fota_init">linkkit_gateway_fota_init</a>
 
 原型
 ---
@@ -4034,7 +4182,7 @@ typedef enum {
 
 -----
 
-### linkkit_gateway_get_default_params
+### <a name="linkkit_gateway_get_default_params">linkkit_gateway_get_default_params</a>
 
 原型
 ---
@@ -4102,7 +4250,7 @@ enum {
 
 -----
 
-### linkkit_gateway_get_devinfo
+### <a name="linkkit_gateway_get_devinfo">linkkit_gateway_get_devinfo</a>
 
 原型
 ---
@@ -4148,7 +4296,7 @@ enum {
 
 -----
 
-### linkkit_gateway_get_num_devices
+### <a name="linkkit_gateway_get_num_devices">linkkit_gateway_get_num_devices</a>
 
 原型
 ---
@@ -4170,7 +4318,7 @@ void
 
 -----
 
-### linkkit_gateway_init
+### <a name="linkkit_gateway_init">linkkit_gateway_init</a>
 
 原型
 ---
@@ -4197,7 +4345,7 @@ int linkkit_gateway_init(linkkit_params_t *initParams);
 
 -----
 
-### linkkit_gateway_invoke_fota_service
+### <a name="linkkit_gateway_invoke_fota_service">linkkit_gateway_invoke_fota_service</a>
 
 原型
 ---
@@ -4225,7 +4373,7 @@ int linkkit_gateway_invoke_fota_service(void* data_buf, int data_buf_length);
 
 -----
 
-### linkkit_gateway_post_extinfos
+### <a name="linkkit_gateway_post_extinfos">linkkit_gateway_post_extinfos</a>
 
 原型
 ---
@@ -4255,7 +4403,7 @@ int linkkit_gateway_post_extinfos(int devid, linkkit_extinfo_t *extinfos, int nb
 
 -----
 
-### linkkit_gateway_post_property_json
+### <a name="linkkit_gateway_post_property_json">linkkit_gateway_post_property_json</a>
 
 原型
 ---
@@ -4287,7 +4435,7 @@ int linkkit_gateway_post_property_json(int devid, char *property, int timeout_ms
 
 -----
 
-### linkkit_gateway_post_property_json_sync
+### <a name="linkkit_gateway_post_property_json_sync">linkkit_gateway_post_property_json_sync</a>
 
 原型
 ---
@@ -4316,7 +4464,7 @@ int linkkit_gateway_post_property_json_sync(int devid, char *property, int timeo
 
 -----
 
-### linkkit_gateway_post_rawdata
+### <a name="linkkit_gateway_post_rawdata">linkkit_gateway_post_rawdata</a>
 
 原型
 ---
@@ -4345,7 +4493,7 @@ int linkkit_gateway_post_rawdata(int devid, void *data, int len);
 
 -----
 
-### linkkit_gateway_set_event_callback
+### <a name="linkkit_gateway_set_event_callback">linkkit_gateway_set_event_callback</a>
 
 原型
 ---
@@ -4374,7 +4522,7 @@ int linkkit_gateway_set_event_callback(linkkit_params_t *params, int (*event_cb)
 
 -----
 
-### linkkit_gateway_setopt
+### <a name="linkkit_gateway_setopt">linkkit_gateway_setopt</a>
 
 原型
 ---
@@ -4416,7 +4564,7 @@ enum {
 
 -----
 
-### linkkit_gateway_start
+### <a name="linkkit_gateway_start">linkkit_gateway_start</a>
 
 原型
 ---
@@ -4444,7 +4592,7 @@ int linkkit_gateway_start(linkkit_cbs_t *cbs, void *ctx);
 
 -----
 
-### linkkit_gateway_stop
+### <a name="linkkit_gateway_stop">linkkit_gateway_stop</a>
 
 原型
 ---
@@ -4471,7 +4619,7 @@ int linkkit_gateway_stop(int devid);
 
 -----
 
-### linkkit_gateway_subdev_create
+### <a name="linkkit_gateway_subdev_create">linkkit_gateway_subdev_create</a>
 
 原型
 ---
@@ -4569,7 +4717,7 @@ typedef struct {
 
 -----
 
-### linkkit_gateway_subdev_destroy
+### <a name="linkkit_gateway_subdev_destroy">linkkit_gateway_subdev_destroy</a>
 
 原型
 ---
@@ -4596,7 +4744,7 @@ int linkkit_gateway_subdev_destroy(int devid);
 
 -----
 
-### linkkit_gateway_subdev_login
+### <a name="linkkit_gateway_subdev_login">linkkit_gateway_subdev_login</a>
 
 原型
 ---
@@ -4623,7 +4771,7 @@ int linkkit_gateway_subdev_login(int devid);
 
 -----
 
-### linkkit_gateway_subdev_logout
+### <a name="linkkit_gateway_subdev_logout">linkkit_gateway_subdev_logout</a>
 
 原型
 ---
@@ -4650,7 +4798,7 @@ int linkkit_gateway_subdev_logout(int devid);
 
 -----
 
-### linkkit_gateway_subdev_register
+### <a name="linkkit_gateway_subdev_register">linkkit_gateway_subdev_register</a>
 
 原型
 ---
@@ -4679,7 +4827,7 @@ int linkkit_gateway_subdev_register(char *productKey, char *deviceName, char *de
 
 -----
 
-### linkkit_gateway_subdev_unregister
+### <a name="linkkit_gateway_subdev_unregister">linkkit_gateway_subdev_unregister</a>
 
 原型
 ---
@@ -4707,7 +4855,7 @@ int linkkit_gateway_subdev_unregister(char *productKey, char *deviceName);
 
 -----
 
-### linkkit_gateway_trigger_event_json
+### <a name="linkkit_gateway_trigger_event_json">linkkit_gateway_trigger_event_json</a>
 
 原型
 ---
@@ -4740,7 +4888,7 @@ int linkkit_gateway_trigger_event_json(int devid, char *identifier, char *event,
 
 -----
 
-### linkkit_gateway_trigger_event_json_sync
+### <a name="linkkit_gateway_trigger_event_json_sync">linkkit_gateway_trigger_event_json_sync</a>
 
 原型
 ---

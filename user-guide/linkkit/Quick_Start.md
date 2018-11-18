@@ -1,12 +1,40 @@
-# 快速体验
+# <a name="目录">目录</a>
++ [快速体验](#快速体验)
+    * [准备开发环境](#准备开发环境)
+        - [安装本地开发环境](#安装本地开发环境)
+            + [安装Ubuntu16.04](#安装Ubuntu16.04)
+            + [安装必备软件](#安装必备软件)
+        - [通过Hacklab Web IDE进行开发](#通过Hacklab Web IDE进行开发)
+    * [以MQTT Topic编程方式接入设备](#以MQTT Topic编程方式接入设备)
+        - [创建产品和设备](#创建产品和设备)
+        - [产品功能实现](#产品功能实现)
+            + [了解SDK根目录结构](#了解SDK根目录结构)
+            + [填写设备三元组到例程中](#填写设备三元组到例程中)
+            + [初始化与建立连接](#初始化与建立连接)
+            + [上报数据到云端](#上报数据到云端)
+            + [从云端订阅并处理数据](#从云端订阅并处理数据)
+            + [编译例子程序](#编译例子程序)
+        - [观察数据](#观察数据)
+    * [以物模型编程方式接入设备](#以物模型编程方式接入设备)
+        - [创建产品和设备](#创建产品和设备)
+        - [产品功能实现](#产品功能实现)
+            + [填写设备三元组到例程中](#填写设备三元组到例程中)
+            + [编译与运行程序](#编译与运行程序)
+        - [观察数据](#观察数据)
+            + [属性上报](#属性上报)
+            + [属性设置处理](#属性设置处理)
+            + [事件上报](#事件上报)
+            + [服务调用](#服务调用)
+
+# <a name="快速体验">快速体验</a>
 
 本章描述如何创建产品和设备, 并在Ubuntu上快速体验通过MQTT topic和通过物模型的编程方式, 上报和接收业务报文.
 
-## 准备开发环境
+## <a name="准备开发环境">准备开发环境</a>
 
-### 安装本地开发环境
+### <a name="安装本地开发环境">安装本地开发环境</a>
 
-#### 安装Ubuntu16.04
+#### <a name="安装Ubuntu16.04">安装Ubuntu16.04</a>
 
 本快速体验的编译环境是**64位**主机上的`Ubuntu16.04`, 在其它Linux版本上尚未验证过, 推荐安装与阿里一致的发行版以避免碰到兼容性方面的问题
 
@@ -14,7 +42,7 @@
 
 然后安装64位的Desktop版本的`Ubuntu 16.04.x LTS`, 下载地址: [http://releases.ubuntu.com/16.04](http://releases.ubuntu.com/16.04)
 
-#### 安装必备软件
+#### <a name="安装必备软件">安装必备软件</a>
 
 本SDK的开发编译环境使用如下软件: `make-4.1`, `git-2.7.4`, `gcc-5.4.0`, `gcov-5.4.0`, `lcov-1.12`, `bash-4.3.48`, `tar-1.28`, `mingw-5.3.1`
 
@@ -22,20 +50,20 @@
 
     apt-get install -y build-essential make git gcc
 
-### 通过Hacklab Web IDE进行开发
+### <a name="通过Hacklab Web IDE进行开发">通过Hacklab Web IDE进行开发</a>
 
 如果您不打算在您的PC或者笔记本电脑上安装Ubuntu, 也可通过阿里云IoT提供的Hacklab Web IDE环境直接进行设备开发, Hacklab Web IDE是一个云端的Linux开发环境, 已经将必要的软件安装完毕, 只要您拥有一个阿里云账号, 就可以通过浏览器登录进行开发, 点击此处登录[Hacklab Web IDE](https://hacklab.aliyun.com/)
 
-## 以MQTT Topic编程方式接入设备
-### 创建产品和设备
+## <a name="以MQTT Topic编程方式接入设备">以MQTT Topic编程方式接入设备</a>
+### <a name="创建产品和设备">创建产品和设备</a>
 
 请登录[阿里云IoT物联网平台](https://iot.aliyun.com/products/linkKits)进行产品创建, 登录时通过您的阿里云账号进行登录. 因为是直接通过MQTT的Topic进行产品功能实现, 所以在创建产品时选择"基础版"即可
 创建产品之后可以添加一个具体的设备, 阿里云IoT物联网平台会为设备生成身份信息
 如果您对云端如何创建产品不熟悉, 请[点击此处](https://help.aliyun.com/document_detail/68946.html)了解如何在阿里云IoT物联网平台进行产品和设备创建
 
-### 产品功能实现
+### <a name="产品功能实现">产品功能实现</a>
 
-#### 了解SDK根目录结构
+#### <a name="了解SDK根目录结构">了解SDK根目录结构</a>
 
 *注：本文档以2.3.0版本为例，不同的版本内容可能会有不同*
 
@@ -45,7 +73,7 @@
     ls
     build-rules  Config.in  examples  LICENSE   make.settings  project.mk  sdk-c.mk  win_board_conf.mk CMakeLists.txt  Config.linkkit include   makefile  prebuilt  README.txt  src  win.makefile
 
-#### 填写设备三元组到例程中
+#### <a name="填写设备三元组到例程中">填写设备三元组到例程中</a>
 
 打开文件 `iotx-sdk-c/examples/mqtt/mqtt-example.c`, 编辑如下代码段, 填入之前在云端创建设备后得到的**设备三元组**:
 
@@ -71,7 +99,7 @@
 
 *注: 在Ubuntu的获取ProductKey、DeviceName、DeviceSecret的HAL实现中读取了上面定义的设备三元组信息*
 
-#### 初始化与建立连接
+#### <a name="初始化与建立连接">初始化与建立连接</a>
 
 下面的代码片段简单描述了设备的初始化以及连接过程:
 
@@ -105,7 +133,7 @@ int mqtt_client(void)
     }
 </pre>
 
-#### 上报数据到云端
+#### <a name="上报数据到云端">上报数据到云端</a>
 
 在示例文件中定义了如下的topic:
 
@@ -145,7 +173,7 @@ int mqtt_client(void)
 
 		EXAMPLE_TRACE("\n publish message: \n topic: %s\n payload: \%s\n rc = %d", TOPIC_UPDATE, topic_msg.payload, rc);
 
-#### 从云端订阅并处理数据
+#### <a name="从云端订阅并处理数据">从云端订阅并处理数据</a>
 
 示例程序向一个topic发送数据, 并自己订阅该topic将其从云端将数据接收回来. 下面的代码订阅指定的topic并指定接收到数据时的处理函数:
 
@@ -202,7 +230,7 @@ static void _demo_message_arrive(void *pcontext, void *pclient, iotx_mqtt_event_
 		        }
 		        EXAMPLE_TRACE("packet-id=%u, publish topic msg=%s", (uint32_t)rc, msg_pub);
 
-#### 编译例子程序
+#### <a name="编译例子程序">编译例子程序</a>
 
 运行如下命令:
 
@@ -221,7 +249,7 @@ static void _demo_message_arrive(void *pcontext, void *pclient, iotx_mqtt_event_
     ...
     ...
 
-### 观察数据
+### <a name="观察数据">观察数据</a>
 
 执行如下命令:
 
@@ -240,9 +268,9 @@ _demo_message_arrive|175 :: Payload: '{"attr_name":"temperature", "attr_value":"
 _demo_message_arrive|176 :: ----
 </pre>
 
-## 以物模型编程方式接入设备
+## <a name="以物模型编程方式接入设备">以物模型编程方式接入设备</a>
 
-### 创建产品和设备
+### <a name="创建产品和设备">创建产品和设备</a>
 
 可以在阿里云IoT物联网平台以及其上承载的多个行业服务中进行产品的创建, 下面是在阿里云IoT物联网平台创建产品的帮助链接:
 
@@ -270,9 +298,9 @@ _demo_message_arrive|176 :: ----
 
 定义物模型之后云端会为该物模型生成物模型(TSL)描述文件, 该文件使用JSON格式进行描述
 
-### 产品功能实现
+### <a name="产品功能实现">产品功能实现</a>
 
-#### 填写设备三元组到例程中
+#### <a name="填写设备三元组到例程中">填写设备三元组到例程中</a>
 
 将 `iotx-sdk-c/examples/linkkit/linkkit_example_solo.c` 中的三元组替换成云端创建的设备的三元组
 
@@ -281,7 +309,7 @@ _demo_message_arrive|176 :: ----
     #define DEVICE_NAME      "AdvExample1"
     #define DEVICE_SECRET    "3xGoxtWRscxPAoMxnJnjocZbNfmCTRi0"
 
-#### 编译与运行程序
+#### <a name="编译与运行程序">编译与运行程序</a>
 
 运行如下命令:
 
@@ -295,11 +323,11 @@ _demo_message_arrive|176 :: ----
     cd ~/srcs/iotx-sdk-c
     ./output/release/bin/linkkit-example-solo
 
-### 观察数据
+### <a name="观察数据">观察数据</a>
 
 示例程序会定期将`LightSwitch`属性的数值上报云端, 因此可以在云端查看收到的属性, 并且可以在云端对该属性进行设置, 然后再次查看从设备端上报的`LightSwitch`已经修改为用户设置的数值
 
-#### 属性上报
+#### <a name="属性上报">属性上报</a>
 
 示例中使用**user_post_property**作为上报属性的例子. 该示例会循环上报各种情况的payload, 用户可观察在上报错误payload时返回的提示信息:
 
@@ -531,7 +559,7 @@ _demo_message_arrive|176 :: ----
 
 注: 实际的产品收到属性设置时, 应该解析属性并进行相应处理而不是仅仅将数值发送回云端
 
-#### 事件上报
+#### <a name="事件上报">事件上报</a>
 
 示例中使用 `IOT_Linkkit_TriggerEvent` 上报属性. 该示例会循环上报各种情况的payload, 用户可观察在上报错误payload时返回的提示信息:
 
@@ -627,7 +655,7 @@ _demo_message_arrive|176 :: ----
 
     user_trigger_event_reply_event_handler.310: Trigger Event Reply Received, Devid: 0, Message ID: 1, Code: 200, EventID: Error, Message: success
 
-#### 服务调用
+#### <a name="服务调用">服务调用</a>
 
 在设备端示例程序中, 当收到服务调用请求时, 会进入如下回调函数:
 
@@ -731,3 +759,4 @@ _demo_message_arrive|176 :: ----
 
 关于高级版单品例程中服务/属性/事件的说明就此结束
 
+[回到页头](#快速体验)

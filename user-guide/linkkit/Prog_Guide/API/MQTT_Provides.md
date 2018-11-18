@@ -3,12 +3,12 @@
     * [IOT_MQTT_Construct](#IOT_MQTT_Construct)
     * [IOT_MQTT_Destroy](#IOT_MQTT_Destroy)
     * [IOT_MQTT_Yield](#IOT_MQTT_Yield)
-    * [IOT_MQTT_LogPost](#IOT_MQTT_LogPost)
     * [IOT_MQTT_CheckStateNormal](#IOT_MQTT_CheckStateNormal)
     * [IOT_MQTT_Subscribe](#IOT_MQTT_Subscribe)
     * [IOT_MQTT_Subscribe_Sync](#IOT_MQTT_Subscribe_Sync)
     * [IOT_MQTT_Unsubscribe](#IOT_MQTT_Unsubscribe)
     * [IOT_MQTT_Publish](#IOT_MQTT_Publish)
+    * [IOT_MQTT_Publish_Simple](#IOT_MQTT_Publish_Simple)
 
 # <a name="MQTT上云API详解">MQTT上云API详解</a>
 

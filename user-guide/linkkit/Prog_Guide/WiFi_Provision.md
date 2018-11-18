@@ -1,5 +1,16 @@
+# <a name="目录">目录</a>
+    * [ 配网的定义 ](# 配网的定义 )
+    * [AWSS用户API](#AWSS用户API)
+    * [AWSS用户API详解](#AWSS用户API详解)
+        - [awss_start](#awss_start)
+        - [awss_config_press](#awss_config_press)
+        - [awss_stop](#awss_stop)
+        - [awss_report_set](#awss_report_set)
+    * [AWSS示例](#AWSS示例)
+    * [需要实现的HAL接口](#需要实现的HAL接口)
+
 ------
-##  配网的定义 
+## <a name=" 配网的定义 "> 配网的定义 </a>
 ![image](http://git.cn-hangzhou.oss-cdn.aliyun-inc.com/uploads/Apsaras64/pub/4b7616e37b9b2eecbd2d3664190d018e/image.png)
 用户拿到一个新设备时, 需要添加设备来建立用户和设备的绑定关系, 而添加设备的整个流程分成三个步骤, 如上图所示:
 > - -用户添加设备前置步骤
@@ -10,7 +21,7 @@
 
 ------
 
-## AWSS用户API
+## <a name="AWSS用户API">AWSS用户API</a>
 | 函数名                                                      | 说明
 |-------------------------------------------------------------|---------------------------------------------------------
 | [awss_start](#awss_start)                     | 启动**AWSS**服务(未使能), **AWSS**采用**AES128**保证数据安全, 加解密依赖于设备四元组, 启动**AWSS**服务之前先确认设备四元组(`DeviceName + DeviceSecret + ProductKey + ProductSecret`)已经成功烧录
@@ -19,8 +30,8 @@
 | [awss_report_reset](#awss_report_reset)                       | **AWSS**上报设备恢复出厂设置到云端, 云端解除设备与用户的绑定关系
 ------
 
-## AWSS用户API详解
-### awss_start
+## <a name="AWSS用户API详解">AWSS用户API详解</a>
+### <a name="awss_start">awss_start</a>
 
 原型
 ---
@@ -39,7 +50,7 @@ int awss_start();
 | 0       | 成功
 | < 0     | 失败
 ---
-### awss_config_press
+### <a name="awss_config_press">awss_config_press</a>
 
 原型
 ---
@@ -59,7 +70,7 @@ int awss_config_press();
 | < 0     | 失败
 ---
 
-### awss_stop
+### <a name="awss_stop">awss_stop</a>
 
 原型
 ---
@@ -78,7 +89,7 @@ int awss_stop();
 | 0       | 成功
 | < 0     | 失败
 ---
-### awss_report_set
+### <a name="awss_report_set">awss_report_set</a>
 
 原型
 ---
@@ -99,7 +110,7 @@ int awss_report_set();
 | < 0     | 失败
 ---
 
-## AWSS示例
+## <a name="AWSS示例">AWSS示例</a>
 ------
 ```
 uint8_t bssid[ETH_ALEN] = {0};
@@ -115,7 +126,7 @@ if (INVALID_SSID(ssid) || INVALID_BSSID(bssid) || AP_NOT_EXIST(ssid, bssid) {
 }
 ```
 ------
-## 需要实现的HAL接口
+## <a name="需要实现的HAL接口">需要实现的HAL接口</a>
 以下函数在**AliOS Things**已经实现, 如果希望单独使用**SDK**, 则需要用户对接**
 
 | 函数名                                      | 说明

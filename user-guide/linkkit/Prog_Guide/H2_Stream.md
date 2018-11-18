@@ -1,4 +1,9 @@
 # <a name="目录">目录</a>
++ [例程讲解](#例程讲解)
+    * [流传输功能](#流传输功能)
+    * [文件上传功能](#文件上传功能)
++ [H2 Stream功能API](#H2 Stream功能API)
++ [需要实现的HAL接口](#需要实现的HAL接口)
 
 + [例程讲解](#例程讲解)
 + [H2 Stream功能API](#H2 Stream功能API)
@@ -8,7 +13,7 @@
 
 注意: http2流传输功不是IOT平台固有能力, 需要业务端服务器接入CMP平台实现内容转存等相关业务, 因此不是所有的三元组都可以用来演示此功能
 
-## 流传输功能
+## <a name="流传输功能">流传输功能</a>
 
 > 现对照 `examples/http2/http2_example_stream.c` 例程分步骤讲解如何使用相关API实现http2 流传输功能
 
@@ -115,7 +120,7 @@
     ret = IOT_HTTP2_Disconnect(handle);
 ```
 
-## 文件上传功能
+## <a name="文件上传功能">文件上传功能</a>
 
 > 现对照 `examples/http2/http2_example_uploadfile.c` 例程分步骤讲解如何使用相关API实现http2 流传输功能
 

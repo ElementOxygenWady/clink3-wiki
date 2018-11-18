@@ -1,5 +1,5 @@
 # <a name="目录">目录</a>
-+ [WiFi配网相关HAL接口详解](#WiFi配网相关HAL接口详解)  (包含了废弃的HAL API，废弃的HAL API可以不用对接，更为详细的HAL API说明参见"阿里巴巴智能生活平台配网开发说明文档 v1.0.0")
++ [WiFi配网相关HAL接口详解](#WiFi配网相关HAL接口详解)
     * [HAL_Aes128_Cbc_Decrypt](#HAL_Aes128_Cbc_Decrypt)
     * [HAL_Aes128_Cbc_Encrypt](#HAL_Aes128_Cbc_Encrypt)
     * [HAL_Aes128_Cfb_Decrypt](#HAL_Aes128_Cfb_Decrypt)

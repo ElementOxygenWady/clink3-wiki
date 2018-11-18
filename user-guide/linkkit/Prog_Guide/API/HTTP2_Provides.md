@@ -3,7 +3,7 @@
     * [IOT_HTTP2_Connect](#IOT_HTTP2_Connect)
     * [IOT_HTTP2_Stream_Open](#IOT_HTTP2_Stream_Open)
     * [IOT_HTTP2_Stream_Send](#IOT_HTTP2_Stream_Send)
-    * [IOT_HTTP2_Stream_Query](#IOT_HTTP2_Stream_Query)
+    * [IOT_HTTP2_Stream_Send](#IOT_HTTP2_Stream_Send)
     * [IOT_HTTP2_Stream_Close](#IOT_HTTP2_Stream_Close)
     * [IOT_HTTP2_Stream_UploadFile](#IOT_HTTP2_Stream_UploadFile)
     * [IOT_HTTP2_Disconnect](#IOT_HTTP2_Disconnect)

@@ -1,4 +1,24 @@
-# 移植指南
+# <a name="目录">目录</a>
++ [移植指南](#移植指南)
+    * [在Ubuntu上编译主机版本](#在Ubuntu上编译主机版本)
+        - [正常的编译过程演示](#正常的编译过程演示)
+        - [得到的编译产物说明](#得到的编译产物说明)
+    * [交叉编译到嵌入式硬件平台](#交叉编译到嵌入式硬件平台)
+        - [安装交叉编译工具链](#安装交叉编译工具链)
+        - [添加配置文件](#添加配置文件)
+        - [编辑配置文件](#编辑配置文件)
+        - [选择配置文件](#选择配置文件)
+        - [交叉编译产生库文件`libiot_sdk.a`](#交叉编译产生库文件`libiot_sdk.a`)
+        - [获取交叉编译的产物, 包括静态库和头文件](#获取交叉编译的产物, 包括静态库和头文件)
+    * [开发未适配平台的HAL层](#开发未适配平台的HAL层)
+        - [复制一份HAL层实现代码](#复制一份HAL层实现代码)
+        - [打开之前被关闭的编译开关](#打开之前被关闭的编译开关)
+        - [尝试交叉编译被复制的HAL层代码](#尝试交叉编译被复制的HAL层代码)
+        - [允许交叉编译样例程序](#允许交叉编译样例程序)
+        - [重新载入配置文件, 交叉编译可执行程序](#重新载入配置文件, 交叉编译可执行程序)
+        - [尝试运行样例程序](#尝试运行样例程序)
+
+# <a name="移植指南">移植指南</a>
 
 > 物联网平台C-SDK旨在提供与目标平台硬件CPU体系架构无关、与目标平台嵌入式OS操作系统无关的跨平台SDK。**如果您的开发方式不是通过将SDK编译成为.a，而是将SDK中的源文件添加到您的工程中编译的方式实现，那么可以略过本章。**
 
@@ -13,7 +33,7 @@
 ---
 本文为了快速走通以上流程, 简写了第3步和第4步, 以移植到 `arm-linux` 平台为例, 直接演示了一个完整的移植过程
 
-## 在Ubuntu上编译主机版本
+## <a name="在Ubuntu上编译主机版本">在Ubuntu上编译主机版本</a>
 
 具体步骤是:
 
@@ -22,7 +42,7 @@
 
 即可得到`libiot_sdk.a`
 
-### 正常的编译过程演示
+### <a name="正常的编译过程演示">正常的编译过程演示</a>
 
     $ make distclean
     $ make
@@ -42,7 +62,7 @@
     CONFIGURE .............................. [src/protocol/http2]
     CONFIGURE .............................. [src/protocol/mqtt]
 
-### 得到的编译产物说明
+### <a name="得到的编译产物说明">得到的编译产物说明</a>
 
 SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 
@@ -110,7 +130,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 | output/lib/libiot_tls.a                             | TLS主库, 集中提供了所有`mbedtls_xxx_yyy()`接口的实现, 它的上层是`libiot_hal.a`
 | output/lib/*.a                                      | 其它分库, 它们是从SDK源码目录的`prebuilt/`目录移动过来的, 主要提供一些闭源发布的功能, 比如`ID2`等
 
-## 交叉编译到嵌入式硬件平台
+## <a name="交叉编译到嵌入式硬件平台">交叉编译到嵌入式硬件平台</a>
 
 对于嵌入式硬件平台的情况, 对编译出目标平台的`libiot_sdk.a`, 需要经历如下几个步骤:
 
@@ -129,7 +149,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 ---
 下面以某款目前未官方适配的 `arm-linux` 目标平台为例, 演示如何编译出该平台上可用的`libiot_sdk.a`
 
-### 安装交叉编译工具链
+### <a name="安装交叉编译工具链">安装交叉编译工具链</a>
 
 > 仍以Ubuntu16.04开发环境为例
 
@@ -141,13 +161,13 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
     This is free software; see the source for copying conditions.  There is NO
     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-### 添加配置文件
+### <a name="添加配置文件">添加配置文件</a>
 
     $ touch src/board/config.arm-linux.demo
     $ ls src/board/
     config.arm-linux.demo  config.macos.make  config.rhino.make  config.ubuntu.x86  config.win7.mingw32
 
-### 编辑配置文件
+### <a name="编辑配置文件">编辑配置文件</a>
 
 在这一步, 需要设置编译选项和工具链, 以及跳过编译的目录
 
@@ -170,7 +190,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 
 **在编译未被适配平台的库时在最初是必要的, 这样可以避免产生过多的错误**
 
-### 选择配置文件
+### <a name="选择配置文件">选择配置文件</a>
 <pre>
     $ make reconfig
     SELECT A CONFIGURATION:
@@ -198,7 +218,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
     CONFIGURE .............................. [src/sdk-impl]
 </pre>
 
-### 交叉编译产生库文件`libiot_sdk.a`
+### <a name="交叉编译产生库文件`libiot_sdk.a`">交叉编译产生库文件`libiot_sdk.a`</a>
 
 > 注: 本步骤不编译HAL, 只是为了验证配置文件中的交叉编译参数是否正确, 如果出现错误请对配置文件再次进行修改, 直到编译成功
 
@@ -217,7 +237,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
     [AR] libiot_sdk.a                       <=  ...
     [AR] libiot_tls.a                       <=  ...
 
-### 获取交叉编译的产物, 包括静态库和头文件
+### <a name="获取交叉编译的产物, 包括静态库和头文件">获取交叉编译的产物, 包括静态库和头文件</a>
 
     $ ls -1 output/release/lib/
     libiot_sdk.a
@@ -235,7 +255,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 
 这里, `iot_import.h`和`iot_export.h`就是使用SDK需要包含的头文件, 它们按功能点又包含不同的子文件, 分别列在`imports/`目录下和`exports/`目录下
 
-## 开发未适配平台的HAL层
+## <a name="开发未适配平台的HAL层">开发未适配平台的HAL层</a>
 
 对于实现平台抽象层接口 `HAL_XXX_YYY()` 的库 `libiot_hal.a`, 不限制其编译和产生的方式
 
@@ -244,7 +264,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 ---
 仍然以上一节中, 某款目前未适配的`arm-linux`目标平台为例, 假设这款平台和`Ubuntu`差别很小, 完全可以用`Ubuntu`上开发测试的HAL层代码作为开发的基础, 则可以这样做:
 
-### 复制一份HAL层实现代码
+### <a name="复制一份HAL层实现代码">复制一份HAL层实现代码</a>
 
 > 注: 在 `src/ref-impl/hal/os` 下需要创建一个与 `src/board/confg.XXX.YYY` 中的 `XXX` 一样的目录用于存放HAL实现
 
@@ -268,7 +288,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
     +-- kv.c
     +-- kv.h
 
-### 打开之前被关闭的编译开关
+### <a name="打开之前被关闭的编译开关">打开之前被关闭的编译开关</a>
 
     $ vim src/board/config.arm-linux.demo
 
@@ -287,7 +307,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 
 可以看到在`CONFIG_src/ref-impl/hal :=`这一行前添加了一个`#`符号, 代表这一行被注释掉了, `src/ref-impl/hal`将会进入编译过程
 
-### 尝试交叉编译被复制的HAL层代码
+### <a name="尝试交叉编译被复制的HAL层代码">尝试交叉编译被复制的HAL层代码</a>
 
     $ make reconfig
     SELECT A CONFIGURATION:
@@ -315,7 +335,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 
 可以看到我们进展的十分顺利, 被复制的代码 `src/ref-impl/hal/os/arm-linux/*.c` 直接编译成功了, 产生了 `arm-linux` 格式的 `libiot_hal.a`
 
-### 允许交叉编译样例程序
+### <a name="允许交叉编译样例程序">允许交叉编译样例程序</a>
 
 这样有了`libiot_hal.a`, `libiot_tls.a`, 以及`libiot_sdk.a`, 已经可以尝试交叉编译样例的可执行程序, 并在目标嵌入式硬件开发板上运行一下试试了
 
@@ -348,7 +368,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 
 这是因为产生这些样例程序除了链接`libiot_hal.a`和`libiot_hal.a`之外, 还需要连接 `libpthread` 库和 `librt` 库
 
-### 重新载入配置文件, 交叉编译可执行程序
+### <a name="重新载入配置文件, 交叉编译可执行程序">重新载入配置文件, 交叉编译可执行程序</a>
 <pre>
     $ make reconfig
     SELECT A CONFIGURATION:
@@ -413,7 +433,7 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 
 可以用`file`命令验证, 这些可执行程序确实是交叉编译到 `arm-linux` 架构上的
 
-### 尝试运行样例程序
+### <a name="尝试运行样例程序">尝试运行样例程序</a>
 
 接下来, 您就可以把样例程序例如`mqtt-example`, 用`SCP`, `TFTP`或者其它方式, 拷贝下载到您的目标开发板上运行调试了
 

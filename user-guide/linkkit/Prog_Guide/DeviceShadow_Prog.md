@@ -1,4 +1,17 @@
 # <a name="目录">目录</a>
++ [设备影子API](#设备影子API)
++ [API接口详解](#API接口详解)
+        - [IOT_Shadow_Construct](#IOT_Shadow_Construct)
+        - [IOT_Shadow_Destroy](#IOT_Shadow_Destroy)
+        - [IOT_Shadow_Yield](#IOT_Shadow_Yield)
+        - [IOT_Shadow_RegisterAttribute](#IOT_Shadow_RegisterAttribute)
+        - [IOT_Shadow_DeleteAttribute](#IOT_Shadow_DeleteAttribute)
+        - [IOT_Shadow_PushFormat_Init](#IOT_Shadow_PushFormat_Init)
+        - [IOT_Shadow_PushFormat_Add](#IOT_Shadow_PushFormat_Add)
+        - [IOT_Shadow_PushFormat_Finalize](#IOT_Shadow_PushFormat_Finalize)
+        - [IOT_Shadow_Push](#IOT_Shadow_Push)
+        - [IOT_Shadow_Push_Async](#IOT_Shadow_Push_Async)
+        - [IOT_Shadow_Pull](#IOT_Shadow_Pull)
 
 + [设备影子API](#设备影子API)
 + [API接口详解](#API接口详解)
