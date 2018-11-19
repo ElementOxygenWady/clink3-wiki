@@ -26,7 +26,7 @@
 
 网关的建连过程与单品直连设备的建连过程完全一致
 
-1. 调用`IOT_RegisterCallback`注册必要的回调处理函数, 如连接事件处理函数, 设备连云初始化完成处理, 属性设置事件处理等等. 子设备和网关共用一组回调处理函数, 以参数DeviceID来区分不同的设备
+1. 调用`IOT_RegisterCallback`注册必要的回调处理函数, 如连接事件处理, 设备连云初始化完成处理, 属性设置事件处理等回调函数。子设备和网关共用一组回调处理函数, 以参数DeviceID来区分不同的设备
 ```
     IOT_RegisterCallback(ITE_CONNECT_SUCC, user_connected_event_handler);
     IOT_RegisterCallback(ITE_DISCONNECTED, user_disconnected_event_handler);
@@ -34,6 +34,7 @@
     IOT_RegisterCallback(ITE_REPORT_REPLY, user_report_reply_event_handler);
     IOT_RegisterCallback(ITE_TIMESTAMP_REPLY, user_timestamp_reply_event_handler);
     IOT_RegisterCallback(ITE_INITIALIZE_COMPLETED, user_initialized);
+    IOT_RegisterCallback(ITE_PERMIT_JOIN, user_permit_join_event_handler);
 ```
 2. 调用`IOT_Ioctl`进行必要的配置, 如选择服务器站点, 选择是否使用一型一密等等
 ```

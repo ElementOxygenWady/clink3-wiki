@@ -1,14 +1,28 @@
 # <a name="目录">目录</a>
 
 
-+ [第一章 SDK概述](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/SDK_Overview)
-+ [第二章 快速体验](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Quick_Start)
-+ [第三章 移植指南](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Porting_Guide)
-+ [第四章 构建配置说明](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Build_Usage)
-+ [第五章 编程指南](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/ProgGuide_Home)
-    * [认证与连接](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Auth_Connect)
++ [SDK概述](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/SDK_Overview)
++ [快速体验](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Quick_Start)
++ **移植指南**
+    * [移植概述](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Porting_Overview)
+    * [基于Make的编译系统说明](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Make_Usage)
+    * [基于Make的交叉编译示例](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_Example)
+    * **MCU上集成SDK示例**
+        - ~~在KEIL上集成SDK~~
+        - ~~在IAR上集成SDK~~
+    * **模组上集成SDK示例**
+        - [庆科MK3060/MK3080](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_MK3060)
+        - [乐鑫ESP8266](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_ESP8266)
+    * **高级系统集成SDK示例**
+        - [目标系统为64位Linux](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_Linux64)
+        - [目标系统为32位Linux](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_Linux32)
+        - [目标系统为arm-linux](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_ArmLinux)
+        - [目标系统为Windows](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_Windows)
+
++ [编程指南](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/ProgGuide_Home)
+    * [设备认证](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Auth_Connect)
+    * [MQTT自定义TOPIC通信](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/MQTT_Connect)
     * **设备多协议连接**
-        - [MQTT](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/MQTT_Connect)
         - [CoAP](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/CoAP_Connect)
         - [HTTP/S](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HTTP_Connect)
         - [HTTP2](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/H2_Connect)
@@ -28,6 +42,7 @@
         - [MQTT相关API](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides)
         - [CoAP上云相关API](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/CoAP_Provides)
         - [HTTP上云相关API](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP_Provides)
+        - [设备影子相关API](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Shadow_Provides)
         - [OTA固件下载相关API](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/OTA_Provides)
         - [HTTP2流式传输相关API](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides)
     * [HAL接口清单](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Required_APIs)

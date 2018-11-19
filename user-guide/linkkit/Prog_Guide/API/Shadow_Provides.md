@@ -1,5 +1,5 @@
 # <a name="目录">目录</a>
-+ [设备影子API详解](#设备影子API详解)
++ [设备影子API接口详解](#设备影子API接口详解)
     * [IOT_Shadow_Construct](#IOT_Shadow_Construct)
     * [IOT_Shadow_Destroy](#IOT_Shadow_Destroy)
     * [IOT_Shadow_Yield](#IOT_Shadow_Yield)
@@ -12,7 +12,8 @@
     * [IOT_Shadow_Push_Async](#IOT_Shadow_Push_Async)
     * [IOT_Shadow_Pull](#IOT_Shadow_Pull)
 
-# <a name="设备影子API详解">设备影子API详解</a>
+# <a name="设备影子API接口详解">设备影子API接口详解</a>
+
 ## <a name="IOT_Shadow_Construct">IOT_Shadow_Construct</a>
 
 原型

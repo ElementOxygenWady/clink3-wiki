@@ -185,13 +185,13 @@
 
 | 函数名                                                      | 说明
 |-------------------------------------------------------------|---------------------------------------------------------
-| [IOT_HTTP2_Connect](#IOT_HTTP2_Connect)       | 使用指定参数与IOT平台建立http2连接
-| [IOT_HTTP2_Stream_Open](#IOT_HTTP2_Stream_Open)             | HTTP2会话阶段,使用指定参数打开一个业务流,并返回业务流唯一标识-channel_id
-| [IOT_HTTP2_Stream_Send](#IOT_HTTP2_Stream_Send)             | HTTP2会话阶段,向指定业务流发送数据
-| [IOT_HTTP2_Stream_Query](#IOT_HTTP2_Stream_Query)           | HTTP2会话阶段,向云端查询下行数据, 一个业务流, 仅需调用一次
-| [IOT_HTTP2_Stream_Close](#IOT_HTTP2_Stream_Close)           | HTTP2会话阶段,关闭指定业务流
-| [IOT_HTTP2_Disconnect](#IOT_HTTP2_Disconnect)               | HTTP2会话阶段,关闭http2连接
-| [IOT_HTTP2_Stream_UploadFile](#IOT_HTTP2_Stream_UploadFile) | HTTP2会话阶段,异步上传文件, 文件上传成功或失败会通过回调函数通知结果
+| [IOT_HTTP2_Connect](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides#IOT_HTTP2_Connect)       | 使用指定参数与IOT平台建立http2连接
+| [IOT_HTTP2_Stream_Open](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides#IOT_HTTP2_Stream_Open)             | HTTP2会话阶段,使用指定参数打开一个业务流,并返回业务流唯一标识-channel_id
+| [IOT_HTTP2_Stream_Send](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides#IOT_HTTP2_Stream_Send)             | HTTP2会话阶段,向指定业务流发送数据
+| [IOT_HTTP2_Stream_Query](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides#IOT_HTTP2_Stream_Query)           | HTTP2会话阶段,向云端查询下行数据, 一个业务流, 仅需调用一次
+| [IOT_HTTP2_Stream_Close](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides#IOT_HTTP2_Stream_Close)           | HTTP2会话阶段,关闭指定业务流
+| [IOT_HTTP2_Disconnect](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides#IOT_HTTP2_Disconnect)               | HTTP2会话阶段,关闭http2连接
+| [IOT_HTTP2_Stream_UploadFile](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides#IOT_HTTP2_Stream_UploadFile) | HTTP2会话阶段,异步上传文件, 文件上传成功或失败会通过回调函数通知结果
 
 
 
@@ -202,17 +202,17 @@
 
 | 函数名                                      | 说明
 |---------------------------------------------|-------------------------------------------------------------------------
-| [HAL_SSL_Destroy](#HAL_SSL_Destroy)         | 销毁一个TLS连接, 用于MQTT功能, HTTPS功能
-| [HAL_SSL_Establish](#HAL_SSL_Establish)     | 建立一个TLS连接, 用于MQTT功能, HTTPS功能
-| [HAL_SSL_Read](#HAL_SSL_Read)               | 从一个TLS连接中读数据, 用于MQTT功能, HTTPS功能
-| [HAL_SSL_Write](#HAL_SSL_Write)             | 向一个TLS连接中写数据, 用于MQTT功能, HTTPS功能
-| [HAL_TCP_Destroy](#HAL_TCP_Destroy)         | 销毁一个TLS连接, 用于MQTT功能, HTTPS功能
-| [HAL_TCP_Establish](#HAL_TCP_Establish)     | 建立一个TCP连接, 包含了域名解析的动作和TCP连接的建立
-| [HAL_TCP_Read](#HAL_TCP_Read)               | 在指定时间内, 从TCP连接读取流数据, 并返回读到的字节数
-| [HAL_TCP_Write](#HAL_TCP_Write)             | 在指定时间内, 向TCP连接发送流数据, 并返回发送的字节数
-| [HAL_Fopen](#HAL_Fopen)                     | 打开文件
-| [HAL_Fread](#HAL_Fread)                     | 读取文件数据
-| [HAL_Fwrite](#HAL_Fwrite)                   | 向文件写入数据
-| [HAL_Fseek](#HAL_Fseek)                     | 设置文件指针stream的位置
-| [HAL_Fclose](#HAL_Fclose)                   | 关闭文件
-| [HAL_Ftell](#HAL_Ftell)                     | 得到文件位置指针当前位置相对于文件首的偏移字节数
+| [HAL_SSL_Destroy](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_SSL_Destroy#HAL_SSL_Destroy)         | 销毁一个TLS连接, 用于MQTT功能, HTTPS功能
+| [HAL_SSL_Establish](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_SSL_Establish)     | 建立一个TLS连接, 用于MQTT功能, HTTPS功能
+| [HAL_SSL_Read](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_SSL_Read)               | 从一个TLS连接中读数据, 用于MQTT功能, HTTPS功能
+| [HAL_SSL_Write](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_SSL_Write)             | 向一个TLS连接中写数据, 用于MQTT功能, HTTPS功能
+| [HAL_TCP_Destroy](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_TCP_Destroy)         | 销毁一个TLS连接, 用于MQTT功能, HTTPS功能
+| [HAL_TCP_Establish](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_TCP_Establish)     | 建立一个TCP连接, 包含了域名解析的动作和TCP连接的建立
+| [HAL_TCP_Read](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_TCP_Read)               | 在指定时间内, 从TCP连接读取流数据, 并返回读到的字节数
+| [HAL_TCP_Write](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_TCP_Write)             | 在指定时间内, 向TCP连接发送流数据, 并返回发送的字节数
+| [HAL_Fopen](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fopen)                     | 打开文件
+| [HAL_Fread](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fread)                     | 读取文件数据
+| [HAL_Fwrite](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fwrite)                   | 向文件写入数据
+| [HAL_Fseek](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fseek)                     | 设置文件指针stream的位置
+| [HAL_Fclose](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fclose)                   | 关闭文件
+| [HAL_Ftell](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Ftell)                     | 得到文件位置指针当前位置相对于文件首的偏移字节数
