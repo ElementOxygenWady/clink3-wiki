@@ -64,7 +64,7 @@ IOT_RegisterCallback(ITE_COTA, user_cota_event_handler);
     memcpy(master_meta_info.device_secret, DEVICE_SECRET, strlen(DEVICE_SECRET));
 ```
 
-3.与云端建立的配置, 调用IOT_Ioctl()进行相关配置, 详细情况可查看对应API说明
+3.与云端建立连接的配置, 调用IOT_Ioctl()进行相关配置, 详细情况可查看对应API说明
 ---
 ```
     /* Choose Login Server, domain should be configured before IOT_Linkkit_Open() */
@@ -80,7 +80,7 @@ IOT_RegisterCallback(ITE_COTA, user_cota_event_handler);
     int dynamic_register = 0;
     IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
 ```
-4. 主设备建立连接
+4. 设备与云端建立连接
 ---
 ```
     /* Create Master Device Resources */

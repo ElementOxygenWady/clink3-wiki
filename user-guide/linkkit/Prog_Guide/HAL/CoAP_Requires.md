@@ -4,7 +4,7 @@
     * [HAL_DTLSSession_free](#HAL_DTLSSession_free)
     * [HAL_DTLSSession_read](#HAL_DTLSSession_read)
     * [HAL_DTLSSession_write](#HAL_DTLSSession_write)
-    * [HAL_UDP_connect](#HAL_UDP_connect)
+    * [HAL_UDP_close_without_connect](#HAL_UDP_close_without_connect)
     * [HAL_UDP_create](#HAL_UDP_create)
     * [HAL_UDP_read](#HAL_UDP_read)
     * [HAL_UDP_readTimeout](#HAL_UDP_readTimeout)
@@ -150,27 +150,23 @@ unsigned int HAL_DTLSSession_write(DTLSContext          *context,
 
 -----
 
-## <a name="HAL_UDP_connect">HAL_UDP_connect</a>
+## <a name="HAL_UDP_close_without_connect">HAL_UDP_close_without_connect</a>
 
 原型
 ---
 ```
-int HAL_UDP_connect(_IN_ intptr_t sockfd,
-                    _IN_ const char *host,
-                    _IN_ unsigned short port);
+int HAL_UDP_close_without_connect(intptr_t sockfd)
 ```
 
 接口说明
 ---
-设置UDP socket的目的地址和目的端口
+销毁sockfd指定的UDP socket，释放资源
 
 参数说明
 ---
 | 参数    | 数据类型        | 方向    | 说明
 |---------|-----------------|---------|-----------------
 | sockfd  | intptr_t        | 输入    | UDP socket句柄
-| host    | const char *    | 输入    | UDP目的地址
-| port    | unsigned short  | 输入    | UDP目的端口
 
 返回值说明
 ---

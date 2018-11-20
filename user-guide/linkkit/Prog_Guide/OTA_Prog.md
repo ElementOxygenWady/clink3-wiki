@@ -1,5 +1,4 @@
 # <a name="目录">目录</a>
-+ [例程讲解](#例程讲解)
     * [用高级版接口实现的OTA例程](#用高级版接口实现的OTA例程)
     * [用基础版接口实现的OTA例程](#用基础版接口实现的OTA例程)
 + [OTA功能API](#OTA功能API)
@@ -10,8 +9,8 @@
     * [用高级版接口实现OTA功能需要实现的API](#用高级版接口实现OTA功能需要实现的API)
 + [HAL的参考实现](#HAL的参考实现)
 
-# <a name="例程讲解">例程讲解</a>
-通过OTA的API可以实现设备端订阅固件升级消息/下载固件/上报升级进度等功能. `但是如何存储/使用下载到的固件, 需要用户实现`. 存储固件是指将下载到的固件存储到FLASH等介质上. 使用固件, 包括加载新下载的固件, 需要用户根据业务的具体需求(比如需要用户点击升级按钮)来实现.
+
+通过OTA的API可以实现设备端固件下载， `但是如何存储/使用下载到的固件, 需要用户实现`. 存储固件是指将下载到的固件存储到FLASH等介质上. 使用固件, 包括加载新下载的固件, 需要用户根据业务的具体需求(比如需要用户点击升级按钮)来实现.
 更多OTA相关功能说明可查看[OTA服务](https://iot.console.aliyun.com/service/ota)
 下面用两个例子分别说明如何用`高级版`和`基础版`接口来实现OTA功能
 
@@ -57,7 +56,7 @@ IOT_RegisterCallback(ITE_FOTA, user_fota_event_handler);
     memcpy(master_meta_info.device_secret, DEVICE_SECRET, strlen(DEVICE_SECRET));
 ```
 
-3. 与云端建立的配置, 调用IOT_Ioctl()进行相关配置, 详细情况可查看对应API说明
+3. 设置与云端建立连接的配置, 调用IOT_Ioctl()进行相关配置, 详细情况可查看对应API说明
 ---
 ```
     /* Choose Login Server, domain should be configured before IOT_Linkkit_Open() */
@@ -73,10 +72,9 @@ IOT_RegisterCallback(ITE_FOTA, user_fota_event_handler);
     int dynamic_register = 0;
     IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
 ```
-4. 主设备建立连接
+4. 建立连接
 ---
 ```
-    /* Create Master Device Resources */
     user_example_ctx->master_devid = IOT_Linkkit_Open(IOTX_LINKKIT_DEV_TYPE_MASTER, &master_meta_info);
     if (user_example_ctx->master_devid < 0) {
         EXAMPLE_TRACE("IOT_Linkkit_Open Failed\n");
@@ -107,6 +105,7 @@ IOT_Linkkit_Connect订阅了固件升级有关的topic, 因此服务端在发布
 
 ## <a name="用基础版接口实现的OTA例程">用基础版接口实现的OTA例程</a>
 > 现对照 `examples/ota/ota_mqtt-example.c` 例程分步骤讲解如何使用基础版的接口实现OTA的功能
+> 基础版接口实现OTA较为复杂，推荐使用高级版接口进行OTA实现
 
 1. OTA业务建立前的准备: 导入设备三元组, 初始化连接信息
 ---

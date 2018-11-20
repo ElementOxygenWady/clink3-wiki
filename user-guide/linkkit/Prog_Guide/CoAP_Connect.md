@@ -255,6 +255,8 @@ static void iotx_response_handler(void *arg, void *p_response)
 
 ## <a name="连接高级版设备">连接高级版设备</a>
 
+本章节主要介绍使用CoAP协议接口连接
+
 1. 在`物联网控制台`新建一个高级版产品, 使用ALink JSON数据格式. 在**产品详情 > 消息通信**页面可查看到默认的topic定义. 在**产品详情 > 功能定义**页面添加一个标识符为`Data`的字符串格式属性, 如下图所示
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/Linkkit_CoAP/coap_cloud_adv_01.png)
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/Linkkit_CoAP/coap_cloud_adv_02.png)
@@ -394,30 +396,30 @@ The host IP 47.101.22.127, port is 5682
 
 | 函数名                                                      | 说明
 |-------------------------------------------------------------|---------------------------------------------------------------------------------
-| [IOT_CoAP_Init](#IOT_CoAP_Init)                             | CoAP实例的构造函数, 入参为`iotx_coap_config_t`结构体, 返回创建的CoAP会话句柄
-| [IOT_CoAP_Deinit](#IOT_CoAP_Deinit)                         | CoAP实例的销毁函数, 入参为 [IOT_CoAP_Init](#IOT_CoAP_Init) 所创建的句柄
-| [IOT_CoAP_DeviceNameAuth](#IOT_CoAP_DeviceNameAuth)         | 基于控制台申请的`DeviceName`, `DeviceSecret`, `ProductKey`做设备认证
-| [IOT_CoAP_GetMessageCode](#IOT_CoAP_GetMessageCode)         | CoAP会话阶段, 从服务器的`CoAP Response`报文中获取`Respond Code`
-| [IOT_CoAP_GetMessagePayload](#IOT_CoAP_GetMessagePayload)   | CoAP会话阶段, 从服务器的`CoAP Response`报文中获取报文负载
-| [IOT_CoAP_SendMessage](#IOT_CoAP_SendMessage)               | CoAP会话阶段, 连接已成功建立后调用, 组织一个完整的CoAP报文向服务器发送
-| [IOT_CoAP_Yield](#IOT_CoAP_Yield)                           | CoAP会话阶段, 连接已成功建立后调用, 检查和收取服务器对`CoAP Request`的回复报文
+| [IOT_CoAP_Init](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/CoAP_Provides#iot_coap_init)                             | CoAP实例的构造函数, 入参为`iotx_coap_config_t`结构体, 返回创建的CoAP会话句柄
+| [IOT_CoAP_Deinit](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/CoAP_Provides#iot_coap_deinit)                         | CoAP实例的销毁函数, 入参为 [IOT_CoAP_Init](#IOT_CoAP_Init) 所创建的句柄
+| [IOT_CoAP_DeviceNameAuth](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/CoAP_Provides#iot_coap_devicenameauth)         | 基于控制台申请的`DeviceName`, `DeviceSecret`, `ProductKey`做设备认证
+| [IOT_CoAP_GetMessageCode](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/CoAP_Provides#iot_coap_getmessagecode)         | CoAP会话阶段, 从服务器的`CoAP Response`报文中获取`Respond Code`
+| [IOT_CoAP_GetMessagePayload](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/CoAP_Provides#iot_coap_getmessagepayload)   | CoAP会话阶段, 从服务器的`CoAP Response`报文中获取报文负载
+| [IOT_CoAP_SendMessage](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/CoAP_Provides#iot_coap_sendmessage)               | CoAP会话阶段, 连接已成功建立后调用, 组织一个完整的CoAP报文向服务器发送
+| [IOT_CoAP_Yield](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/CoAP_Provides#iot_coap_yield)                           | CoAP会话阶段, 连接已成功建立后调用, 检查和收取服务器对`CoAP Request`的回复报文
 
 # <a name="需要的HAL接口">需要的HAL接口</a>
 
 | 函数名                                              | 说明
 |-----------------------------------------------------|-----------------------------------------------------------------
-| [HAL_DTLSSession_create](#HAL_DTLSSession_create)   | 初始化DTLS资源并建立一个DTLS会话, 用于CoAP功能
-| [HAL_DTLSSession_free](#HAL_DTLSSession_free)       | 销毁一个DTLS会话并释放DTLS资源, 用于CoAP功能
-| [HAL_DTLSSession_read](#HAL_DTLSSession_read)       | 从DTLS连接中读数据, 用于CoAP功能
-| [HAL_DTLSSession_write](#HAL_DTLSSession_write)     | 向DTLS连接中写数据, 用于CoAP功能
-| [HAL_Aes128_Cbc_Decrypt](#HAL_Aes128_Cbc_Decrypt)   | AES128解密, CBC模式, 用于CoAP报文加解密
-| [HAL_Aes128_Cbc_Encrypt](#HAL_Aes128_Cbc_Encrypt)   | AES128加密, CBC模式, 用于CoAP报文加解密
-| [HAL_Aes128_Cfb_Decrypt](#HAL_Aes128_Cfb_Decrypt)   | AES128解密, CFB模式, 用于CoAP报文加解密
-| [HAL_Aes128_Cfb_Encrypt](#HAL_Aes128_Cfb_Encrypt)   | AES128加密, CFB模式, 用于CoAP报文加解密
-| [HAL_Aes128_Destroy](#HAL_Aes128_Destroy)           | AES128反初始化
-| [HAL_Aes128_Init](#HAL_Aes128_Init)                 | AES128初始化
-| [HAL_UDP_close](#HAL_UDP_close)                     | 关闭一个UDP socket
-| [HAL_UDP_create](#HAL_UDP_create)                   | 创建一个UDP socket
-| [HAL_UDP_read](#HAL_UDP_read)                       | 阻塞的从一个UDP socket中读取数据包, 并返回读到的字节数
-| [HAL_UDP_readTimeout](#HAL_UDP_readTimeout)         | 在指定时间内, 从一个UDP socket中读取数据包, 返回读到的字节数
-| [HAL_UDP_write](#HAL_UDP_write)                     | 阻塞的向一个UDP socket中发送数据包, 并返回发送的字节数
+| [HAL_DTLSSession_create](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_dtlssession_create)   | 初始化DTLS资源并建立一个DTLS会话, 用于CoAP功能
+| [HAL_DTLSSession_free](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_dtlssession_free)       | 销毁一个DTLS会话并释放DTLS资源, 用于CoAP功能
+| [HAL_DTLSSession_read](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_dtlssession_read)       | 从DTLS连接中读数据, 用于CoAP功能
+| [HAL_DTLSSession_write](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_dtlssession_write)     | 向DTLS连接中写数据, 用于CoAP功能
+| [HAL_Aes128_Cbc_Decrypt](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_cbc_decrypt)   | AES128解密, CBC模式, 用于CoAP报文加解密
+| [HAL_Aes128_Cbc_Encrypt](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_cbc_encrypt)   | AES128加密, CBC模式, 用于CoAP报文加解密
+| [HAL_Aes128_Cfb_Decrypt](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_cfb_decrypt)   | AES128解密, CFB模式, 用于CoAP报文加解密
+| [HAL_Aes128_Cfb_Encrypt](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_cfb_encrypt)   | AES128加密, CFB模式, 用于CoAP报文加解密
+| [HAL_Aes128_Destroy](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_destroy)           | AES128反初始化
+| [HAL_Aes128_Init](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_init)                 | AES128初始化
+| [HAL_UDP_close_without_connect](#HAL_UDP_close)                     | 关闭一个UDP socket
+| [HAL_UDP_create](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_udp_create)                   | 创建一个UDP socket
+| [HAL_UDP_read](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_udp_read)                       | 阻塞的从一个UDP socket中读取数据包, 并返回读到的字节数
+| [HAL_UDP_readTimeout](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_udp_readtimeout)         | 在指定时间内, 从一个UDP socket中读取数据包, 返回读到的字节数
+| [HAL_UDP_write](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_udp_write)                     | 阻塞的向一个UDP socket中发送数据包, 并返回发送的字节数

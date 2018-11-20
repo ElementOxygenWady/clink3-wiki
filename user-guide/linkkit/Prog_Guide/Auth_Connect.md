@@ -188,13 +188,8 @@ $./output/release/bin/mqtt-example
 ```
 (Device Secret): "KGQQFFlGinIipW9Xn7xQ5U6d6MokPZD4"
 ```
-SDK会调用`HAL_Kv_Get`将之持久化. 若用户尝试对同一设备第二次使用一型一密功能, 则云端会返回以下错误:
 
-```
-[inf] _fetch_dynreg_http_resp(110): Http Response Payload: {"code":6289,"message":"device is already active"}
-```
-
-SDK会自动调用`HAL_Kv_Get`将之持久化. 若用户尝试对同一设备第二次使用一型一密功能, 则云端会返回以下错误:
+SDK会自动调用`HAL_Kv_Set`将之持久化. 若用户尝试对同一设备第二次使用一型一密功能, 则云端会返回以下错误:
 
 ```
 [inf] _fetch_dynreg_http_resp(110): Http Response Payload: {"code":6289,"message":"device is already active"}

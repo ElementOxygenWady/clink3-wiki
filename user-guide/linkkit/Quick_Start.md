@@ -14,7 +14,7 @@
 
 # <a name="快速体验">快速体验</a>
 
-本章描述如何创建产品和设备, 并在Ubuntu上快速体验通过MQTT topic和通过物模型的编程方式, 上报和接收业务报文.
+本章描述如何在Ubuntu上快速体验通过MQTT topic和通过物模型的编程方式, 上报和接收业务报文.
 
 ## <a name="准备开发环境">准备开发环境</a>
 
@@ -744,5 +744,3 @@ _demo_message_arrive|176 :: ----
     [inf] dm_server_send(76): Send Observe Notify Result 0
 
 关于高级版单品例程中服务/属性/事件的说明就此结束
-
-[回到页头](#快速体验)

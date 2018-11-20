@@ -40,8 +40,8 @@
         IOTX_CLOUD_DOMAIN_MAX
     } iotx_cloud_region_types_t;
 
-+ 首先使用 [IOT_Ioctl](#IOT_Ioctl) 的 `IOTX_IOCTL_SET_REGION` 选项, 配合上面的枚举值, 设置要连接的站点
-+ 然后使用 [IOT_MQTT_Construct](#IOT_MQTT_Construct) 或者 [IOT_Linkkit_Connect](#IOT_Linkkit_Connect) 来建立设备到阿里云的连接
++ 首先使用 [IOT_Ioctl](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Basic_Provides#IOT_Ioctl) 的 `IOTX_IOCTL_SET_REGION` 选项, 配合上面的枚举值, 设置要连接的站点
++ 然后使用 [IOT_MQTT_Construct](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Construct) 或者 [IOT_Linkkit_Connect](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Connect) 来建立设备到阿里云的连接
 
 例如:
 ---
@@ -50,10 +50,10 @@
     int domain_type = IOTX_CLOUD_REGION_SHANGHAI;
     IOT_Ioctl(IOTX_IOCTL_SET_REGION, (void *)&domain_type);
 
-SDK同时还支持手动配置站点域名, 对于枚举类型`iotx_cloud_region_types_t`中未定义的地区站点, 可通过[IOT_Ioctl](#IOT_Ioctl)的其他选项进行设置
+SDK同时还支持手动配置站点域名, 对于枚举类型`iotx_cloud_region_types_t`中未定义的地区站点, 可通过[IOT_Ioctl](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Basic_Provides#IOT_Ioctl)的其他选项进行设置
 
-+ 使用[IOT_Ioctl](#IOT_Ioctl)的`IOTX_IOCTL_SET_MQTT_DOMAIN`选项手动配置MQTT服务器域名
-+ 使用[IOT_Ioctl](#IOT_Ioctl)的`IOTX_IOCTL_SET_HTTP_DOMAIN`选项手动配置HTTP服务器域名
++ 使用[IOT_Ioctl](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Basic_Provides#IOT_Ioctl)的`IOTX_IOCTL_SET_MQTT_DOMAIN`选项手动配置MQTT服务器域名
++ 使用[IOT_Ioctl](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Basic_Provides#IOT_Ioctl)的`IOTX_IOCTL_SET_HTTP_DOMAIN`选项手动配置HTTP服务器域名
 
 例如, 通过以下方法将连接站点配置为美国(弗吉尼亚):
 ---
@@ -71,7 +71,7 @@ SDK同时还支持手动配置站点域名, 对于枚举类型`iotx_cloud_region
 
 *AOS1.3.2版本连接海外站点*
 ---
-在AOS1.3.2版本中连接到新加坡站点的配置方式有所不同, 新加坡站点会自动为设备分配最近的加速点
+AliOS things物联网操作系统也包含了Linkkit SDK，但不同版本的AOS在连接海外站点的配置上有所不同。在AOS1.3.2版本中连接到新加坡站点的配置方式有所不同, 新加坡站点会自动为设备分配最近的加速点
 
 只需要修改`example/linkkitapp/linkkitapp.mk`文件, 将默认配置:
 ```
@@ -241,5 +241,5 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 | [HAL_TCP_Read](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_TCP_Read)              | 在指定时间内, 从TCP连接读取流数据, 并返回读到的字节数
 | [HAL_TCP_Write](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_TCP_Write)            | 在指定时间内, 向TCP连接发送流数据, 并返回发送的字节数
 | [HAL_Random](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_Random)                  | 随机数函数, 接受一个无符号数作为范围, 返回0到该数值范围内的随机无符号数
-| [HAL_Srandom](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_Srandom)                | 随机数播种函数, 使 [HAL_Random](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_Random) 的返回值每个执行序列各不相同, 类似`srand`
+| [HAL_Srandom](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_Srandom)                | 随机数播种函数, 使 [HAL_Random](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Random) 的返回值每个执行序列各不相同, 类似`srand`
 
