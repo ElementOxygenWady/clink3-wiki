@@ -418,7 +418,7 @@ The host IP 47.101.22.127, port is 5682
 | [HAL_Aes128_Cfb_Encrypt](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_cfb_encrypt)   | AES128加密, CFB模式, 用于CoAP报文加解密
 | [HAL_Aes128_Destroy](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_destroy)           | AES128反初始化
 | [HAL_Aes128_Init](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#hal_aes128_init)                 | AES128初始化
-| [HAL_UDP_close_without_connect](#HAL_UDP_close)                     | 关闭一个UDP socket
+| [HAL_UDP_close_without_connect](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_udp_close_without_connect)                     | 关闭一个UDP socket
 | [HAL_UDP_create](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_udp_create)                   | 创建一个UDP socket
 | [HAL_UDP_read](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_udp_read)                       | 阻塞的从一个UDP socket中读取数据包, 并返回读到的字节数
 | [HAL_UDP_readTimeout](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/CoAP_Requires#hal_udp_readtimeout)         | 在指定时间内, 从一个UDP socket中读取数据包, 返回读到的字节数
