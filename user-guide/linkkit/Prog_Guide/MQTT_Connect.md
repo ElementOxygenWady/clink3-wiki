@@ -44,6 +44,7 @@
 + 然后使用 [IOT_MQTT_Construct](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/MQTT_Provides#IOT_MQTT_Construct) 或者 [IOT_Linkkit_Connect](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#IOT_Linkkit_Connect) 来建立设备到阿里云的连接
 
 例如:
+
 ---
 
     /* Choose Login Server */
@@ -56,6 +57,7 @@ SDK同时还支持手动配置站点域名, 对于枚举类型`iotx_cloud_region
 + 使用[IOT_Ioctl](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Basic_Provides#IOT_Ioctl)的`IOTX_IOCTL_SET_HTTP_DOMAIN`选项手动配置HTTP服务器域名
 
 例如, 通过以下方法将连接站点配置为美国(弗吉尼亚):
+
 ---
 
     #define USA_EAST_DOMAIN_MQTT     "iot-as-mqtt.us-east-1.aliyuncs.com"
@@ -70,6 +72,7 @@ SDK同时还支持手动配置站点域名, 对于枚举类型`iotx_cloud_region
 *例如: 在阿里云物联网控制台的华东2站点申请的三元组, 在物联网套件中应该连接华东2(上海)站点*
 
 *AOS1.3.2版本连接海外站点*
+
 ---
 AliOS things物联网操作系统也包含了Linkkit SDK，但不同版本的AOS在连接海外站点的配置上有所不同。在AOS1.3.2版本中连接到新加坡站点的配置方式有所不同, 新加坡站点会自动为设备分配最近的加速点
 
@@ -90,6 +93,7 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 > 现对照 `examples/mqtt/mqtt-example.c` 例程分步骤讲解如何使用这几个API实现MQTT上云功能
 
 1. 初始化阶段, 如果用户需要配置使用海外站点或者使用动态注册功能, 可先使用`IOT_Ioctl()`完成配置
+
 ---
 ```
     /* Choose Login Server */
@@ -102,6 +106,7 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 ```
 
 2. MQTT会话建立前的准备, 导入设备三元组, 初始化连接信息
+
 ---
 ```
     iotx_conn_info_pt pconn_info;
@@ -118,6 +123,7 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
     }
 ```
 3. 配置MQTT参数, 构建MQTT连接会话, 与云端服务器建立连接
+
 ---
 ```
     void *pclient;
@@ -152,6 +158,7 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 ```
 
 4. MQTT会话建立成功后, 用户便可以根据业务需要对自定义Topic进行数据发布(需事先在https://iot.console.aliyun.com 自定义此topic并赋予其publish权限)
+
 ---
 
 ```
@@ -180,6 +187,7 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 ```
 
 5. 同样, 用户也可以根据业务需要对自定义Topic进行订阅或取消订阅(需事先在https://iot.console.aliyun.com 自定义此topic并赋予其subscribe权限)
+
 ---
 
 ```
@@ -198,6 +206,7 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 ```
 
 6. 用户会发现每一个向服务器的上行操作(包括发布, 订阅和取消订阅等行为)后都会紧接一个`IOT_MQTT_Yield()`, 此函数主要用于处理服务器下行报文的收取和解析, 同时内含了心跳的维持. 在while()循环中必须包含次函数
+
 ---
 ```
     /* handle the MQTT packet received from TCP or SSL connection */
@@ -205,6 +214,7 @@ GLOBAL_DEFINES += SUPPORT_SINGAPORE_DOMAIN ALIOT_DEBUG IOTX_DEBUG USE_LPTHREAD H
 ```
 
 7. 最终用户可以通过`IOT_MQTT_Destroy()`结束会话, 断开设备与服务端连接
+
 ---
 ```
     IOT_MQTT_Destroy(&pclient);
