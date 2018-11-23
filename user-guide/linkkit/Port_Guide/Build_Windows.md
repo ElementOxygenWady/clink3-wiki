@@ -3,6 +3,9 @@
     * [使用 `make`+`i686-w64-mingw32-gcc` 方式编译](#使用 `make`+`i686-w64-mingw32-gcc` 方式编译)
     * [使用 `cmake` 方式编译](#使用 `cmake` 方式编译)
     * [使用 `Visual Studio 2015` 的编译示例](#使用 `Visual Studio 2015` 的编译示例)
+    * [通过库和头文件来搭建 `linkkit SDK Visual Studio` 工程](#通过库和头文件来搭建 `linkkit SDK Visual Studio` 工程)
++ [运行](#运行)
++ [样例工程](#样例工程)
 
 # <a name="目标平台为Windows">目标平台为Windows</a>
 
@@ -327,3 +330,64 @@ http2_example工程的使用
 按照提示安装所有缺失的工具, 直到编译和运行都正确为止
 
 ![image](<https://linkkit-export.oss-cn-shanghai.aliyuncs.com/compile_err.png>)
+
+
+## <a name="通过库和头文件来搭建 `linkkit SDK Visual Studio` 工程">通过库和头文件来搭建 `linkkit SDK Visual Studio` 工程</a>
+
+#### <a name="获得由linkkit sdk提供的库和头文件">获得由linkkit sdk提供的库和头文件</a>
+
+##### <a name="库文件">库文件</a>
+
++ `iot_sdk.dll`
+
++ `iot_hal.dll`
+
++ `iot_tls.dll`
+
+sdk函数定义所在的动态库
+
++ `iot_sdk.lib`
+
++ `iot_hal.lib`
+
++ `iot_tls.lib`
+
+与动态库对应的在可执行文件链接时所需的静态库，其中不包含函数定义，只包含函数的一些说明信息，用于让程序运行时去正确加载dll文件
+
+##### <a name="头文件">头文件</a>
+
+![](https://img.alicdn.com/tfs/TB158YNrmrqK1RjSZK9XXXyypXa-1159-192.png)
+
+以下附件中的库和头文件，可作为参考:
+
+[库和头文件样例](https://files.alicdn.com/tpsservice/4a75c2939a9f3164b4bb9347da611c38.zip)
+
+#### <a name="工程配置">工程配置</a>
+
+按照一般步骤创建 vs 的win32工程后，还需要进行如下额外的设置：
+
+##### <a name="增加头文件inlcude路径">增加头文件inlcude路径</a>
+
+![](https://img.alicdn.com/tfs/TB1fQzVrgHqK1RjSZJnXXbNLpXa-833-563.png)
+
+#### <a name="增加预定义宏">增加预定义宏</a>
+
+增加宏 DLL_IOT_EXPORTS, 用于声明定义在dll的接口 (不同sdk版本可能宏的名字会有不同，具体可见 iot_import.h)
+
+![](https://img.alicdn.com/tfs/TB1VGjRrhTpK1RjSZFGXXcHqFXa-836-563.png)
+
+##### <a name="增加要链接的静态库">增加要链接的静态库</a>
+
+![](https://img.alicdn.com/tfs/TB1.nnWrgHqK1RjSZFgXXa7JXXa-834-564.png)
+
+# <a name="运行">运行</a>
+
+exe文件运行时，dll 文件须放在和exe同一输出目录下，用户须手动拷贝，否则找不到
+
+# <a name="样例工程">样例工程</a>
+
+以上设置均在样例工程中有示范，用户可在样例工程基础上进行自己的开发
+
+见附件： 
+[样例工程](https://files.alicdn.com/tpsservice/841a7d87e7c4cfc6ddd16c33256d52ec.zip)
+可直接通过vs2015打开

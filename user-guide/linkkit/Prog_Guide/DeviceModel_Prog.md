@@ -13,7 +13,9 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
 * 属性上报说明
 
-示例中使用`user_post_property`作为上报属性的例子, 其中展示了如何使用`IOT_Linkkit_Report`进行属性上报（对于异常情况的上报，详见example）:
+> 下面的讲解中使用了示例代码./examples/linkkit/linkkit_example_solo.c
+
+用户可以调用IOT_Linkkit_Report()函数来上报属性，属性上报时需要按照云端定义的属性格式使用JSON编码后进行上报。示例中函数`user_post_property`展示了如何使用`IOT_Linkkit_Report`进行属性上报（对于异常情况的上报，详见example）:
 
     void user_post_property(void)
     {
@@ -36,9 +38,13 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
         EXAMPLE_TRACE("Post Property Message ID: %d", res);
     }
 
+> 注：property_payload = "{\"LightSwitch\":1}" 即是将属性编码为JSON对象。
+
 * 属性设置说明:
 
-示例在回调函数`user_property_set_event_handler`中获取云端设置的属性值, 并原样上报数据到云端, 这样可以更新在云端的设备影子中保存的设备属性值, 用户可在此处对收到的属性值进行处理（该回调函数是在example初始化时使用`IOT_RegisterCallback`注册的`ITE_SERVICE_REQUST`事件对应的回调函数）:
+示例在回调函数`user_property_set_event_handler`中获取云端设置的属性值, 并原样上报数据到云端, 这样可以更新在云端的设备影子中保存的设备属性值, 用户可在此处对收到的属性值进行处理。
+
+注：该回调函数是在example初始化时使用`IOT_RegisterCallback`注册的`ITE_SERVICE_REQUST`事件对应的回调函数:
 
     static int user_property_set_event_handler(const int devid, const char *request, const int request_len)
     {

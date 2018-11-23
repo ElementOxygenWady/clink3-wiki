@@ -34,7 +34,7 @@
 
 可使用如下命令行安装必要的软件:
 
-    apt-get install -y build-essential make git gcc
+    $ sudo apt-get install -y build-essential make git gcc
 
 ### <a name="通过Hacklab Web IDE进行开发">通过Hacklab Web IDE进行开发</a>
 
@@ -51,17 +51,14 @@
 
 #### <a name="了解SDK根目录结构">了解SDK根目录结构</a>
 
-*注：本文档以2.3.0版本为例，不同的版本内容可能会有不同*
-
 获取Linkkit SDK后，顶层目录结构如下：
 
-    cd iotx-sdk-c/
-    ls
+    $ ls
     build-rules  Config.in  examples  LICENSE   make.settings  project.mk  sdk-c.mk  win_board_conf.mk CMakeLists.txt  Config.linkkit include   makefile  prebuilt  README.txt  src  win.makefile
 
 #### <a name="填写设备三元组到例程中">填写设备三元组到例程中</a>
 
-打开文件 `iotx-sdk-c/examples/mqtt/mqtt-example.c`, 编辑如下代码段, 填入之前在云端创建设备后得到的**设备三元组**:
+打开文件 `./examples/mqtt/mqtt-example.c`, 编辑如下代码段, 填入之前在云端创建设备后得到的**设备三元组**:
 
 <pre>
 #if defined(SUPPORT_ITLS)
@@ -218,9 +215,8 @@ static void _demo_message_arrive(void *pcontext, void *pclient, iotx_mqtt_event_
 
 #### <a name="编译例子程序">编译例子程序</a>
 
-运行如下命令:
+在SDK顶层目录运行如下命令:
 
-    cd ~/srcs/iotx-sdk-c
     make distclean
     make
 
@@ -239,8 +235,7 @@ static void _demo_message_arrive(void *pcontext, void *pclient, iotx_mqtt_event_
 
 执行如下命令:
 
-    cd ~/srcs/iotx-sdk-c
-    ./output/release/bin/mqtt-example
+    $ ./output/release/bin/mqtt-example
 
 可以在物联网平台的控制台, 找到指定的产品, 在其日志服务中查看设备上报的消息. 可以[点击此处](https://help.aliyun.com/document_detail/44542.html)了解如何在云端查看设备上报的数据
 
@@ -270,13 +265,13 @@ _demo_message_arrive|176 :: ----
 + 属性LightSwitch
     - 标识符: LightSwitch
     - 数据类型: enum,
-    - 数据长度: 1,
+    - 取值：0和1
     - 读写类型: 读写
 + 服务Custom
     - 标识符: Custom
     - 调用方式: 异步
-    - 输入参数: {标识符: transparency, 数据类型: int32}
-    - 输出参数: {标识符: Contrastratio, 数据类型: int32}
+    - 输入参数: {标识符: transparency, 数据类型: int32, 取值范围: 0 ~ 100}
+    - 输出参数: {标识符: Contrastratio, 数据类型: int32, 取值范围: 0 ~ 100}
 + 事件
     - 标识符: Error
     - 事件类型: 信息
@@ -288,7 +283,7 @@ _demo_message_arrive|176 :: ----
 
 #### <a name="填写设备三元组到例程中">填写设备三元组到例程中</a>
 
-将 `iotx-sdk-c/examples/linkkit/linkkit_example_solo.c` 中的三元组替换成云端创建的设备的三元组
+将 `./examples/linkkit/linkkit_example_solo.c` 中的三元组替换成云端创建的设备的三元组
 
     #define PRODUCT_KEY      "a1csED27mp7"
     #define PRODUCT_SECRET   "VuULINCrtTAzCSzp"
@@ -297,17 +292,16 @@ _demo_message_arrive|176 :: ----
 
 #### <a name="编译与运行程序">编译与运行程序</a>
 
-运行如下命令:
+在SDK顶层目录执行如下命令:
 
     $ make distclean
     $ make
 
 编译成功完成后, 生成的高级版例子程序在当前路径的 `output/release/bin` 目录下, 名为`linkkit-example-solo`
 
-执行如下命令:
+在SDK顶层目录执行如下命令:
 
-    cd ~/srcs/iotx-sdk-c
-    ./output/release/bin/linkkit-example-solo
+    $ ./output/release/bin/linkkit-example-solo
 
 ### <a name="观察数据">观察数据</a>
 
