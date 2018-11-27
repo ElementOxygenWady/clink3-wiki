@@ -1,5 +1,4 @@
 # <a name="目录">目录</a>
-+ [目录](#目录)
 + [V2.3.0](#V2.3.0)
     * [make.settings 文件](#make.settings 文件)
     * [全局函数接口](#全局函数接口)
@@ -10,15 +9,6 @@
         - [去掉的接口](#去掉的接口)
     * [HAL函数接口](#HAL函数接口)
 
-# <a name="目录">目录</a>
-
-* [V2.3.0](#V2.3.0)
-    * [make.settings 文件](#make.settings 文件)
-    * [全局函数接口](#全局函数接口)
-    * [MQTT函数接口](#MQTT函数接口)
-    * [OTA函数接口](#OTA函数接口)
-    * [Linkkit函数接口](#Linkkit函数接口)
-    * [HAL函数接口](#HAL函数接口)
 
 > 本页面记录 Link Kit SDK 在__所有用户可感知方面的变化内容__, 包括但不限于函数接口, 目录文件, 以及配置方式等
 
@@ -69,26 +59,25 @@
     * `IOT_MQTT_Publish_Simple`
 * 删除结构体 `iotx_mqtt_param_t` 中的 `pwrite_buf` 成员和 `pread_buf` 成员
 * 新增接口 `IOT_MQTT_Publish_Simple()`, 可以传入字符串类型的参数表达topic和payload
-    ```
-    int IOT_MQTT_Publish_Simple(void *handle, const char *topic_name, int qos, void *data, int len);
-    ```
+
+        int IOT_MQTT_Publish_Simple(void *handle, const char *topic_name, int qos, void *data, int len);
+
 * 新增接口 `IOT_MQTT_Subscribe_Sync()`, 可以阻塞式的进行同步订阅, 订阅成功之前函数并不返回
-    ```
-    int IOT_MQTT_Subscribe_Sync(void *handle,
-                                const char *topic_filter,
-                                iotx_mqtt_qos_t qos,
-                                iotx_mqtt_event_handle_func_fpt topic_handle_func,
-                                void *pcontext,
-                                int timeout_ms);
-    ```
+
+        int IOT_MQTT_Subscribe_Sync(void *handle,
+                                    const char *topic_filter,
+                                    iotx_mqtt_qos_t qos,
+                                    iotx_mqtt_event_handle_func_fpt topic_handle_func,
+                                    void *pcontext,
+                                    int timeout_ms);
+
 * 优化接口 `IOT_MQTT_Subscribe()`, 可以在MQTT连接尚未建立的时候就提前做离线的订阅, C-SDK会在建连成功后立即发送订阅报文
 
 ## <a name="OTA函数接口">OTA函数接口</a>
 
 * 由于MQTT函数接口的第1个参数`handle`可以传`NULL`, 也影响到基础版OTA函数接口 `IOT_OTA_Init` 的第3个参数可以接受`NULL`传参, 表示使用默认连接
-    ```
-    void *IOT_OTA_Init(const char *product_key, const char *device_name, void *ch_signal);
-    ```
+
+        void *IOT_OTA_Init(const char *product_key, const char *device_name, void *ch_signal);
 
 ## <a name="Linkkit函数接口">Linkkit函数接口</a>
 
@@ -117,7 +106,7 @@
 FEATURE_DEPRECATED_LINKKIT=y
 ```
 
-<em>注2: 为了减少设备端内存消耗，当用户调用SDK的API上传属性变化通知、事件通知到云端时SDK不再检查数据格式的正确性，因此用户不再需要从云端导出TSL的json文件转换为C的字符串后放到C代码中</em>
+<em>注2: 为了减少设备端内存消耗，当用户调用SDK的新版API上传属性变化通知、事件通知到云端时SDK不再检查数据格式的正确性，因此用户不再需要从云端导出TSL的json文件转换为C的字符串后放到C代码中</em>
 
 ## <a name="HAL函数接口">HAL函数接口</a>
 

@@ -13,8 +13,9 @@
 
 # <a name="OTA例程讲解">OTA例程讲解</a>
 
+OTA整体流程请见[OTA服务](
+https://help.aliyun.com/document_detail/85700.html)。
 通过OTA的API可以实现设备端固件下载， `但是如何存储/使用下载到的固件, 需要用户实现`. 存储固件是指将下载到的固件存储到FLASH等介质上. 使用固件, 包括加载新下载的固件, 需要用户根据业务的具体需求(比如需要用户点击升级按钮)来实现.
-更多OTA相关功能说明可查看[OTA服务](https://iot.console.aliyun.com/service/ota)
 下面用两个例子分别说明如何用`高级版`和`基础版`接口来实现OTA功能
 
 ## <a name="用高级版接口实现的OTA例程">用高级版接口实现的OTA例程</a>
