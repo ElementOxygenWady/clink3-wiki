@@ -6,6 +6,8 @@
         - [使用限制](#使用限制)
     * [B.2 移植阶段问题](#B.2 移植阶段问题)
     * [B.3 编译阶段问题](#B.3 编译阶段问题)
+        - [SDK几个分库的链接顺序](#SDK几个分库的链接顺序)
+        - [获取动态链接库形态的SDK编译产物](#获取动态链接库形态的SDK编译产物)
     * [B.4 错误码自查](#B.4 错误码自查)
         - [TLS/SSL连接错误](#TLS/SSL连接错误)
         - [MQTT连接错误](#MQTT连接错误)
@@ -67,6 +69,99 @@ Topic订阅设备超过1000怎么处理
 ## <a name="B.2 移植阶段问题">B.2 移植阶段问题</a>
 
 ## <a name="B.3 编译阶段问题">B.3 编译阶段问题</a>
+
+### <a name="SDK几个分库的链接顺序">SDK几个分库的链接顺序</a>
+
+请务必保持使用
+
+    -liot_sdk -liot_hal -liot_tls
+
+这样的顺序来链接SDK提供的几个分库, 因为写在后面的都是对前面库的支撑
+
+---
+对于移植到Linux上使用的情况, 还需要以
+
+     -liot_sdk -liot_hal -liot_tls -lpthread -lrt
+
+的方式来书写, 这是因为SDK在Linux下的HAL参考实现使用了pthread库和librt实时库
+
+---
+比如, 使用 `dlopen()` 接口打开我们的 `libiot_sdk.so` 这样的情况, 那么在编译SDK和使用它的应用程序的时候, 就需要写成比如
+
+    $(TARGET): $(OBJS)
+        $(CC) -o $@ $^ -liot_sdk -liot_hal -liot_tls -lpthread -lrt
+
+的这个样子
+
+---
+不论是链接静态库, 还是链接动态库, 还是使用 `dlopen()` 等运行时动态加载的方式使用SDK, 应用程序链接的时候都请确保按照上述顺序编写链接指令
+
+### <a name="获取动态链接库形态的SDK编译产物">获取动态链接库形态的SDK编译产物</a>
+
+由于C-SDK大部分情况下运行在非Linux的嵌入式操作系统上, 比如`AliOS Things`, 或者`FreeRTOS`等
+
+而这些操作系统并无Linux的动态链接库概念, 所以默认情况下SDK都是以静态库(`libiot_sdk.a` + `libiot_hal.a` + `libiot_tls.a`)的方式输出
+
+可以用如下的修改方法调整默认的输出形态, 将SDK的编译产物从静态库的方式改成动态库
+
+获取`libiot_sdk.so`代替`libiot_sdk.a`
+---
+以默认的 `config.ubuntu.x86` 配置文件为例, 如下的修改可以告诉构建系统要产生动态库形态的构建产物
+
+    --- a/src/board/config.ubuntu.x86
+    +++ b/src/board/config.ubuntu.x86
+    @@ -1,6 +1,5 @@
+     CONFIG_ENV_CFLAGS   += \
+         -Os -Wall \
+    -    -g3 --coverage \
+         -D_PLATFORM_IS_LINUX_ \
+         -D__UBUNTU_SDK_DEMO__ \
+
+    @@ -19,6 +18,7 @@ CONFIG_ENV_CFLAGS   += \
+         -DCONFIG_MQTT_RX_MAXLEN=5000 \
+         -DCONFIG_MBEDTLS_DEBUG_LEVEL=0 \
+
+    +CONFIG_LIB_EXPORT := dynamic
+
+     ifneq (Darwin,$(strip $(shell uname)))
+     CONFIG_ENV_CFLAGS   += -rdynamic
+
++ **改动点1:** 确保`CFLAGS`中没有`-g3 --coverage`这样的编译选项
++ **改动点2:** 新增一行 `CONFIG_LIB_EXPORT := dynamic`
++ **改动点3:** 重新运行 `make reconfig` 选择刚才修改到的 `config.ubuntu.x86` 配置文件, 或者被定制的config文件, **然后以 `make all` 而不是 `make` 的方式来编译**
+
+---
+按照如上改法, `make all`之后在 `output/release/lib/libiot_sdk.so` 就可以获取动态库形态的SDK了, 其内容和默认的 `libiot_sdk.a` 是一致的
+
+    $ ls output/release/lib/*.so
+    output/release/lib/libiot_sdk.so
+
+获取`libiot_hal.so`代替`libiot_hal.a`
+---
+修改 `src/ref-impl/hal/iot.mk`, 新增如下这行
+
+    LIBSO_TARGET := libiot_hal.so
+
+然后运行:
+
+    make reconfig
+    make all
+
+之后便可以在 `output/release/lib/libiot_hal.so` 得到动态库形式的HAL参考实现的分库, 其内容和默认的 `libiot_hal.a` 是一致的
+
+获取`libiot_tls.so`代替`libiot_tls.a`
+---
+修改 `src/ref-impl/tls/iot.mk`, 新增如下这行
+
+    LIBSO_TARGET := libiot_tls.so
+
+然后运行:
+
+    make reconfig
+    make all
+
+之后便可以在 `output/release/lib/libiot_tls.so` 得到动态库形式的TLS参考实现的分库, 其内容和默认的 `libiot_tls.a` 是一致的
+
 
 ## <a name="B.4 错误码自查">B.4 错误码自查</a>
 

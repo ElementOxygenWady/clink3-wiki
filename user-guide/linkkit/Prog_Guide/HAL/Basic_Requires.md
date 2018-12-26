@@ -73,7 +73,9 @@ char *HAL_GetChipID(_OU_ char cid_str[HAL_CID_LEN]);
 
 接口说明
 ---
-获取唯一的芯片ID字符串, 字符串长度不能超过`HAL_CID_LEN`定义的数值
+获取唯一的芯片ID字符串, 字符串长度不能超过`HAL_CID_LEN`定义的数值。
+
+注：该HAL只需要芯片商进行适配，如果用户不是芯片商，该HAL返回空字符串即可
 
 参数说明
 ---
@@ -88,7 +90,7 @@ char *HAL_GetChipID(_OU_ char cid_str[HAL_CID_LEN]);
 -----
 
 ## <a name="HAL_GetDeviceID">HAL_GetDeviceID</a>
-
+(在2.3.1及以后版本中不需要实现）
 原型
 ---
 ```
@@ -169,7 +171,7 @@ int HAL_GetFirmwareVesion(_OU_ char version[FIRMWARE_VERSION_MAXLEN]);
 
 接口说明
 ---
-获取设备的固件版本字符串, 次固件版本号将会用于OTA升级的版本上报
+获取设备的固件版本字符串, 此固件版本号将会用于OTA升级的版本上报。如果设备不准备支持OTA，该函数返回空串即可。
 
 参数说明
 ---
@@ -193,7 +195,7 @@ int HAL_GetModuleID(_OU_ char mid_str[MID_STR_MAXLEN]);
 
 接口说明
 ---
-获取设备的`Module ID`, 仅用于紧密合作伙伴
+获取设备的`Module ID`, 仅用于紧密合作伙伴。该函数用于模组商上报模组型号，其它角色的用户返回空串即可。
 
 参数说明
 ---
@@ -217,7 +219,7 @@ int HAL_GetPartnerID(_OU_ char pid_str[PID_STR_MAXLEN]);
 
 接口说明
 ---
-获取设备的`Partner ID`, 仅用于紧密合作伙伴
+获取设备的`Partner ID`, 仅用于紧密合作伙伴。
 
 参数说明
 ---
@@ -280,7 +282,7 @@ int HAL_GetProductSecret(_OU_ char product_secret[DEVICE_SECRET_LEN]);
 -----
 
 ## <a name="HAL_GetTimeStr">HAL_GetTimeStr</a>
-
+(在2.3.1及以后版本中不需要实现）
 原型
 ---
 ```
@@ -480,7 +482,7 @@ uint32_t HAL_Random(_IN_ uint32_t region);
 
 接口说明
 ---
-随机数函数, 接受一个无符号数作为范围, 返回0到该数值范围内的一个随机数
+随机数函数, 接受一个无符号数作为范围, 返回0到region范围内的一个随机数
 
 参数说明
 ---
