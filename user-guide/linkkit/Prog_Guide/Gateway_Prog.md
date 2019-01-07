@@ -129,6 +129,8 @@ int example_add_subdev(iotx_linkkit_dev_meta_info_t *meta_info)
 
 + 删除子设备拓扑关系: SDK不提供删除拓扑关系的API
 
++ 子设备OTA：详情请见[子设备OTA的设计与用例说明文档](http://gitlab.alibaba-inc.com/Apsaras64/pub/wikis/Linkkit_Iterations/V231/SubDev_OTA)
+
 ## <a name="子设备数据交互">子设备数据交互</a>
 
 子设备与云端的数据交互方法与单品产品完全一致. 比如:
