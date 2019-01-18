@@ -1,5 +1,16 @@
 # <a name="目录">目录</a>
 
+最新SDK下载链接:
+---
+https://github.com/aliyun/iotkit-embedded/archive/v2.3.0.zip
+
+最新SDK长期分支:
+---
+git clone git@github.com:aliyun/iotkit-embedded.git -b v2.3.0
+
+SDK手册目录
+---
+
 + [SDK概述](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/SDK_Overview)
 + [快速体验](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Quick_Start)
 + **移植指南**
