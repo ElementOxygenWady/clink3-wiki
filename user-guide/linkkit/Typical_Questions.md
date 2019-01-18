@@ -6,6 +6,7 @@
         - [使用限制](#使用限制)
     * [B.2 移植阶段问题](#B.2 移植阶段问题)
         - [如何编译SDK能够减小二进制尺寸](#如何编译SDK能够减小二进制尺寸)
+        - [如何解决嵌入式平台上 `strtod()` 不工作问题](#如何解决嵌入式平台上 `strtod()` 不工作问题)
     * [B.3 编译阶段问题](#B.3 编译阶段问题)
         - [SDK几个分库的链接顺序](#SDK几个分库的链接顺序)
         - [获取动态链接库形态的SDK编译产物](#获取动态链接库形态的SDK编译产物)
@@ -88,6 +89,14 @@ Topic订阅设备超过1000怎么处理
 |-----------------------------------------|-----------------------------------------------------------------------------
 | **`FEATURE_AWSS_SUPPORT_ROUTER`**       | 配网中的路由器配网模式, 一般可以直接关闭, 以减小尺寸
 | **`FEATURE_AWSS_SUPPORT_PHONEASAP`**    | 配网中的手机热点配网模式, 一般不使用这种模式的时候也可以关闭, 以减小尺寸
+
+### <a name="如何解决嵌入式平台上 `strtod()` 不工作问题">如何解决嵌入式平台上 `strtod()` 不工作问题</a>
+
+在有些嵌入式平台上, 由于C库被定制, 标准的C99库函数 `strtod()` 可能不工作甚至引起崩溃和死机, 可通过
+
+    setlocale(LC_ALL, "C");
+
+的方式使能C库能力全集来解决
 
 ## <a name="B.3 编译阶段问题">B.3 编译阶段问题</a>
 
@@ -249,6 +258,32 @@ DNS域名解析错误: `Failed to get an IP address for the given hostname`
 ---
 + 大概率是设备端当前网络故障, 无法访问公网
     * 如果是WiFi设备, 检查其和路由器/热点之间的连接状况, 以及上联路由器是否可以正常访问公网
++ 需要通过类似 `res_init()` 之类的调用强制C库刷新DNS解析文件
+    * 在Linux系统上, 域名解析的系统调用 `getaddrinfo()` 的工作是依赖域名解析文件 `/etc/resolv.conf`
+    * 对某些嵌入式Linux, 可能会有 `libc` 库读取过时的 `/etc/resolv.conf` 问题
+    * 对于这类系统, 域名解析请求不论是早于还是晚于域名解析文件的更新, 都会读到过时的信息, 进而造成域名解析失败
+
+> 这种现象产生的原因是DNS文件的更新晚于MQTT的域名解析请求, 这样 `getaddrinfo()` 系统调用就会得到一个 `EAI_AGAIN` 错误
+>
+> 然而, 如果不通过 `res_init()`, C库中的 `getaddrinfo()` 即使被重试逻辑调用也仍然读取过时的DNS文件, 并继续得到 `EAI_AGAIN` 错误
+
+---
+*例如, 可以改动 `HAL_TLS_mbedtls.c`*
+
+    #include <arpa/nameser.h>
+    #include <resolv.h>
+
+    ...
+    ...
+
+    if ((ret = getaddrinfo(host, port, &hints, &addr_list)) != 0) {
+            if (ret == EAI_AGAIN)
+                res_init();
+
+                return (MBEDTLS_ERR_NET_UNKNOWN_HOST);
+    }
+
+*以上只是一个示意的改法, `res_init()`本身也是一个过时的函数, 所以不建议进入SDK的官方代码, 用户可以酌情加在合适的位置*
 
 #### <a name="-0x0044/-68/MBEDTLS_ERR_NET_CONNECT_FAILED">-0x0044/-68/MBEDTLS_ERR_NET_CONNECT_FAILED</a>
 解释

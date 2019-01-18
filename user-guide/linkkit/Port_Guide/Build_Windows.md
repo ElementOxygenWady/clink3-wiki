@@ -360,7 +360,7 @@ sdk函数定义所在的动态库
 
 以下附件中的库和头文件，可作为参考:
 
-[库和头文件样例](https://files.alicdn.com/tpsservice/4a75c2939a9f3164b4bb9347da611c38.zip)
+[库和头文件样例](https://code.aliyun.com/edward.yangx/public-docs/raw/master/libs/linkkit_sdk_dll_230.zip)
 
 #### <a name="工程配置">工程配置</a>
 
