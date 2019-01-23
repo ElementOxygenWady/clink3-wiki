@@ -92,6 +92,8 @@ IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
 + 使用`IOT_Ioctl`选择使用一型一密方式
 + 注释掉示例代码中所有使用到 `DEVICE_SECRET` 和 `HAL_SetDeviceSecret()` 的地方
 
+**注意: 在Linux上使用新的设备进行一型一密动态注册需要删除运行目录下的 `linkkit_kv.bin` 文件**
+
 ```
 #if defined(SUPPORT_ITLS)
 
