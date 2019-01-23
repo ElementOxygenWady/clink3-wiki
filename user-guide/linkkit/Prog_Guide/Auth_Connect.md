@@ -88,7 +88,10 @@ IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
 
 ![image](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/LP-%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86-%E5%88%9B%E5%BB%BA%E4%B8%80%E5%9E%8B%E4%B8%80%E5%AF%86%E8%AE%BE%E5%A4%87.png)
 
-打开linkkit sdk, 用设备`Example_dyn1`的四元组替换示例代码(`examples/mqtt/mqtt-example.c`)中的四元组, 并使用`IOT_Ioctl`选择使用一型一密方式:
++ 打开linkkit sdk, 用设备`Example_dyn1`的三元组(PK+DN+PS)替换示例代码(`examples/mqtt/mqtt-example.c`)中的三元组(PK+DN+PS)
++ 使用`IOT_Ioctl`选择使用一型一密方式
++ 注释掉示例代码中所有使用到 `DEVICE_SECRET` 和 `HAL_SetDeviceSecret()` 的地方
+
 ```
 #if defined(SUPPORT_ITLS)
 
