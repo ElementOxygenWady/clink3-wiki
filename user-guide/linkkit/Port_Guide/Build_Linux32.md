@@ -1,7 +1,6 @@
 # <a name="目录">目录</a>
 + [目标系统为32位Linux](#目标系统为32位Linux)
     * [使用 `make`+`gcc` 编译SDK](#使用 `make`+`gcc` 编译SDK)
-    * [使用 `cmake` 编译SDK](#使用 `cmake` 编译SDK)
 
 # <a name="目标系统为32位Linux">目标系统为32位Linux</a>
 
@@ -19,7 +18,7 @@
 修改平台配置文件
 ---
 
-    vim src/board/config.ubuntu.x86
+    vim tools/board/config.ubuntu.x86
 
 增加如下一行
 
@@ -46,11 +45,19 @@
 ---
 
     make reconfig
+
     SELECT A CONFIGURATION:
 
-    1) config.macos.make    3) config.ubuntu.x86
-    2) config.rhino.make    4) config.win7.mingw32
+    1) config.alios.esp8266
+    2) config.alios.mk3080
+    3) config.ubuntu.x86
     #? 3
+
+    SELECTED CONFIGURATION:
+
+    VENDOR :   ubuntu
+    MODEL  :   x86
+
 
 编译
 ---
@@ -98,58 +105,3 @@
     output/release/bin/ota-example-mqtt:          ELF 32-bit LSB executable, Intel 80386, ... stripped
     output/release/bin/sdk-testsuites:            ELF 32-bit LSB executable, Intel 80386, ... stripped
     output/release/bin/uota_app-example:          ELF 32-bit LSB executable, Intel 80386, ... stripped
-
-## <a name="使用 `cmake` 编译SDK">使用 `cmake` 编译SDK</a>
-
-修改 CMakeLists.txt 文件
----
-在默认的文件中修改CFLAGS, 加入`-m32`
-
-    SET (CMAKE_C_FLAGS " -Iexamples -Os -Wall")
-
-改成
-
-    SET (CMAKE_C_FLAGS " -Iexamples -Os -Wall -m32")
-
-从 CMakeLists.txt 构建makefile
----
-    mkdir ooo
-    cd ooo
-    cmake ..
-
-编译
----
-    make -j32
-
-产物
----
-    ~/srcs/iotx-sdk-c/ooo$ ls
-    bin  CMakeCache.txt  CMakeFiles  cmake_install.cmake  examples  lib  Makefile  src  tests
-
-可执行程序在 `bin/` 目录下:
-
-    ls bin/
-
-    linkkit-example-countdown  linkkit-example-sched  linkkit-example-solo  linkkit_tsl_convert
-    mqtt-example  mqtt_example_multithread  mqtt_example_rrpc  ota-example-mqtt  uota_app-example
-
-可以用如下方式验证, 注意 `file` 命令的输出中, 已经显示程序都是32位的了(`ELF 32-bit LSB executable`)
-
-    file ooo/bin/*
-
-    ooo/bin/linkkit-example-countdown: ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/linkkit-example-sched:     ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/linkkit-example-solo:      ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/linkkit_tsl_convert:       ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/mqtt-example:              ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/mqtt-example-multithread:  ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/mqtt-example-rrpc:         ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/ota-example-mqtt:          ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/sdk-testsuites:            ELF 32-bit LSB executable, Intel 80386, ... stripped
-    ooo/bin/uota_app-example:          ELF 32-bit LSB executable, Intel 80386, ... stripped
-
-二进制库在 `lib/` 目录下:
-
-    ls lib/
-
-    libiot_hal.so  libiot_sdk.so  libiot_tls.so

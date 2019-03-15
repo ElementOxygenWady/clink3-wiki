@@ -1,16 +1,17 @@
 # <a name="目录">目录</a>
-+ [乐鑫ESP8266](#乐鑫ESP8266)
++ [乐鑫ESP8266 + AliOS Things 移植示例](#乐鑫ESP8266 + AliOS Things 移植示例)
 
-# <a name="乐鑫ESP8266">乐鑫ESP8266</a>
+# <a name="乐鑫ESP8266 + AliOS Things 移植示例">乐鑫ESP8266 + AliOS Things 移植示例</a>
 
 选择平台配置
 ---
     make reconfig
+    
     SELECT A CONFIGURATION:
 
-    1) config.esp8266.aos   4) config.mk3080.aos    7) config.win7.mingw32
-    2) config.macos.make    5) config.rhino.make
-    3) config.mk3060.aos    6) config.ubuntu.x86
+    1) config.alios.esp8266
+    2) config.alios.mk3080
+    3) config.ubuntu.x86
     #? 1
 
 编译
@@ -23,8 +24,8 @@
 
     BUILDING WITH EXISTING CONFIGURATION:
 
-    VENDOR :   esp8266
-    MODEL  :   aos
+    VENDOR :   alios
+    MODEL  :   esp8266
 
     https://gitee.com/alios-things/gcc-xtensa-lx106-linux -> .O/compiler/gcc-xtensa-lx106-linux/main
     ---
@@ -36,8 +37,9 @@
     ---
     downloading toolchain for xtensa-lx106-elf-gcc .................... done
 
-    [CC] utils_epoch_time.o                 <=  ...
-    [CC] json_parser.o                      <=  ...
+    [CC] infra_preauth.o                    <=  ...
+    [CC] infra_timer.o                      <=  ...
+    [CC] infra_json_parser.o                <=  ...
     ...
     ...
     [AR] libiot_sdk.a                       <=  ...
@@ -53,4 +55,4 @@
 
 | 产物文件名      | 说明
 |-----------------|-------------------------------------------------------------
-| `libiot_sdk.a`  | SDK的主库, 提供了 `IOT_XXX` 接口和 `linkkit_xxx()` 接口
+| `libiot_sdk.a`  | SDK的主库, 提供了 `IOT_XXX` 接口

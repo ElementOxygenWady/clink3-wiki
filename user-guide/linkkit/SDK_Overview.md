@@ -16,6 +16,7 @@
         - [主要目录及文件一览](#主要目录及文件一览)
     * [1.5 C-SDK版本一览](#1.5 C-SDK版本一览)
 
+> 在阅读本手册之前, 建议先快速浏览文档 [阿里云物联网平台接入](https://code.aliyun.com/edward.yangx/public-docs/raw/master/docs/IoT_Basic_Concepts.pdf), 建立一些基本的概念
 
 # <a name="第一章 设备端C语言Link Kit SDK概述">第一章 设备端C语言Link Kit SDK概述</a>
 
@@ -23,7 +24,7 @@
 
 C语言Link Kit SDK适用于使用C语言开发业务处理逻辑的设备, 由于C语言运行速度快/需要的运行内存较少, 目前大多数的IoT设备使用C语言进行功能开发
 
-设备需要支持TCP/IP协议栈才能集成Link Kit SDK, 对于zigbee/433/KNX这样的非IP设备需要通过集成了Link Kit SDK的网关设备接入到阿里云IoT平台
+设备需要支持TCP/IP协议栈或通过AT指令外挂网络通信模组才能集成Link Kit SDK, 对于zigbee/433/KNX这样的非IP设备需要通过集成了Link Kit SDK的网关设备接入到阿里云IoT平台
 
 ## <a name="1.2 使用C-SDK对接开发流程">1.2 使用C-SDK对接开发流程</a>
 ### <a name="准备开发环境">准备开发环境</a>
@@ -46,37 +47,39 @@ C-SDK提供了诸多的功能比如MQTT上云, CoAP上云, OTA下载固件, 高�
 ### <a name="交叉编译C-SDK到目标平台">交叉编译C-SDK到目标平台</a>
 阅读 [第三章 移植指南](#第三章 移植指南) 和 [第四章 构建配置说明](#第四章 构建配置说明) 部分, 将C-SDK的源码交叉编译成您所要开发设备的目标嵌入式平台格式
 
-这个环节的成功产物是目标平台格式的二进制静态库文件 `libiot_sdk.a`, 配合我们提供的 `iot_export.h` 头文件, 您就获得了所谓的SDK, 所有的编程API函数在头文件中声明, 在库文件中实现
+这个环节的成功产物是目标平台格式的二进制静态库文件 `libiot_sdk.a`, 配合我们提供的 `xxx_api.h` 头文件(xxx代表您想要取用的功能点), 您就获得了所谓的SDK
+
+所有的编程API函数在头文件中声明, 在库文件中实现
 
 ### <a name="开发对接的HAL层实现">开发对接的HAL层实现</a>
 > C-SDK本身是一个不假设自己运行在哪款硬件平台, 以及运行在哪个操作系统(甚至可以没有操作系统)上的跨平台SDK
 >
 > 它对底层的依赖, 都抽象成一组 `HAL_XXX` 风格的函数接口来代替
 >
-> 实际运行的时候, 需要用户或者硬件平台的提供方, 提供在自己平台上的这些接口
+> 名为 xxx 的功能点所依赖的底层函数, 都将陈列在 src/xxx/xxx_wrapper.h, 例如, MQTT上云这个功能点, 它的外部依赖就在 `src/mqtt/mqtt_wrapper.h`
+>
+> 实际运行的时候, 需要用户或者硬件平台的提供方, 提供在自己平台上的这些接口函数的实现
 >
 > C-SDK自带了在 `Ubuntu`, 以及 `Windows` 上对这些接口的实现源码, 可供参考
 
-阅读 第五章中HAL说明部分, 可以了解有哪些接口需要您实现, 以及如何参考我们的参考实现
+阅读 第五章中HAL说明部分, 可以了解对应您需要取用的功能点, 分别对应有哪些接口需要您实现, 以及如何参考我们的参考代码来实现
 
-完成之后, 可以编译成一个比如 `libiot_hal.a` 的库文件, 它对应SDK中的 `iot_import.h`, 头文件中列出函数原型, 库文件中提供函数实现
+完成之后, 可以编译成一个比如 `libiot_hal.a` 的库文件, 它对应SDK中各种 `xxx_wrapper.h` 头文件中列出函数原型, 库文件中提供函数实现
 
 ---
 *在C-SDK提供的参考HAL层实现中, 为方便直接修改官方源码完成这个环节, 我们使用著名的开源软件库 mbedtls 实现HAL中安全方面的接口*
 
-*它会被编译成 `libiot_tls.a`, 是 `libiot_hal.a` 的依赖, 如果您使用其它的开源库比如 OpenSSL 等, 在C-SDK中也有对应的参考源码, 不过默认不会参与编译*
+*目前, 名为 `HAL_SSL_XXX()` 的函数, 都是基于 mbedtls 来封装实现的*
 
 ### <a name="将SDK和HAL层实现嵌入到固件中">将SDK和HAL层实现嵌入到固件中</a>
 有了上面说明的 `libiot_sdk.a` 作为能力的核心提供库, 以及您自主开发完成的 `libiot_hal.a` 作为SDK的支撑库, 则重要组件都已就绪
 
 将它们拿到您自己工程的编译系统/编译环境中, 修改编译设置, 使它们被链接到目标固件或者目标应用程序中, 即可使用C-SDK提供的API了
 
-**也就是说, C-SDK的主要输出形式是二进制库`libiot_sdk.a`和头文件`iot_export.h`, 它以库的方式和您的业务固件/程序对接**
-
 ---
 建议您阅读第五章中用户编程接口说明部分了解此时可以使用的API
 
-并且可以参照 [第二章 快速体验](#第二章 快速体验) 部分, 直接用例程源码比如 `examples/mqtt/mqtt_example.c` 链接上述的两个库文件, 验证其运行效果是否和在主机上运行demo时一致
+并且可以参照 [第二章 快速体验](#第二章 快速体验) 部分, 直接用例程源码比如 `src/mqtt/examples/mqtt_example.c` 链接上述的库文件, 验证其运行效果是否和在主机上运行demo时一致
 
 ### <a name="编写业务逻辑">编写业务逻辑</a>
 C-SDK提供的API可以使用之后, 就可以用来编写您自己的业务/应用程序了, 比如上报数据, 订阅主题, 接收命令等
@@ -178,74 +181,88 @@ productKey是物联网平台为产品颁发的唯一标识. 这个参数很重�
 ## <a name="1.4 C-SDK组成部分">1.4 C-SDK组成部分</a>
 ### <a name="架构框图">架构框图</a>
 
-![image](https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/sdk_arch.png)
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/sdk_arch.png" width="800" height="450" align="center" />
 
 ### <a name="主要目录及文件一览">主要目录及文件一览</a>
 
     .
-    +-- build-rules                         : 编译构建系统, 基于GNU Make和bash脚本
-    +-- project.mk                          : 编译系统配置, 指定SDK的目录排布等
-    +-- LICENSE                             : 软件许可证, C-SDK使用的是Apache-2.0版本软件许可证
-    +-- README.txt                          : 简要说明, 列出了C-SDK的功能模块和模块内容等
-    +-- makefile                            : 基于GNU Make编译SDK的顶层Makefile
-    +-- CMakeLists.txt                      : 基于cmake编译SDK的顶层CMakeLists.txt
-    +-- make.settings                       : 功能裁剪配置, 可编辑该文件来裁剪SDK的内容
+    +-- make.settings                       : 记录用户对SDK中哪些功能使用, 哪个功能关闭的配置文件
+    +-- makefile                            : 使用 Ubuntu16.04 及SDK自带编译系统时的makefile
+    +-- extract.bat                         : 使用 Windows 主机作为开发环境时的代码抽取脚本
+    +-- config.bat                          : 使用 Windows 主机作为开发环境时的功能配置脚本
+    +-- extract.sh                          : 使用 Linux 主机作为开发环境时的代码抽取脚本
+    +-- model.json
     |
-    +-- examples                            : 例程目录, 演示SDK的使用
-    |   +-- coap                            :     演示如何使用通信模块CoAP的API
-    |   +-- device-shadow                   :     演示如何使用服务模块DeviceShadow的API
-    |   +-- http                            :     演示如何使用通信模块HTTP的API
-    |   +-- http2                           :     演示如何使用通信模块HTTP2的API
-    |   +-- linkkit                         :     演示如何使用服务模块linkkit的API
-    |   +-- mqtt                            :     演示如何使用通信模块MQTT的API
-    |   +-- ota:                            :     演示如何使用服务模块ota的API
-    |
-    +-- include                             : 头文件目录, 列出SDK依赖的HAL接口和向用户提供的API接口
-    |   +-- iot_export.h                    :     列出所有API层函数的声明, 是SDK所提供的接口
-    |   +-- iot_import.h                    :     列出所有HAL层函数的声明, 是SDK所依赖的接口
-    |   +-- exports                         :     列出各功能点提供的API层接口
-    |   +-- imports                         :     列出各功能点依赖的HAL层接口
-    |
-    +-- src
-    |   +-- board                           : 跨平台适配目录, 一个目标平台对应一个config.xxx.yyy文件
-    |   |   +-- config.rhino.make           :     适配到AliOS Things系统的编译配置文件
-    |   |   +-- config.ubuntu.x86           :     适配到Ubuntu系统的编译配置文件
-    |   |   +-- config.win7.mingw32         :     适配到Win7/Win10系统的编译配置文件
+    +-- output                              : SDK代码抽取以及编译构建的输出目录
     |   |
-    |   +-- infra                           : SDK核心实现中的基础模块目录
-    |   |   +-- log                         :     实现运行时SDK的日志
-    |   |   +-- system                      :     实现全局信息保存, 如官方根证书, 设备标识ID等
-    |   |   +-- utils                       :     实现工具函数, 如连接鉴权时的SHA1摘要计算等
-    |   +-- protocol                        : SDK核心实现中的通信模块目录
-    |   |   +-- alcs                        :     实现设备和手机app之间的本地加密通信
-    |   |   +-- coap                        :     实现设备和阿里云之间的CoAP协议通信
-    |   |   +-- http                        :     实现设备和阿里云之间的HTTP协议通信
-    |   |   +-- http2                       :     实现设备和阿里云之间的HTTP2协议通信
-    |   |   +-- mqtt                        :     实现设备和阿里云之间的MQTT协议通信
-    |   +-- services                        : SDK核心实现中的服务模块目录
-    |   |   +-- awss                        :     实现设备和手机app之间的WiFi配网服务
-    |   |   +-- linkkit                     :     实现设备和阿里云之间的物模型管理服务
-    |   |   +-- ota                         :     实现设备和阿里云之间的固件升级服务
+    |   +-- eng                             : SDK代码抽取输出目录, 运行 extract.sh 或 extract.bat 后产生
+    |   |   +-- dev_model
+    |   |   +-- dev_sign
+    |   |   +-- infra                       : 被抽取出来的各个功能点实现源码
+    |   |   +-- mqtt
+    |   |   +-- wrappers
     |   |
-    |   +-- sdk-impl                        : API实现目录, iot_export.h中的API在此实现
-    |   +-- ref-impl                        : 参考实现目录, 包括加解密库和HAL接口的参考实现
-    |   |   +-- hal                         :     SDK所依赖的HAL接口的参考实现
-    |   |   +-- tls                         :     加解密库的参考实现, 由开源软件mbedtls裁剪而成
+    |   +-- examples                        : 被抽取出来的各个功能点API调用例程
+    |
+    +-- certs                               : 服务端根证书目录, 存放阿里云IoT物联网平台的云端证书
+    +-- external_libs                       : SDK使用的第三方开源库
+    |   +-- mbedtls
+    |   +-- nghttp2
+    +-- src                                 : SDK中各个功能点的实现源码, 运行 extract.sh 或 extract.bat 后会抽取到 output
     |   |
-    |   +-- tools                           : 用于辅助build-rules编译系统的编译脚本文件
+    |   +-- infra                           : 基座组件, 用户不必关心, 其内容的多寡由用户选择使用的功能点多少自动适应
+    |   +-- dev_sign                        : 设备签名模块, 体积最小的SDK可仅选用此功能
+    |   +-- mqtt                            : MQTT上云
+    |   +-- coap                            : CoAP上云
+    |   +-- http                            : HTTP上云
+    |   +-- ota                             : OTA固件升级
+    |   +-- dev_model                       : 物模型管理
+    |   +-- dynamic_register                : 一型一密
+    |   +-- dev_bind                        : 设备绑定
+    |   +-- dev_reset                       : 设备重置
+    |   +-- http2                           : HTTP2流式传输和文件上传
+    |   +-- wifi_provision                  : WiFi配网
+    |   +-- atm                             : AT命令辅助模块, 将SDK运行在外挂网络通信模组的MCU上, MCU和模组间用AT指令通信时使用
     |
-    +-- prebuilt                            : 预编译二进制库存放目录, 分头文件和库文件的子目录
-    |   +-- ubuntu
-    |   |   +-- include                     :     Ubuntu平台预编译库对应的头文件
-    |   |   +-- libs                        :     Ubuntu平台预编译库, 64位
-    |   +-- win7
-    |       +-- include                     :     Win7平台预编译库对应的头文件
-    |       +-- libs                        :     Win7平台预编译库, 64位
-    |       +-- 32bit-libs                  :     Win7平台预编译库, 32位
-    |
-    +-- tests                               : SDK的单元测试例目录
+    +-- tools                               : SDK抽取代码等行为所依赖的主机工具, 用户不必关心
+    +-- wrappers                            : SDK对外界依赖的函数接口 HAL_XXX 或者 wrapper_xxx 的参考实现
+        +-- atm
+        +-- os
+        |   +-- freertos                    : SDK运行在FreeRTOS操作系统上的对接代码示例
+        |   +-- nos                         : SDK运行在无操作系统的设备上的对接代码示例
+        |   +-- ubuntu                      : SDK运行在Ubuntu操作系统上的对接代码示例
+        |   +-- nucleus                     : SDK运行在Nucleus操作系统上的对接代码示例
+        +-- tls
 
 ## <a name="1.5 C-SDK版本一览">1.5 C-SDK版本一览</a>
+
+#### <a name="V3.0.1">V3.0.1</a>
++ 发布日期: 2019/03/15
++ 下载链接: [v3.0.1.zip](https://github.com/aliyun/iotkit-embedded/archive/v3.0.1.zip)
++ 更新内容:
+    - **新增对异步/通知式的底层TCP/IP协议栈的支持:** 专用于联发科 `MTK2503/MTK6261` 的 Nucleus 系统对接
+        + 新增 `FEATURE_ASYNC_PROTOCOL_STACK` 开关支持异步协议栈, 详情介绍请看文档: [异步通知式底层通信模型](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/AsyncMQTT_Prog)
+        + 在异步协议栈支持的基础上, 支持与 `MTK2503/MTK6261` 系统对接, 详情介绍请看文档: [移植到联发科MTK2503/MTK6261](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_MTK2503)
+    - **新增以源文件方式移植对接:** 用户可以使用任何自己熟悉或者喜欢的方式编译SDK
+        + 提供"配置工具", 用于配置选用SDK的哪些功能点
+        + 提供"抽取工具", 用于根据功能点抽取需要的源文件
+        + 源文件被抽取后, 在 `output` 目录下, 用户可以用任何方式编译它们
+        + 详情介绍请看文档: [不使用SDK自带编译系统时的移植示例](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Extract_Example)
+    - **新增用户需要实现的HAL接口自动整理:** 用户不再会看到自己不需要实现的HAL接口
+        + 上述"抽取工具", 会根据所选功能点自动整理待填充的源文件 `output/eng/wrappers/wrapper.c`
+        + 用户需要做的只是把这个文件中留空的函数全部按注释实现即可, 不需要查阅文档, 也不会做多余的实现
+        + SDK整体性质的 `include/iot_import.h` 也去掉了, 以避免用户看到他其实不必关注的HAL接口声明
+    - **新增每个功能点有独立的和风格统一的API声明头文件:** 都在 `src/xxx/xxx_api.h`
+        + 目录扁平化处理, 每一个 `src/xxx` 就对应了SDK的一个名字为 `xxx` 的功能点
+        + SDK整体性质的 `include/iot_export.h` 也去掉了, 以避免用户看到他其实不必关注的API接口声明
+    - **新增HTTP2文件上传的功能:** 在 `src/http2/http2_upload_api.h`, 基于流式传输实现
+    - **新增设备签名功能:** 在 `src/dev_sign`, 可计算设备连云签名, 是SDK的最小形态(ROM: `4.5KB`, RAM: `1KB`)
+    - **新增设备重置的功能:** 在 `src/dev_reset`, 可用于子设备重置网关对应关系, 或设备和用户绑定关系等
+    - **新增简化版的一型一密功能:** 在 `src/dynamic_register`, 只有1个API, 可帮助用户获取`DeviceSecret`
+    - **WiFi配网功能中新增了设备热点配网模式:** 在 `src/wifi_provision/dev_ap`, 通过设备开AP来得到SSID和密码
+    - **优化了MQTT的建连接口:** 调用时需要用户传入的参数减少了80%
+        + 仍然通过 `IOT_MQTT_Construct()` 发起云端建连, 但不再需要调用 `IOT_SetupConnInfo()`
+        + 对 `IOT_MQTT_Construct()` 调用时, 结构体入参中的绝大多数都可以不填写, SDK会自动补充默认值
 
 #### <a name="V2.3.0">V2.3.0</a>
 + 发布日期: 2018/11/19

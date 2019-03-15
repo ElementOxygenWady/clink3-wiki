@@ -118,7 +118,7 @@ typedef struct {
     const char          *identify;
     int                 h2_stream_id;
     char                *channel_id;
-    void                *user_data; 
+    void                *user_data;
 } stream_data_info_t;
 ```
 
@@ -325,14 +325,17 @@ typedef struct {
 原型
 ---
 ```
-int IOT_HTTP2_Stream_UploadFile(void *handle, const char *file_path, const char *identify,
-                                header_ext_info_t *header,
-                                upload_file_result_cb cb, void *user_data)
+int IOT_HTTP2_Stream_UploadFile(void *handle,
+                                const char *filename,
+                                const char *identify,
+                                upload_file_result_cb_t cb,
+                                http2_file_upload_opt_t *opt,
+                                void *user_data);
 ```
 
 接口说明
 ---
-向指定流异步发送文件,需要使能FEATURE_FS_ENABLE宏才能使用此功能
+向云端指定流通道异步发送文件,需要使能FEATURE_FS_ENABLE宏才能使用此功能
 
 该接口在SDK基础版或高级版中都需要用户显式调用
 
@@ -340,11 +343,11 @@ int IOT_HTTP2_Stream_UploadFile(void *handle, const char *file_path, const char 
 ---
 | 参数            | 数据类型                | 方向    | 说明
 |-----------------|-----------------------|---------|---------------------------------------------------------------------
-| handle          | void *                | 输入     | 连接句柄
-| file_path       | const char *          | 输入     | 文件路径
-| identify        | const char *          | 输入     | 服务端流标识
-| header          | header_ext_info_t *   | 输入     | 用户自定义头部
+| handle          | void *                | 输入     | 连接句柄，由调用`IOT_HTTP2_Connect`接口时返回
+| filename       | const char *           | 输入     | 文件名，文件名中只能包含`[0-9][a-z][A-Z]`以及`_.`这些限定字符
+| identify        | const char *          | 输入     | 服务端流通道标识，固定使用字符串`"c/iot/sys/thing/file/upload"`
 | cb              | upload_file_result_cb | 输入     | 发件发送状态回调函数
+| opt             | http2_file_upload_opt_t * | 输入 | 配置选项结构体，目前只提供了文件覆盖选项`UPLOAD_FILE_OPT_BIT_OVERWRITE`
 | user_data       | void *                | 输入     | 带给回调函数的用户数据
 
 返回值说明
@@ -356,11 +359,11 @@ int IOT_HTTP2_Stream_UploadFile(void *handle, const char *file_path, const char 
 
 参数附加说明
 ---
+**回调函数原型**：
 ```
 typedef void (* upload_file_result_cb)(const char *path, int result, void *user_data);
 ```
-result:取值范围:
----
+**result取值范围**:
 ```
 typedef enum {
     UPLOAD_FILE_NOT_EXIST     = -9,
@@ -373,6 +376,19 @@ typedef enum {
     UPLOAD_SUCCESS            = 0,
 } http2_file_upload_result_t;
 ```
+
+**配置选项结构体**
+```
+typedef struct {
+    uint32_t opt_bit_map;
+} http2_file_upload_opt_t;
+```
+**配置选项位定义**
+```
+/* bit define of file override option */
+#define UPLOAD_FILE_OPT_BIT_OVERWRITE       (0x00000001)
+```
+
 -----
 
 ## <a name="IOT_HTTP2_Disconnect">IOT_HTTP2_Disconnect</a>

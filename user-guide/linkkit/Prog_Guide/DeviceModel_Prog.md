@@ -7,38 +7,33 @@
 
 > 物模型管理功能是指SDK能够使能IoT设备接受云端控制台或者手机公版app的控制, 进行属性/事件/服务维度的设置和监控, 在本文的其它地方, 有时也称为"高级版"
 
+> 下面的讲解中使用了示例代码./src/dev_model/examples/linkkit_example_solo.c
+
+**注意**：在Linux环境下，用户可通过修改`wrappers/os/ubuntu/HAL_OS_linux.c`文件中的默认三元组来使用自己在云端控制台创建的设备。我们在`src/dev_model/examples`目录下提供了名为`model_for_example.json`的物模型描述文件，用户可以用自己产品的`productkey`替换掉该文件中的`"productKey"`值，并将该物模型文件导入到云端产品中。这样便能保证例程物模型与用户自建产品物模型的相互匹配。
+
 # <a name="设备属性">设备属性</a>
 
 SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过`IOT_Ioctl`对`IOTX_IOCTL_RECV_EVENT_REPLY`选项进行设备
 
 * 属性上报说明
 
-> 下面的讲解中使用了示例代码./examples/linkkit/linkkit_example_solo.c
-
 用户可以调用IOT_Linkkit_Report()函数来上报属性，属性上报时需要按照云端定义的属性格式使用JSON编码后进行上报。示例中函数`user_post_property`展示了如何使用`IOT_Linkkit_Report`进行属性上报（对于异常情况的上报，详见example）:
 
     void user_post_property(void)
     {
-        static int example_index = 0;
+        static int cnt = 0;
         int res = 0;
-        user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-        char *property_payload = "NULL";
 
-        ...
-        ...
-            /* Normal Example */
-            property_payload = "{\"LightSwitch\":1}";
-            example_index++;
-        ...
-        ...
+        char property_payload[30] = {0};
+        HAL_Snprintf(property_payload, sizeof(property_payload), "{\"Counter\": %d}", cnt++);
 
-        res = IOT_Linkkit_Report(user_example_ctx->master_devid, ITM_MSG_POST_PROPERTY,
+        res = IOT_Linkkit_Report(EXAMPLE_MASTER_DEVID, ITM_MSG_POST_PROPERTY,
                                 (unsigned char *)property_payload, strlen(property_payload));
 
         EXAMPLE_TRACE("Post Property Message ID: %d", res);
     }
 
-> 注：property_payload = "{\"LightSwitch\":1}" 即是将属性编码为JSON对象。
+> 注：property_payload = "{\"Counter\":1}" 即是将属性编码为JSON对象。
 
 * 属性设置说明:
 
@@ -61,17 +56,17 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
 # <a name="设备服务">设备服务</a>
 
-在设备端示例程序中, 当收到服务调用请求时, 会进入如下回调函数:
+在设备端示例程序中, 当收到服务调用请求时, 会进入如下回调函数, 一下代码使用了`cJSON`来解析服务请求的参数值:
 
     static int user_service_request_event_handler(const int devid, const char *serviceid, const int serviceid_len,
-        const char *request, const int request_len,
-        char **response, int *response_len)
+                                                const char *request, const int request_len,
+                                                char **response, int *response_len)
     {
-        int contrastratio = 0, to_cloud = 0;
-        cJSON *root = NULL, *item_transparency = NULL, *item_from_cloud = NULL;
-        EXAMPLE_TRACE("Service Request Received, Devid: %d, Service ID: %.*s, Payload: %s", devid, serviceid_len,
-                    serviceid,
-                    request);
+        int add_result = 0;
+        cJSON *root = NULL, *item_number_a = NULL, *item_number_b = NULL;
+        const char *response_fmt = "{\"Result\": %d}";
+
+        EXAMPLE_TRACE("Service Request Received, Service ID: %.*s, Payload: %s", serviceid_len, serviceid, request);
 
         /* Parse Root */
         root = cJSON_Parse(request);
@@ -80,35 +75,38 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
             return -1;
         }
 
-处理收到的Service ID为**Custom**的服务, 将该服务的输入参数+1赋值给输出参数并返回给云端:
-
-        if (strlen("Custom") == serviceid_len && memcmp("Custom", serviceid, serviceid_len) == 0) {
-            /* Parse Item */
-            const char *response_fmt = "{\"Contrastratio\":%d}";
-            item_transparency = cJSON_GetObjectItem(root, "transparency");
-            if (item_transparency == NULL || !cJSON_IsNumber(item_transparency)) {
+        if (strlen("Operation_Service") == serviceid_len && memcmp("Operation_Service", serviceid, serviceid_len) == 0) {
+            /* Parse NumberA */
+            item_number_a = cJSON_GetObjectItem(root, "NumberA");
+            if (item_number_a == NULL || !cJSON_IsNumber(item_number_a)) {
                 cJSON_Delete(root);
                 return -1;
             }
-            EXAMPLE_TRACE("transparency: %d", item_transparency->valueint);
-            contrastratio = item_transparency->valueint + 1;
+            EXAMPLE_TRACE("NumberA = %d", item_number_a->valueint);
+
+            /* Parse NumberB */
+            item_number_b = cJSON_GetObjectItem(root, "NumberB");
+            if (item_number_b == NULL || !cJSON_IsNumber(item_number_b)) {
+                cJSON_Delete(root);
+                return -1;
+            }
+            EXAMPLE_TRACE("NumberB = %d", item_number_b->valueint);
+
+            add_result = item_number_a->valueint + item_number_b->valueint;
 
             /* Send Service Response To Cloud */
             *response_len = strlen(response_fmt) + 10 + 1;
-            *response = HAL_Malloc(*response_len);
+            *response = (char *)HAL_Malloc(*response_len);
             if (*response == NULL) {
                 EXAMPLE_TRACE("Memory Not Enough");
                 return -1;
             }
             memset(*response, 0, *response_len);
-            HAL_Snprintf(*response, *response_len, response_fmt, contrastratio);
+            HAL_Snprintf(*response, *response_len, response_fmt, add_result);
             *response_len = strlen(*response);
-        } else if (strlen("SyncService") == serviceid_len && memcmp("SyncService", serviceid, serviceid_len) == 0) {
-            ...
-            ...
         }
-        cJSON_Delete(root);
 
+        cJSON_Delete(root);
         return 0;
     }
 
@@ -118,21 +116,11 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
     void user_post_event(void)
     {
-        static int example_index = 0;
         int res = 0;
-        user_example_ctx_t *user_example_ctx = user_example_get_ctx();
-        char *event_id = "Error";
-        char *event_payload = "NULL";
+        char *event_id = "HardwareError";
+        char *event_payload = "{\"ErrorCode\": 0}";
 
-        ...
-        ...
-            /* Normal Example */
-            event_payload = "{\"ErrorCode\":0}";
-            example_index++;
-        ...
-        ...
-
-        res = IOT_Linkkit_TriggerEvent(user_example_ctx->master_devid, event_id, strlen(event_id),
+        res = IOT_Linkkit_TriggerEvent(EXAMPLE_MASTER_DEVID, event_id, strlen(event_id),
                                     event_payload, strlen(event_payload));
         EXAMPLE_TRACE("Post Event Message ID: %d", res);
     }
@@ -170,7 +158,7 @@ IOT_Linkkit_Report(devid, ITM_MSG_POST_PROPERTY, payload, strlen(payload));
 
 ```
 
-上报事件时, 与上报属性的区别是, 事件ID需要单独拿出来, 放在`IOT_Linkkit_TriggerEvent()`的`eventid`中, 而事件的上报内容, 也就是物模型定义中事件的输出参数, 则使用与上报属性相同的格式进行上报, 示例如下:
+上报事件时, 与上报属性的区别是, 事件ID需要单独拿出来, 放在`IOT_Linkkit_TriggerEvent()`的`eventid`中, 而事件的上报内容, 也就是物模型定义中事件的输出参数, 则使用与上报属性相同的格式进行上报, 示例如下:
 ```
 /* 事件ID为Error, 其输出参数ID为ErrorCode, 数据类型为枚举型 */
 char *eventid = "Error";

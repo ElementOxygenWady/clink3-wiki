@@ -1,7 +1,6 @@
 # <a name="目录">目录</a>
 + [例程讲解](#例程讲解)
     * [流传输功能](#流传输功能)
-    * [文件上传功能](#文件上传功能)
 + [H2 Stream功能API](#H2 Stream功能API)
 + [需要实现的HAL接口](#需要实现的HAL接口)
 
@@ -120,67 +119,6 @@
     ret = IOT_HTTP2_Disconnect(handle);
 ```
 
-## <a name="文件上传功能">文件上传功能</a>
-
-> 现对照 `examples/http2/http2_example_uploadfile.c` 例程分步骤讲解如何使用相关API实现http2 流传输功能
-
-1.http2建连.导入设备三元组,url及port, 建立连接,与流传输功能步骤1相同
----
-
-2.准备文件上传异步通知回调函数, 主要用来告知用户文件上传完成或失败
----
-```
-    static int upload_end = 0;
-    void upload_file_result(const char * path,int result, void * user_data)
-    {
-        upload_end ++;
-        EXAMPLE_TRACE("===========path = %s,result =%d,finish num =%d=========", path,result,upload_end);
-
-    }
-```
-
-3.如果需要自定义header, 准备自定义头部
----
-```
-   http2_header header[] = {
-        MAKE_HEADER("test_name", "test_http2_header"),
-        MAKE_HEADER_CS("hello", "world"),
-    };
-
-    header_ext_info_t my_header_info = {
-        header,
-        2
-    };
-
-```
-
-4.调用文件上传接口直接上传文件
----
-```
-    int goal_num = 0;
-    ret = IOT_HTTP2_Stream_UploadFile(handle,"test1.zip","iotx/vision/voice/intercom/live",&my_header_info,
-                                    upload_file_result, NULL);
-    if(ret == 0) {
-        goal_num++;
-    }
-
-    ret = IOT_HTTP2_Stream_UploadFile(handle,"test2.avi","iotx/vision/voice/intercom/live",&my_header_info,
-                                    upload_file_result, NULL);
-    if(ret == 0) {
-        goal_num++;
-    }
-```
-
-5.等待文件传输完成后, 断开连接
----
-```
-    while(upload_end != goal_num) {
-        HAL_SleepMs(200);
-    }
-    ret = IOT_HTTP2_Disconnect(handle);
-```
-
-
 # <a name="H2 Stream功能API">H2 Stream功能API</a>
 
 | 函数名                                                      | 说明
@@ -194,11 +132,7 @@
 | [IOT_HTTP2_Stream_UploadFile](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/HTTP2_Provides#IOT_HTTP2_Stream_UploadFile) | HTTP2会话阶段,异步上传文件, 文件上传成功或失败会通过回调函数通知结果
 
 
-
-
-
 # <a name="需要实现的HAL接口">需要实现的HAL接口</a>
-**以下函数为可选实现, 如果希望SDK提供http2 流功能, 则需要用户对接前8个, 如果需要实现文件传输功能需要额外实现后6个**
 
 | 函数名                                      | 说明
 |---------------------------------------------|-------------------------------------------------------------------------
@@ -210,9 +144,3 @@
 | [HAL_TCP_Establish](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_TCP_Establish)     | 建立一个TCP连接, 包含了域名解析的动作和TCP连接的建立
 | [HAL_TCP_Read](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_TCP_Read)               | 在指定时间内, 从TCP连接读取流数据, 并返回读到的字节数
 | [HAL_TCP_Write](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_TCP_Write)             | 在指定时间内, 向TCP连接发送流数据, 并返回发送的字节数
-| [HAL_Fopen](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fopen)                     | 打开文件
-| [HAL_Fread](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fread)                     | 读取文件数据
-| [HAL_Fwrite](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fwrite)                   | 向文件写入数据
-| [HAL_Fseek](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fseek)                     | 设置文件指针stream的位置
-| [HAL_Fclose](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Fclose)                   | 关闭文件
-| [HAL_Ftell](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/HTTP2_Requires#HAL_Ftell)                     | 得到文件位置指针当前位置相对于文件首的偏移字节数

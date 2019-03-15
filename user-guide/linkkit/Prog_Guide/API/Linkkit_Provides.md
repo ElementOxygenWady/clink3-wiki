@@ -250,6 +250,10 @@ typedef enum {
 + ITM_MSG_POST_RAW_DATA: 设备透传数据上报
 + ITM_MSG_LOGIN: 子设备登录
 + ITM_MSG_LOGOUT: 子设备登出
++ ITM_MSG_DELETE_TOPO: 删除子设备和网关之间的拓扑关系
++ ITM_MSG_REPORT_SUBDEV_FIRMWARE_VERSION: 上报子设备的固件版本号, 用于子设备OTA功能
++ ITM_MSG_PROPERTY_DESIRED_GET: 获取云端缓存的属性值下发, 用于高级版设备影子
++ ITM_MSG_PROPERTY_DESIRED_DELETE: 主动删除云端缓存的属性值, 用于高级版设备影子
 
 -----
 

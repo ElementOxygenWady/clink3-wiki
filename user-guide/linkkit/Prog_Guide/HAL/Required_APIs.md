@@ -108,7 +108,7 @@
     027  HAL_GetDeviceID(在2.3.1及以后版本中不需要实现）
     028  HAL_GetDeviceName
     029  HAL_GetDeviceSecret
-    030  HAL_GetFirmwareVesion
+    030  HAL_GetFirmwareVersion
     031  HAL_GetModuleID
     032  HAL_GetPartnerID
     033  HAL_GetProductKey
@@ -310,7 +310,7 @@
 |-----------------------------------------------------|-----------------------------------------------------------------
 | [HAL_GetChipID](#HAL_GetChipID)                     | 获取芯片ID
 | [HAL_GetDeviceID](#HAL_GetDeviceID)                 | 获取设备ID  (在2.3.1及以后版本中不需要实现）
-| [HAL_GetFirmwareVesion](#HAL_GetFirmwareVesion)     | 获取固件版本号, 必须实现
+| [HAL_GetFirmwareVersion](#HAL_GetFirmwareVersion)     | 获取固件版本号, 必须实现
 | [HAL_GetModuleID](#HAL_GetModuleID)                 | 获取模组ID, 用于紧密合作伙伴, 一般客户只需要在此可实现为空函数
 | [HAL_GetPartnerID](#HAL_GetPartnerID)               | 获取合作伙伴ID, 用于紧密合作伙伴, 一般客户只需要在此可实现为空函数
 | [HAL_GetDeviceName](#HAL_GetDeviceName)             | 获取DeviceName, 三元组获取函数之一, 必须实现

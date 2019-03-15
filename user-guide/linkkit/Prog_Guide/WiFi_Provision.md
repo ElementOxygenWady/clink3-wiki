@@ -1,172 +1,90 @@
 # <a name="目录">目录</a>
-    * [ 配网的定义 ](# 配网的定义 )
-    * [AWSS用户API](#AWSS用户API)
-    * [AWSS用户API详解](#AWSS用户API详解)
-        - [awss_start](#awss_start)
-        - [awss_config_press](#awss_config_press)
-        - [awss_stop](#awss_stop)
-        - [awss_report_set](#awss_report_set)
-    * [AWSS示例](#AWSS示例)
-    * [需要实现的HAL接口](#需要实现的HAL接口)
++ [功能概述](#功能概述)
++ [现有方案](#现有方案)
++ [配网通用HAL移植说明](#配网通用HAL移植说明)
+    * [配网依赖的Linkkit SDK公共HAL](#配网依赖的Linkkit SDK公共HAL)
+    * [配网模块公共HAL](#配网模块公共HAL)
 
-------
-## <a name=" 配网的定义 "> 配网的定义 </a>
-![image](http://git.cn-hangzhou.oss-cdn.aliyun-inc.com/uploads/Apsaras64/pub/4b7616e37b9b2eecbd2d3664190d018e/image.png)
-用户拿到一个新设备时, 需要添加设备来建立用户和设备的绑定关系, 而添加设备的整个流程分成三个步骤, 如上图所示:
-> - -用户添加设备前置步骤
-> - -设备配网(**AWSS: Alibaba Wireless Setup Service**)
-> - -用户与设备绑定
+# <a name="功能概述">功能概述</a>
 
-大家有可能误以为用户添加设备的整个流程都是配网. 其实, 配网仅仅是把路由器**AP**的**SSID**和**PASSWD**告诉设备, 然后设备连接上路由器, 不包括用户添加设备的前置操作和后续的绑定操作. 另外, **AWSS**已经完全开源, 可以从 **AliOS Things** 仓库获得**AWSS**的源码(https://github.com/alibaba/AliOS-Things.git, **branch: rel_2.0.0**)
+WiFi设备需要连接到WiFi热点(WiFi AP)之后才能与其它设备进行基于IP的通信, 我们将WiFi设备获取到WiFi热点的SSID/密码的步骤称为WiFi配网
 
-------
+对于手机/电脑/平板而言, 用户可以通过键盘或者触摸屏输入WiFi热点的SSID/密码
 
-## <a name="AWSS用户API">AWSS用户API</a>
-| 函数名                                                      | 说明
-|-------------------------------------------------------------|---------------------------------------------------------
-| [awss_start](#awss_start)                     | 启动**AWSS**服务(未使能), **AWSS**采用**AES128**保证数据安全, 加解密依赖于设备四元组, 启动**AWSS**服务之前先确认设备四元组(`DeviceName + DeviceSecret + ProductKey + ProductSecret`)已经成功烧录
-| [awss_config_press](#awss_config_press)     | 使能**AWSS**服务,启动**AWSS**服务用户设备发现和扫描周围的**AP**列表, 只有使能后, **AWSS**才会真正解析**AWSS**包, 并且使能**AWSS**只作用一段时间(具体时间由用户对接的**HAL_Awss_Get_Timeout_Interval_Ms**决定), 超时之后用户需要再次使能**AWSS**.
-| [awss_stop](#awss_stop)                   | 停止**AWSS**服务
-| [awss_report_reset](#awss_report_reset)                       | **AWSS**上报设备恢复出厂设置到云端, 云端解除设备与用户的绑定关系
-------
+但是对于没有键盘, 没有触摸屏的IoT设备而言, 如何获取WiFi热点的SSID/密码是实现设备网络管理的第一个关键步骤
 
-## <a name="AWSS用户API详解">AWSS用户API详解</a>
-### <a name="awss_start">awss_start</a>
+<img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/3.0.1_awss/1.png" width="700" height="150" />
 
-原型
+为了节约WiFi设备厂商开发配网方案的开发成本, 阿里为WiFi类型的IoT设备提供了几种配网方案, 设备厂商可以根据自己的需要相应集成
+
+注:
 ---
-```
-int awss_start();
-```
++ 目前阿里提供的配网方案仅针对WiFi家庭网络(即设备使用SSID/密码连接一个WiFi热点), 暂不支持对WiFi企业网络场景进行配网(使用SSID/用户名/密码方式连接WiFi热点)
++ 如果设备可以通过触摸屏/键盘, 或其它方式获取到AP热点的SSID/密码, 可以不用移植下面的配网方案, 因为下面的配网方案的移植工作量和难度都并不小
 
-接口说明
----
-启动**AWSS**服务, 用于设备发现和扫描周围的**AP**列表, 仅仅启动**AWSS**服务, **AWSS**不会解析配网包, 只有使能**AWSS**后, **AWSS**才会真正配网包. 另外, 由于**AWSS**采用**AES128**保证数据的安全性, 而**AES128**的密钥依赖于设备四元组信息(`DeviceName + DeviceSecret + ProductKey + ProductSecret`), 在启动**AWSS**之前一定要确保设备的四元组信息已经烧录成功, 否则AWSS无法正确解析出**SSID**和**PASSWD**
+# <a name="现有方案">现有方案</a>
 
-返回值说明
----
-| 值      | 说明
-|---------|---------
-| 0       | 成功
-| < 0     | 失败
----
-### <a name="awss_config_press">awss_config_press</a>
-
-原型
----
-```
-int awss_config_press();
-```
-
-接口说明
----
-使能**AWSS**服务, 只有启动并使能**AWSS**后, **AWSS**才会真正配网包
-
-返回值说明
----
-| 值      | 说明
-|---------|---------
-| 0       | 成功
-| < 0     | 失败
+现有的C-SDK中已支持如下的几种WiFi配网模式
 ---
 
-### <a name="awss_stop">awss_stop</a>
++ 一键配网(`smartconfig`): 手机app直接给IoT设备配网, 设备需能够工作在嗅探(sniffer)状态
++ 手机热点配网(`phone-as-ap`): 手机app充当临时热点, 直接给IoT设备配网
++ 路由器热点配网(`router-ap`): 输出到路由器厂商/通信运营商
++ 零配(`zeroconfig`): 用已配网的IoT设备给其它的IoT设备配网
++ 设备热点配网(`dev-ap`): IoT设备充当临时热点, 手机app连接设备热点为其配网, 设备需能够工作在热点(ap)状态
 
-原型
+<img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/3.0.1_awss/1-2.png" width="900" height="600" />
+
+
+# <a name="配网通用HAL移植说明">配网通用HAL移植说明</a>
+
+设备端针对不同的配网方式需要实现的HAL函数有一定区别。其中部分HAL是SDK公共的,部分HAL是配网模块独有但是所有配网方式公共的，本文档列举所有公共部分HAL，即配网能工作必须要实现的HAL;针对每种不同的配网模式分特有的HAL将在每种配网模式中进行单独列举。
+
+## <a name="配网依赖的Linkkit SDK公共HAL">配网依赖的Linkkit SDK公共HAL</a>
+
+|  序号  |  函数名            |  说明                                    |
+|-------|-------------------|------------------------------------------|
+|  1   | [HAL_MutexCreate](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MultiThread_Requires#HAL_MutexCreate)   |   创建一个互斥量对象, 返回指向所创建互斥量的指针, 用于同步访问, 对于仅支持单线程应用, 可实现为空函数             |
+|  2   | [HAL_MutexDestroy](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MultiThread_Requires#HAL_MutexDestroy)    |  销毁一个互斥量对象, 释放资源              |
+|  3   | [HAL_MutexLock](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MultiThread_Requires#HAL_MutexLock)    |     锁住一个互斥量           |
+|  4   | [HAL_MutexUnlock](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MultiThread_Requires#HAL_MutexUnlock)    |   解锁一个互斥量             |
+|  5   |   [HAL_UptimeMs](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_UptimeMs)  |  获取设备从上电到当前时刻所经过的毫秒数              |
+|  6   |    [HAL_Malloc](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Malloc) |   申请一块堆内存             |
+|  7   |   [HAL_Free](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Free)  | 释放参数ptr指向的一块堆内存, 当传入的参数为NULL时不执行任何操作               |
+|  8   |   [HAL_SleepMs](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_SleepMs)  |  睡眠函数, 使当前执行线程睡眠指定的毫秒数              |
+|  9   |  [HAL_GetProductKey](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_GetProductKey)   |  获取设备的ProductKey, 用于标识设备的品类, 四元组之一              |
+|  10   |  [HAL_GetProductSecret](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_GetProductSecret)   | 获取设备的ProductSecret, 用于标识设备的品类, 四元组之一               |
+|  11  |    [HAL_GetDeviceName](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_GetDeviceName) |  获取设备的DeviceName, 用于标识设备单品的名字, 四元组之一              |
+|  12   |    [HAL_GetDeviceSecret](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_GetDeviceSecret) | 获取设备的DeviceSecret, 用于标识设备单品的密钥, 四元组之一               |
+|  13  |   [HAL_Kv_Set](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Kv_Set)  |   Flash中写入键值对（Key-Value）             |
+|  14  |   [HAL_Kv_Get](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Kv_Get)  |   Flash中读取键值对的Value             |
+|  15  |   [HAL_Aes128_Init](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Aes128_Init)  |   初始化AES加密的结构体             |
+|  16  |    [HAL_Aes128_Destroy](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Aes128_Destroy) |   销毁AES加密的结构体             |
+|  17  |    [HAL_Aes128_Cbc_Decrypt](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Aes128_Cbc_Decrypt) |   以AES-CBC-128方式, 根据HAL_Aes128_Init()时传入的密钥解密指定的密文             |
+|  18  |   [HAL_Aes128_Cfb_Decrypt](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Aes128_Cfb_Decrypt)  |   以AES-CFB-128方式, 根据HAL_Aes128_Init()时传入的密钥解密指定的密文             |
+|   19   |   [HAL_Timer_Create](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Timer_Create)   |  根据Name、TimerFunc和用户上下文创建Timer              |
+|   20   |  [HAL_Timer_Start](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Timer_Start)    |  Timer开始计时，Timer超时时调用回调函数TimerFunc              |
+|  21   |   [HAL_Timer_Stop](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Timer_Stop)   |    停止Timer计时            |
+|  22   |  [HAL_Timer_Delete](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Timer_Delete)    |  删除Timer，释放资源    
+注：
 ---
-```
-int awss_stop();
-```
++ 包括配网模块在内的SDK公用HAL
 
-接口说明
+## <a name="配网模块公共HAL">配网模块公共HAL</a>
+|  序号  |  函数名            |  说明                                    |
+|-------|-------------------|------------------------------------------|
+          |
+|  1   |   [HAL_Awss_Get_Timeout_Interval_Ms](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Get_Timeout_Interval_Ms)   |  获取配网服务(AWSS)的超时时间长度, 单位是毫秒              |
+|  2   |   [HAL_Sys_Net_Is_Ready](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Sys_Net_Is_Ready)   |  检查Wi-Fi网卡、芯片或模组当前的IP地址是否有效              |
+|  3  |   [HAL_Wifi_Get_Ap_Info](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Get_Ap_Info)   |   获取设备所连接的热点(Access Point)的信息             |
+|  4  |  [HAL_Awss_Close_Monitor](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Close_Monitor)    |  关闭监听(Monitor)模式              |
+|  5  |   [HAL_Awss_Open_Monitor](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Open_Monitor)   |   设备工作在监听(Monitor)模式, 并在收到802.11帧的时候调用被传入的回调函数（包括管理帧和数据帧）             |
+|  6  |   [HAL_Awss_Switch_Channel](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Switch_Channel)   |   设置Wi-Fi设备切换到指定的信道(channel)上             |
+|  7  |   [HAL_Awss_Get_Channelscan_Interval_Ms](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Get_Channelscan_Interval_Ms)   |   获取在每个信道(channel)上扫描的时间长度, 单位是毫秒             |
+|  8  |   [HAL_Wifi_Get_Mac](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Get_Mac)   |   获取设备的MAC地址, 格式应当是"XX:XX:XX:XX:XX:XX"             |
+|  9  |   [HAL_Awss_Get_Conn_Encrypt_Type](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Get_Conn_Encrypt_Type)   |   获取基于连接的配网服务(热点配网/路由器配网/零配)的安全等级             |
+|  10  |   [HAL_Awss_Connect_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Connect_Ap)   |  要求Wi-Fi网卡连接指定热点(Access Point)的函数，bssid指定特定AP，另外bssid也可能为空或无效值（全0或全0xff）               |
+
+注：
 ---
-停止**AWSS**服务, **awss_start**和**awss_stop**都是**Block**操作, 请使用时不要再一个线程中使用, 否则会造成死锁
-
-返回值说明
----
-| 值      | 说明
-|---------|---------
-| 0       | 成功
-| < 0     | 失败
----
-### <a name="awss_report_set">awss_report_set</a>
-
-原型
----
-```
-int awss_report_set();
-```
-
-接口说明
----
-**AWSS**向服务器上报恢复出厂操作, 云端收到此消息后解除设备与用户之间的绑定关系
-厂家自己需要清除的信息, 如**SSID**和**PASSWD**需要厂商自己清除.
-
-返回值说明
----
-| 值      | 说明
-|---------|---------
-| 0       | 成功
-| < 0     | 失败
----
-
-## <a name="AWSS示例">AWSS示例</a>
-------
-```
-uint8_t bssid[ETH_ALEN] = {0};
-char ssid[HAL_MAX_SSID_LEN] = {0};
-char passwd[HAL_MAX_PASSWORD_LEN] = {0};
-
-// die or chipset uses itself API to get ssid/passwd/bssid
-
-if (INVALID_SSID(ssid) || INVALID_BSSID(bssid) || AP_NOT_EXIST(ssid, bssid) {
-    awss_start();
-} else {
-    HAL_Awss_Connect_Ap(TIMEOUT_MS, ssid, passwd, 0, 0, bssid, 0);
-}
-```
-------
-## <a name="需要实现的HAL接口">需要实现的HAL接口</a>
-以下函数在**AliOS Things**已经实现, 如果希望单独使用**SDK**, 则需要用户对接**
-
-| 函数名                                      | 说明
-|---------------------------------------------|-------------------------------------------------------------------------
-| [HAL_Awss_Open_Monitor](#HAL_Awss_Open_Monitor)         | 设备工作在监听(**Monitor**)模式, 并在收到**802.11**帧的时候调用被传入的回调函数(包括管理帧和数据帧)
-| [HAL_Awss_Close_Monitor](#HAL_Awss_Close_Monitor)     | 关闭监听(**Monitor**)模式, 并开始以站点(**Station**)模式工作
-| [HAL_Awss_Connect_Ap](#HAL_Awss_Connect_Ap)               | 要求设备连接指定热点(**Access Point**)的函数
-| [HAL_Awss_Get_Channelscan_Interval_Ms](#HAL_Awss_Get_Channelscan_Interval_Ms)             | 获取在每个信道(**Channel**)上扫描的时间长度, 单位是毫秒
-| [HAL_Awss_Get_Timeout_Interval_Ms](#HAL_Awss_Get_Timeout_Interval_Ms)         | 获取配网服务(**AWSS**)的超时时间长度, 单位是毫秒
-| [HAL_Awss_Switch_Channel](#HAL_Awss_Switch_Channel)     | 设置**Wi-Fi**设备切换到指定的信道(**Channel**)上
-| [HAL_Wifi_Scan](#HAL_Wifi_Scan)               | 启动一次**Wi-Fi**的空中扫描(**Scan**)
-| [HAL_Wifi_Send_80211_Raw_Frame](#HAL_Wifi_Send_80211_Raw_Frame)             | 在当前信道(**Channel**)上以基本数据速率(**1Mbps**)发送裸的**802.11**帧(**RAW 802.11 Frame**)
-| [HAL_Wifi_Enable_Mgmt_Frame_Filter](#HAL_Wifi_Enable_Mgmt_Frame_Filter)                   | 在站点(**Station**)模式下使能或禁用对管理帧的过滤
-| [HAL_Wifi_Get_Ap_Info](#HAL_Wifi_Get_Ap_Info)                 | 获取设备所连接的热点(**Access Point**)的信息
-| [HAL_Sys_Net_Is_Ready](#HAL_Sys_Net_Is_Ready)                 | 检查**Wi-Fi**网卡/芯片或模组当前的**IP**地址是否有效
-
----
-除了这些专门的**HAL**之外, **AWS**S还使用了系统的**HAL**:
-
-| 函数名                                      | 说明
-|---------------------------------------------|-------------------------------------------------------------------------
-| [HAL_GetDeviceName](#HAL_GetDeviceName)         | 获取设备的**DeviceName**, 用于标识设备单品的名字, 四元组之一
-| [HAL_GetDeviceSecret](#HAL_GetDeviceSecret)         | 获取设备的**DeviceSecret**, 用于标识设备单品的名字, 四元组之一
-| [HAL_GetProductKey](#HAL_GetProductKey)         | 获取设备的**ProductKey**, 用于标识设备单品的名字, 四元组之一
-| [HAL_GetProductSecret](#HAL_GetProductSecret)         | 获取设备的**ProductSecret**, 用于标识设备单品的名字, 四元组之一
-| [HAL_Aes128_Init](#HAL_Aes128_Init)         | 初始化**AES**加密的结构体
-| [HAL_Aes128_Destroy](#HAL_Aes128_Destroy)         | 销毁**AES**加密的结构体
-| [HAL_Aes128_Cfb_Encrypt](#HAL_Aes128_Cfb_Encrypt)         | 以**AES-CFB-128**方式, 根据**HAL_Aes128_Init()**时传入的密钥加密指定的明文
-| [HAL_Aes128_Cfb_Decrypt](#HAL_Aes128_Cfb_Decrypt)         | 以**AES-CFB-128**方式, 根据**HAL_Aes128_Init()**时传入的密钥解密指定的密文
-| [HAL_Aes128_Cbc_Encrypt](#HAL_Aes128_Cbc_Encrypt)         | 以**AES-CBC-128**方式, 根据**HAL_Aes128_Init()**时传入的密钥加密指定的明文
-| [HAL_Aes128_Cbc_Decrypt](#HAL_Aes128_Cbc_Decrypt)         | 以**AES-CBC-128**方式, 根据**HAL_Aes128_Init()**时传入的密钥解密指定的密文
-| [HAL_Timer_Create](#HAL_Timer_Create)         | 根据**Name**/**TimerFunc**和用户上下文创建**Timer**
-| [HAL_Timer_Start](#HAL_Timer_Start)         | **Timer**开始计时, **Time**r超时时调用回调函数**TimerFunc**
-| [HAL_Timer_Stop](#HAL_Timer_Stop)         | 停止**Timer计**时
-| [HAL_Timer_Delete](#HAL_Timer_Delete)         | 删除**Timer**, 释放资源
-| [HAL_Kv_Set](#HAL_Kv_Set)         | **Flash**中写入键值对(**Key-Value**)
-| [HAL_Kv_Get](#HAL_Kv_Get)         | **Flash**中读取键值对的**Value**
-| [HAL_Kv_Del](#HAL_Kv_Del)         | 删除**Flash**中的键值对
-| [HAL_Kv_Erase_All](#HAL_Kv_Erase_All)         | 擦除存储键值对的整个区域
-| [HAL_Wifi_Get_IP](#HAL_Wifi_Get_IP)         | 获取设备的**IP**地址, 点分十进制格式保存在字符串数组出参, 二进制格式则作为返回值, 并以网络字节序(大端)表达
-| [HAL_Wifi_Get_Mac](#HAL_Wifi_Get_Mac)         | 获取设备的**MAC**地址, 格式应当是**"XX:XX:XX:XX:XX:XX"**
----
-
++ 配网通用HAL，仅配网模块调用

@@ -1,6 +1,6 @@
 # <a name="目录">目录</a>
 + [例程讲解](#例程讲解)
-    * [初始化前配置](#初始化前配置)
+    * [编译配置和相关文件](#编译配置和相关文件)
     * [建连与身份认证](#建连与身份认证)
     * [发送消息](#发送消息)
     * [接收消息](#接收消息)
@@ -13,21 +13,14 @@
 
 # <a name="例程讲解">例程讲解</a>
 
-## <a name="初始化前配置">初始化前配置</a>
+## <a name="编译配置和相关文件">编译配置和相关文件</a>
 
-目前CoAP协议已支持一型一密，在CoAP首次建连前会先使用HTTP去认证服务器获取设备的`DeviceSecret`，并将获取到的`DeviceSecret`做持久化存储，以便下次建连时使用。启用一型一密的方法如下。
-```
-    /* 将dynamic_register配置为1以启用一型一密 */
-    int dynamic_register = 1;
-    int ret = 0;
+在linux环境中，运行`make menuconfig`，选中`FEATURE_COAP_COMM_ENABLED`后保存退出；运行`make`即可编译出CoAP例程。
 
-    IOT_Ioctl(IOTX_IOCTL_SET_DYNAMIC_REGISTER, (void *)&dynamic_register);
-    ret = IOT_SetupConnInfo(IOTX_PRODUCT_KEY, IOTX_DEVICE_NAME, IOTX_DEVICE_SECRET, NULL);
-    if (ret == FAIL_RETURN) {
-        HAL_Printf("IoTx CoAP setup info failed\r\n");
-        return 0;
-    }
-```
+SDK的CoAP功能源码存放在`src/coap`中；
+SDK提供CoAP用户层接口包含在`src/coap/coap_api.h`中；
+CoAP需要用到用户实现的HAL接口包含在`src/coap/coap_wrapper.h`中；
+CoAP例程路径为`src/coap/examples/coap_example.c`。
 
 ## <a name="建连与身份认证">建连与身份认证</a>
 

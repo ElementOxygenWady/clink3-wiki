@@ -1,11 +1,21 @@
 # <a name="目录">目录</a>
+    * [编译配置和相关文件](#编译配置和相关文件)
 + [例程讲解](#例程讲解)
 + [HTTP功能API](#HTTP功能API)
 + [需要实现的HAL](#需要实现的HAL)
 
+## <a name="编译配置和相关文件">编译配置和相关文件</a>
+
+在linux环境中，运行`make menuconfig`，选中`FEATURE_HTTP_COMM_ENABLED`后保存退出；运行`make`即可编译出HTTP例程。
+
+SDK的HTTP功能源码存放在`src/http`中；
+SDK提供HTTP用户层接口包含在`src/http/http_api.h`中；
+HTTP需要用到用户实现的HAL接口包含在`src/http/http_wrapper.h`中；
+HTTP例程路径为`src/http/examples/http_example.c`。
+
 # <a name="例程讲解">例程讲解</a>
 HTTP只适用于设备端向上报属性和事件的场景, 如果产品需要支持服务, 那么不应该选择HTTP
-当前SDK中默认都是开启了TLS功能, 因此下文的部分说明中用到了HTTPS来表示HTTP+TLS
+当前SDK中默认都是开启了TLS功能, 因此下文的部分说明中用到了HTTPS来表示HTTP+TLS
 
 > 现对照 `examples/http/http_example.c` 例程分步骤讲解如何使用这几个API往云端上报数据
 

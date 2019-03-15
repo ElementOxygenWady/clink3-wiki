@@ -21,13 +21,11 @@
     * [HAL_Wifi_Get_Ap_Info](#HAL_Wifi_Get_Ap_Info)
     * [HAL_Wifi_Get_IP](#HAL_Wifi_Get_IP)
     * [HAL_Wifi_Get_Mac](#HAL_Wifi_Get_Mac)
-    * [HAL_Wifi_Get_Os_Version](#HAL_Wifi_Get_Os_Version)
-    * [HAL_Wifi_Get_Rssi_Dbm](#HAL_Wifi_Get_Rssi_Dbm)
     * [HAL_Wifi_Low_Power](#HAL_Wifi_Low_Power)
     * [HAL_Wifi_Scan](#HAL_Wifi_Scan)
     * [HAL_Wifi_Send_80211_Raw_Frame](#HAL_Wifi_Send_80211_Raw_Frame)
-    * [HAL_Config_Read](#HAL_Config_Read)
-    * [HAL_Config_Write](#HAL_Config_Write)
+    * [HAL_Awss_Open_Ap](#HAL_Awss_Open_Ap)
+    * [HAL_Awss_Close_Ap](#HAL_Awss_Close_Ap)
 
 # <a name="WiFi配网相关HAL接口详解">WiFi配网相关HAL接口详解</a>
 
@@ -661,52 +659,6 @@ char *HAL_Wifi_Get_Mac(_OU_ char mac_str[HAL_MAC_LEN]);
 
 -----
 
-## <a name="HAL_Wifi_Get_Os_Version">HAL_Wifi_Get_Os_Version</a>
-
-原型
----
-```
-char *HAL_Wifi_Get_Os_Version(_OU_ char version_str[STR_SHORT_LEN]);
-```
-
-接口说明
----
-获取Wi-Fi模块上的操作系统版本字符串（该API已经废弃，不用对接）
-
-参数说明
----
-| 参数            | 数据类型| 方向    | 说明
-|-----------------|---------|---------|-----------------------------
-| version_str     | char[]  | 输出    | 存放版本字符串的缓冲区数组
-
-返回值说明
----
-指向缓冲区数组的起始地址
-
------
-
-## <a name="HAL_Wifi_Get_Rssi_Dbm">HAL_Wifi_Get_Rssi_Dbm</a>
-
-原型
----
-```
-int HAL_Wifi_Get_Rssi_Dbm(void);
-```
-
-接口说明
----
-获取Wi-Fi的接受信号强度(`RSSI`)（该API已经废弃，不用对接）
-
-参数说明
----
-void
-
-返回值说明
----
-信号强度数值, 单位为dBm
-
------
-
 ## <a name="HAL_Wifi_Low_Power">HAL_Wifi_Low_Power</a>
 
 原型
@@ -801,58 +753,60 @@ typedef enum HAL_Awss_Frame_Type {
 | = 0     | 发送成功
 | = -1    | 发送失败
 
-## <a name="HAL_Config_Read">HAL_Config_Read</a>
-
-原型
----
-```
-int HAL_Config_Read(_IN_ char *buffer, _IN_ int length);
-```
-
-接口说明
----
-在设备的持久化外部存储器比如Flash上, 从配置区域起始位置读取数据到指定的内存缓冲区中（该API已经废弃，不用对接）
-
-参数说明
----
-| 参数    | 数据类型| 方向    | 说明
-|---------|---------|---------|-----------------------------------------
-| buffer  | char *  | 输出    | 存放读取配置信息的缓冲区起始地址
-| length  | int     | 输入    | 将要读取的数据长度, 单位是字节(Byte)
-
-返回值说明
----
-| 值  | 说明
-|-----|-------------
-| 0   | 读取成功
-| -1  | 读取失败
-
 -----
 
-## <a name="HAL_Config_Write">HAL_Config_Write</a>
+## <a name="HAL_Awss_Open_Ap">HAL_Awss_Open_Ap</a>
 
 原型
 ---
 ```
-int HAL_Config_Write(_IN_ const char *buffer, _IN_ int length);
+int HAL_Awss_Open_Ap(const char *ssid, const char *passwd, int beacon_interval, int hide);
 ```
 
 接口说明
 ---
-在设备的持久化外部存储器比如Flash上, 把指定的内存缓冲区向配置区域起始位置写入（该API已经废弃，不用对接）
+开启设备热点（SoftAP模式）
 
 参数说明
 ---
 | 参数    | 数据类型| 方向    | 说明
 |---------|---------|---------|-----------------------------------------
-| buffer  | char *  | 输入    | 存放要写到外存的数据的缓冲区
-| length  | int     | 输入    | 将要写入的数据长度, 单位是字节(Byte)
+| ssid  | const char * | 输入    | 热点的ssid字符
+| passwd  | const char *    | 输入    | 热点的passwd字符
+|beacon_interval | int | 输入 | 热点的Beacon广播周期（广播间隔）
+| hide    |   int | 输入 | 0, 非隐藏, 其它值：隐藏；
+返回值说明
+---
+| 值  | 说明
+|-----|-------------
+| 0   | success
+| -1  | unsupported
+| -2  | failure with system error
+| -3  | failure with no memory
+| -4  | failure with invalid parameters
+-----
+
+## <a name="HAL_Awss_Close_Ap">HAL_Awss_Close_Ap</a>
+
+原型
+---
+```
+int HAL_Awss_Close_Ap(void);
+```
+
+接口说明
+---
+关闭设备热点
+
+参数说明
+---
+void
 
 返回值说明
 ---
 | 值  | 说明
 |-----|-------------
-| 0   | 写入成功
-| -1  | 写入失败
-
+| 0   | success
+| -1  | unsupported
+| -2  | failure 
 -----

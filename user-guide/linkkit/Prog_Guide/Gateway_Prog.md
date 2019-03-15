@@ -10,7 +10,7 @@
 
 # <a name="例程讲解">例程讲解</a>
 
-本节内容以`example/linkkit_gateway/linkkit_example_gateway.c`为例讲解网关产品的编程方法
+本节内容以`src/dev_model/examples/linkkit_example_gateway.c`为例讲解网关产品的编程方法
 
 ## <a name="名词说明">名词说明</a>
 
@@ -72,13 +72,15 @@
         return -1;
     }
 ```
-5. 在`ITE_INITIALIZE_COMPLETED`事件处理函数中确认网关连云初始化完成后, 便可以进行下一步添加子设备的操作
+5. 在`ITE_INITIALIZE_COMPLETED`事件处理函数中确认网关连云初始化完成后, 便可以进行下一步添加子设备的操作。
+
+**注意**：不要在步骤1中注册的回调函数中进行会阻塞线程操作，如调用`IOT_Linkkit_Connect`进行子设备建连，调用`IOT_Linkkit_Report`进行子设备上下线等。
 
 ## <a name="添加子设备">添加子设备</a>
 
 添加子设备主要由3个步骤完成,
 
-1. 使用`IOTX_LINKKIT_DEV_TYPE_SLAVE`参数调用`IOT_Linkkit_Open`初始化子设备资源
+1. 使用`IOTX_LINKKIT_DEV_TYPE_SLAVE`参数调用`IOT_Linkkit_Open`初始化子设备资源.
     > 如果需要使用动态注册, 只需要将设备信息参数的`device_secret`配置为空字符串即可. 启用动态注册功能需要把子设备的DeviceName事先在物联网控制台预注册
 2. 调用`IOT_Linkkit_Connect`将子设备连上云端, 这个接口为同步接口, 会自动完成子设备注册和拓扑关系的添加
 3. 使用`ITM_MSG_LOGIN`参数调用`IOT_Linkkit_Report`完成子设备上线操作
@@ -110,6 +112,8 @@ int example_add_subdev(iotx_linkkit_dev_meta_info_t *meta_info)
     return res;
 }
 ```
+**注意**：
+使用相同`ProductKey`, `DeviceName`重复调用`IOT_Linkkit_Open`初始化子设备资源，将返回相同的`devid`，SDK不会重复创建子设备资源。因此，在子设备创建成功后，用户可通过重复调用`IOT_Linkkit_Open`来查询`ProductKey`, `DeviceName`对应的子设备`devid`。
 
 ## <a name="子设备管理相关">子设备管理相关</a>
 
@@ -127,10 +131,105 @@ int example_add_subdev(iotx_linkkit_dev_meta_info_t *meta_info)
 
 + 注销子设备: SDK不提供注销子设备的API, 防止因用户错误调用导致子设备被意外删除
 
-+ 删除子设备拓扑关系: SDK不提供删除拓扑关系的API
++ 删除子设备拓扑关系: SDK提供了删除拓扑关系的API，用户可以用`ITM_MSG_DELETE_TOPO`选项调用`IOT_Linkkit_Report`以删除参数`devid`指定的子设备拓扑关系。
 
-+ 子设备OTA：详情请见[子设备OTA的设计与用例说明文档](http://gitlab.alibaba-inc.com/Apsaras64/pub/wikis/Linkkit_Iterations/V231/SubDev_OTA)
++ 子设备OTA：用户使用`IOT_Ioctl`配置要升级的子设备，再用`IOT_Linkkit_Query`来触发子设备升级
 
+
+调用IOT_RegisterCallback注册固件升级所用的回调函数user_fota_event_handler
+
+```
+IOT_RegisterCallback(ITE_FOTA, user_fota_event_handler);
+IOT_RegisterCallback(ITE_INITIALIZE_COMPLETED, user_initialized);
+```
+
+使用IOTX_LINKKIT_DEV_TYPE_MASTER参数调用IOT_Linkkit_Open初始化主设备资源
+
+```
+iotx_linkkit_dev_meta_info_t master_meta_info;
+
+memset(&master_meta_info, 0, sizeof(iotx_linkkit_dev_meta_info_t));
+memcpy(master_meta_info.product_key, PRODUCT_KEY, strlen(PRODUCT_KEY));
+memcpy(master_meta_info.product_secret, PRODUCT_SECRET, strlen(PRODUCT_SECRET));
+memcpy(master_meta_info.device_name, DEVICE_NAME, strlen(DEVICE_NAME));
+memcpy(master_meta_info.device_secret, DEVICE_SECRET, strlen(DEVICE_SECRET));
+
+/* Create Master Device Resources */
+user_example_ctx->master_devid = IOT_Linkkit_Open(IOTX_LINKKIT_DEV_TYPE_MASTER, &master_meta_info); 
+if (user_example_ctx->master_devid < 0) {
+    EXAMPLE_TRACE("IOT_Linkkit_Open Failed\n");
+    return -1;
+}
+```
+
+调用IOT_Linkkit_Connect与云端建立连接
+
+```
+/* Start Connect Aliyun Server */
+res = IOT_Linkkit_Connect(user_example_ctx->master_devid);
+if (res < 0) {
+    EXAMPLE_TRACE("IOT_Linkkit_Connect Failed\n");
+    return -1;
+}
+```
+
+添加子设备，进行子设备OTA
+
+```
+/* Add subdev */
+while (user_example_ctx->subdev_index < EXAMPLE_SUBDEV_ADD_NUM) {
+    if (user_example_ctx->master_initialized && user_example_ctx->subdev_index >= 0 &&
+        (0 == current_ota_running) && (user_example_ctx->auto_add_subdev == 1 || user_example_ctx->permit_join != 0)) {
+        /* Add next subdev */
+        if (example_add_subdev((iotx_linkkit_dev_meta_info_t *)&subdevArr[user_example_ctx->subdev_index]) == SUCCESS_RETURN) {
+            EXAMPLE_TRACE("subdev %s add succeed", subdevArr[user_example_ctx->subdev_index].device_name);
+        } else {
+            EXAMPLE_TRACE("subdev %s add failed", subdevArr[user_example_ctx->subdev_index].device_name);
+        }
+        user_example_ctx->subdev_index++;
+        user_example_ctx->permit_join = 0;
+        /* check each sub dev has remote ota message */
+        do_subdev_ota(user_example_ctx->subdev_index);
+        /* wait remote ota message */
+        HAL_SleepMs(10000);
+    }
+}
+```
+
+do_subdev_ota函数详解：
+
+用户通过`IOT_Ioctl`这个接口来切换OTA通道为某个子设备(以devid区分)使用。`切换后，只有这个子设备的升级消息能够被接收到`。同时通过`IOT_Linkkit_Query`接口向云端查询是否有适合当前子设备的固件版本信息，如果有则走入OTA流程（触发用户自定义的OTA回调函数user_fota_event_handler）
+
+```
+void do_subdev_ota(int devid)
+{
+    if (status_list[devid] == SUB_OTA_SUCCESS) {
+        HAL_Printf("current devid is %d, its has checked remote ota message, skip\n", devid);
+        return;
+    }
+
+    if (current_ota_running == 1) {
+        return;
+    }
+
+    HAL_Printf("current devid running ota is %d\n", devid);
+    int ota_result = 0;
+    ota_result = IOT_Ioctl(IOTX_IOCTL_SET_OTA_DEV_ID, (void *)(&devid));
+    if (0 != ota_result) {
+        status_list[devid] = SUB_OTA_FAILED_SET_DEV_ID;
+        HAL_Printf("IOTX_IOCTL_SET_OTA_DEV_ID failed, id is %d\n", devid);
+        return;
+    }
+    ota_result = IOT_Linkkit_Query(devid, ITM_MSG_REQUEST_FOTA_IMAGE, (unsigned char *)current_subdev_version,
+                                   strlen(current_subdev_version));
+    HAL_Printf("current devid is %d, ITM_MSG_REQUEST_FOTA_IMAGE ret is %d\n", devid, ota_result);
+    if (0 != ota_result) {
+        status_list[devid] = SUB_OTA_FAILED_QUERY;
+        return;
+    }
+    status_list[devid] = SUB_OTA_SUCCESS;
+} 
+```
 ## <a name="子设备数据交互">子设备数据交互</a>
 
 子设备与云端的数据交互方法与单品产品完全一致. 比如:

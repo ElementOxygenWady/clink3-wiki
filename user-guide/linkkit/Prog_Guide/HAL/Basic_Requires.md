@@ -5,7 +5,7 @@
     * [HAL_GetDeviceID](#HAL_GetDeviceID)
     * [HAL_GetDeviceName](#HAL_GetDeviceName)
     * [HAL_GetDeviceSecret](#HAL_GetDeviceSecret)
-    * [HAL_GetFirmwareVesion](#HAL_GetFirmwareVesion)
+    * [HAL_GetFirmwareVersion](#HAL_GetFirmwareVersion)
     * [HAL_GetModuleID](#HAL_GetModuleID)
     * [HAL_GetPartnerID](#HAL_GetPartnerID)
     * [HAL_GetProductKey](#HAL_GetProductKey)
@@ -161,12 +161,12 @@ int HAL_GetDeviceSecret(_OU_ char device_secret[DEVICE_SECRET_LEN]);
 
 -----
 
-## <a name="HAL_GetFirmwareVesion">HAL_GetFirmwareVesion</a>
+## <a name="HAL_GetFirmwareVersion">HAL_GetFirmwareVersion</a>
 
 原型
 ---
 ```
-int HAL_GetFirmwareVesion(_OU_ char version[FIRMWARE_VERSION_MAXLEN]);
+int HAL_GetFirmwareVersion(_OU_ char version[FIRMWARE_VERSION_MAXLEN]);
 ```
 
 接口说明

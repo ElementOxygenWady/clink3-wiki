@@ -1,8 +1,5 @@
 # <a name="目录">目录</a>
-+ [移植指南](#移植指南)
-    * [在Ubuntu上编译主机版本](#在Ubuntu上编译主机版本)
-        - [正常的编译过程演示](#正常的编译过程演示)
-        - [得到的编译产物说明](#得到的编译产物说明)
++ [基于Make的交叉编译示例](#基于Make的交叉编译示例)
     * [交叉编译到嵌入式硬件平台](#交叉编译到嵌入式硬件平台)
         - [安装交叉编译工具链](#安装交叉编译工具链)
         - [添加配置文件](#添加配置文件)
@@ -18,117 +15,9 @@
         - [重新载入配置文件, 交叉编译可执行程序](#重新载入配置文件, 交叉编译可执行程序)
         - [尝试运行样例程序](#尝试运行样例程序)
 
-# <a name="移植指南">移植指南</a>
+# <a name="基于Make的交叉编译示例">基于Make的交叉编译示例</a>
 
-> 物联网平台C-SDK旨在提供与目标平台硬件CPU体系架构无关、与目标平台嵌入式OS操作系统无关的跨平台SDK。**如果您的开发方式不是通过将SDK编译成为.a，而是将SDK中的源文件添加到您的工程中编译的方式实现，那么可以略过本章。**
-
-
-我们建议移植时遵循如下的流程, 将C-SDK源码适配移植到您需要接入到阿里云物联网平台的嵌入式硬件上
-
-+ **在Ubuntu上编译主机版本:** 这一步并不进行交叉编译, 而是希望您可以体验主机(X86)版本的SDK及其例程, 熟悉SDK的编译过程和产物
-+ **交叉编译到嵌入式硬件平台:** 接着可以安装目标平台的编译工具链, 按本文说明, 交叉编译嵌入式体系架构的二进制库 `libiot_sdk.a`
-+ **了解C-SDK的构建系统使用:** 在交叉编译环节, 您将接触到C-SDK的构建配置系统
-+ **开发未适配平台的HAL层:** 要使用以上步骤中产生的 `libiot_sdk.a` 所提供的API, 您还需要为C-SDK提供第五章中列出的HAL接口实现
-
----
-本文为了快速走通以上流程, 简写了第3步和第4步, 以移植到 `arm-linux` 平台为例, 直接演示了一个完整的移植过程
-
-## <a name="在Ubuntu上编译主机版本">在Ubuntu上编译主机版本</a>
-
-具体步骤是:
-
-    $ make distclean
-    $ make
-
-即可得到`libiot_sdk.a`
-
-### <a name="正常的编译过程演示">正常的编译过程演示</a>
-
-    $ make distclean
-    $ make
-    SELECTED CONFIGURATION:
-
-    VENDOR :   ubuntu
-    MODEL  :   x86
-
-
-    CONFIGURE .............................. [examples]
-    CONFIGURE .............................. [src/infra/log]
-    CONFIGURE .............................. [src/infra/system]
-    CONFIGURE .............................. [src/infra/utils]
-    CONFIGURE .............................. [src/protocol/alcs]
-    CONFIGURE .............................. [src/protocol/coap]
-    CONFIGURE .............................. [src/protocol/http]
-    CONFIGURE .............................. [src/protocol/http2]
-    CONFIGURE .............................. [src/protocol/mqtt]
-
-### <a name="得到的编译产物说明">得到的编译产物说明</a>
-
-SDK编译的产物在编译成功之后都存放在 `output` 目录下:
-
-    $ tree -A output/
-    output/
-    +-- release
-        +-- bin
-        |   +-- http-example
-        |   +-- linkkit-example-sched
-        |   +-- linkkit-example-solo
-        |   +-- linkkit_tsl_convert
-        |   +-- mqtt-example
-        |   +-- mqtt_multi_thread-example
-        |   +-- mqtt_rrpc-example
-        |   +-- ota-example-mqtt
-        |   +-- sdk-testsuites
-        |   +-- uota_app-example
-        +-- include
-        |   +-- exports
-        |   |   +-- iot_export_alcs.h
-        |   |   +-- iot_export_coap.h
-        |   |   +-- iot_export_errno.h
-        |   |   +-- iot_export_event.h
-        |   |   +-- iot_export_file_uploader.h
-        |   |   +-- iot_export_http2.h
-        |   |   +-- iot_export_http.h
-        |   |   +-- iot_export_mqtt.h
-        |   |   +-- iot_export_ota.h
-        |   |   +-- iot_export_shadow.h
-        |   |   +-- iot_export_subdev.h
-        |   |   +-- linkkit_export.h
-        |   |   +-- linkkit_gateway_export.h
-        |   +-- imports
-        |   |   +-- iot_import_awss.h
-        |   |   +-- iot_import_coap.h
-        |   |   +-- iot_import_config.h
-        |   |   +-- iot_import_crypt.h
-        |   |   +-- iot_import_dtls.h
-        |   |   +-- iot_import_product.h
-        |   +-- iot_export.h
-        |   +-- iot_import.h
-        +-- lib
-            +-- libalicrypto.a
-            +-- libid2client.a
-            +-- libiot_hal.a
-            +-- libiot_sdk.a
-            +-- libiot_tls.a
-            +-- libitls.a
-            +-- libkm.a
-            +-- libmbedcrypto.a
-            +-- libplat_gen.a
-
-说明:
-
-| 产物                                                | 说明
-|-----------------------------------------------------|-----------------------------------------------------------------
-| output/release/bin/*                                | 例子程序, 在Ubuntu上运行, 并对照阅读 `examples/` 目录下的源代码, 以体验SDK的功能
-| output/release/include/iot_export.h                 | 集中存放了所有SDK向外界提供的顶层用户接口声明, 命名方式为`IOT_XXX_YYY()`和`linkkit_mmm_nnn()`, 并且它也包含了所有`exports/`目录下的文件
-| output/release/include/exports/*.h                  | 按不同的子功能分开列出各个子功能所提供的用户接口声明, 比如`iot_export_coap.h`就列出的是SDK提供CoAP相关功能时的可用接口
-| output/release/include/imports/iot_import_config.h  | 配置头文件, 集中存放SDK的伸缩属性的可配置项, 比如`CONFIG_MQTT_TX_MAXLEN`表示给MQTT上行报文可以开辟的最大内存缓冲区长度等
-| output/release/include/iot_import.h                 | 集中存放了所有SDK依赖外界提供的底层支撑接口声明, 命名方式为`HAL_XXX_YYY()`, 并且它也包含了所有`imports/`目录下的文件
-| output/release/include/imports/*.h                  | 按不同的子功能分开列出各个子功能特殊引入的HAL接口的声明, 比如`iot_import_awss.h`就列出的是SDK因为提供配网功能而需要的HAL接口
-| output/lib/libiot_sdk.a                             | SDK主库, 集中提供了所有用户接口的实现, 它的上层是用户业务逻辑, 下层是`libiot_hal.a`
-| output/lib/libiot_hal.a                             | HAL主库, 集中提供了所有`HAL_XXX_YYY()`接口的实现, 它的上层是`libiot_sdk.a`, 下层是`libiot_tls.a`
-| output/lib/libiot_tls.a                             | TLS主库, 集中提供了所有`mbedtls_xxx_yyy()`接口的实现, 它的上层是`libiot_hal.a`
-| output/lib/*.a                                      | 其它分库, 它们是从SDK源码目录的`prebuilt/`目录移动过来的, 主要提供一些闭源发布的功能, 比如`ID2`等
+> 本文以将SDK移植到 `arm-linux` 平台为例, 演示一个完整的交叉编译移植过程
 
 ## <a name="交叉编译到嵌入式硬件平台">交叉编译到嵌入式硬件平台</a>
 
@@ -442,4 +331,3 @@ SDK编译的产物在编译成功之后都存放在 `output` 目录下:
 - 也就是指 `src/ref-impl/hal/os/arm-linux` 目录的HAL层代码, 因为这些代码是我们从 `Ubuntu` 主机部分复制的, 完全可能并不适合 `arm-linux`
 
 如此反复直到确保 `libiot_hal.a` 的开发没问题为止
-
