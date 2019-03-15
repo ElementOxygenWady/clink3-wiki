@@ -31,9 +31,6 @@ git clone git@github.com:aliyun/iotkit-embedded.git -b v3.0.1
         + 仍然通过 `IOT_MQTT_Construct()` 发起云端建连, 但不再需要调用 `IOT_SetupConnInfo()`
         + 对 `IOT_MQTT_Construct()` 调用时, 结构体入参中的绝大多数都可以不填写, SDK会自动补充默认值
 
-*注意: 本手册内所有内容请在登录 [https://code.aliyun.com](https://code.aliyun.com) 后观看, 否则可能出现部分图片无法显示*
----
-
 SDK手册目录
 ---
 
