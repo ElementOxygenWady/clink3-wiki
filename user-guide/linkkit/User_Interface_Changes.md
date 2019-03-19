@@ -3,6 +3,7 @@
     * [新增支持源代码方式移植](#新增支持源代码方式移植)
     * [目录结构](#目录结构)
     * [API接口和HAL接口的呈现方式](#API接口和HAL接口的呈现方式)
+    * [日志输出](#日志输出)
     * [make.settings 文件](#make.settings 文件)
     * [MQTT函数接口](#MQTT函数接口)
     * [新增的功能点和接口](#新增的功能点和接口)
@@ -93,6 +94,31 @@ V3.0.1版本最大的变化, 在于不强制用户使用SDK自带的编译系统
 + 用户只会看到1个API接口, 列在 `dev_sign_api.h` 中
 
 + 用户不会看到任何HAL接口, 甚至也看不到 `wrapper.c`, 因为这个功能是零依赖的, 不需要用户实现任何C函数即可使用
+
+## <a name="日志输出">日志输出</a>
+
+> 过去SDK会在执行的过程中打印很多日志表达内部执行的动作, 但这些日志本身也会占用ROM资源
+
++ 我们收到部分用户的反馈, 他们表示ROM开销小是更重要的, SDK的内部运行信息是次要的
++ 另外也有一些使用`Keil/IAR`等IDE的客户根本就不会查看串口输出的日志, 这种功能完全是浪费
+
+所以, 我们改为默认没有任何日志的方式输出
+---
+
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/log_sub_menu.png" width="800" height="400" align="center" />
+
+仍然需要看到运行日志的用户, 可以用配置界面的 `Main Menu` -> `Log Configurations`, 逐个打开自己需要编译进去的日志等级
+
+---
+*或者, 更简单的办法是直接编辑 `make.settings` 文件, 删除所有以下带有 `MUTE` 字样的行, 然后重新编译SDK, 也可以起到相同的作用*
+
+    FEATURE_INFRA_LOG_ALL_MUTED=y
+    FEATURE_INFRA_LOG_MUTE_FLW=y
+    FEATURE_INFRA_LOG_MUTE_DBG=y
+    FEATURE_INFRA_LOG_MUTE_INF=y
+    FEATURE_INFRA_LOG_MUTE_WRN=y
+    FEATURE_INFRA_LOG_MUTE_ERR=y
+    FEATURE_INFRA_LOG_MUTE_CRT=y
 
 ## <a name="make.settings 文件">make.settings 文件</a>
 
