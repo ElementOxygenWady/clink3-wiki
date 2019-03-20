@@ -70,10 +70,10 @@
     CONFIG_ENV_CFLAGS = \
         -D_PLATFORM_IS_LINUX_ \
         -Wall \
-        -DNO_EXECUTABLES \
+        -DNO_EXECUTABLES
 
     CONFIG_ENV_LDFLAGS = \
-        -lpthread -lrt \
+        -lpthread -lrt
 
     OVERRIDE_CC = arm-linux-gnueabihf-gcc
     OVERRIDE_AR = arm-linux-gnueabihf-ar
@@ -174,7 +174,7 @@
         -Wall
 
     CONFIG_ENV_LDFLAGS = \
-        -lpthread -lrt \
+        -lpthread -lrt
 
     OVERRIDE_CC = arm-linux-gnueabihf-gcc
     OVERRIDE_AR = arm-linux-gnueabihf-ar
