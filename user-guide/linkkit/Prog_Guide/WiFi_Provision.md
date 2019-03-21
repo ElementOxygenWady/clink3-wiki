@@ -4,6 +4,7 @@
 + [配网通用HAL移植说明](#配网通用HAL移植说明)
     * [配网依赖的Linkkit SDK公共HAL](#配网依赖的Linkkit SDK公共HAL)
     * [配网模块公共HAL](#配网模块公共HAL)
++ [扩展 ](#扩展 )
 
 # <a name="功能概述">功能概述</a>
 
@@ -100,3 +101,11 @@ WiFi设备需要连接到WiFi热点(WiFi AP)之后才能与其它设备进行基
     - 配网成功时设备端会主动通告 token , 然后手机端可以收到 token 之后到云端去进行设备绑定, 然后云端将会删除该 token 的记录
         + 但是设备端并不知道上报云端的 token 已经被删除了
         + 所以如果手机立即再去设备端查询 token, 设备端还是会返回一个在云端已经无效的 token, 此时手机端去绑定设备就会收到无效 token 的错误
+
+
+# <a name="扩展 ">扩展 </a>
+
+- [一键配网](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_Smartconfig)
+- [设备热点配网](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_DevAP)
+- [手机热点配网](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_PhoneAP)
+- [零配](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_ZeroConfig)

@@ -3,13 +3,18 @@
 + [设备服务](#设备服务)
 + [设备事件](#设备事件)
 + [关于上报消息的格式说明及示例](#关于上报消息的格式说明及示例)
++ [基于MQTT Topic进行数据收发](#基于MQTT Topic进行数据收发)
 + [与物模型功能相关的API列表](#与物模型功能相关的API列表)
 
 > 物模型管理功能是指SDK能够使能IoT设备接受云端控制台或者手机公版app的控制, 进行属性/事件/服务维度的设置和监控, 在本文的其它地方, 有时也称为"高级版"
 
-> 下面的讲解中使用了示例代码./src/dev_model/examples/linkkit_example_solo.c
+下面的讲解中使用了示例代码 `./src/dev_model/examples/linkkit_example_solo.c`
 
-**注意**：在Linux环境下，用户可通过修改`wrappers/os/ubuntu/HAL_OS_linux.c`文件中的默认三元组来使用自己在云端控制台创建的设备。我们在`src/dev_model/examples`目录下提供了名为`model_for_example.json`的物模型描述文件，用户可以用自己产品的`productkey`替换掉该文件中的`"productKey"`值，并将该物模型文件导入到云端产品中。这样便能保证例程物模型与用户自建产品物模型的相互匹配。
+**注意**
+- 在Linux环境下, 用户可通过修改 `wrappers/os/ubuntu/HAL_OS_linux.c` 文件中的默认三元组来使用自己在云端控制台创建的设备
+- 我们在 `src/dev_model/examples` 目录下提供了名为 `model_for_example.json` 的物模型描述文件
+    + 用户可以用自己产品的 `productkey` 替换掉该文件中的 `"productKey"` 值, 并将该物模型文件导入到云端产品中
+    + 这样便能保证例程物模型与用户自建产品物模型的相互匹配
 
 # <a name="设备属性">设备属性</a>
 
@@ -17,7 +22,9 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
 * 属性上报说明
 
-用户可以调用IOT_Linkkit_Report()函数来上报属性，属性上报时需要按照云端定义的属性格式使用JSON编码后进行上报。示例中函数`user_post_property`展示了如何使用`IOT_Linkkit_Report`进行属性上报（对于异常情况的上报，详见example）:
+> 用户可以调用 `IOT_Linkkit_Report()` 函数来上报属性, 属性上报时需要按照云端定义的属性格式使用JSON编码后进行上报
+
+示例中函数 `user_post_property` 展示了如何使用 `IOT_Linkkit_Report` 进行属性上报(对于异常情况的上报, 详见example):
 
     void user_post_property(void)
     {
@@ -33,13 +40,15 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
         EXAMPLE_TRACE("Post Property Message ID: %d", res);
     }
 
-> 注：property_payload = "{\"Counter\":1}" 即是将属性编码为JSON对象。
+> 注: property_payload = "{\"Counter\":1}" 即是将属性编码为JSON对象
 
 * 属性设置说明:
 
-示例在回调函数`user_property_set_event_handler`中获取云端设置的属性值, 并原样上报数据到云端, 这样可以更新在云端的设备影子中保存的设备属性值, 用户可在此处对收到的属性值进行处理。
+示例在回调函数 `user_property_set_event_handler` 中获取云端设置的属性值, 并原样上报数据到云端
 
-注：该回调函数是在example初始化时使用`IOT_RegisterCallback`注册的`ITE_SERVICE_REQUST`事件对应的回调函数:
+这样可以更新在云端的设备影子中保存的设备属性值, 用户可在此处对收到的属性值进行处理
+
+*注: 该回调函数是在example初始化时使用 `IOT_RegisterCallback` 注册的 `ITE_SERVICE_REQUST` 事件对应的回调函数:*
 
     static int user_property_set_event_handler(const int devid, const char *request, const int request_len)
     {
@@ -56,7 +65,7 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
 # <a name="设备服务">设备服务</a>
 
-在设备端示例程序中, 当收到服务调用请求时, 会进入如下回调函数, 一下代码使用了`cJSON`来解析服务请求的参数值:
+在设备端示例程序中, 当收到服务调用请求时, 会进入如下回调函数, 以下代码使用了开源软件 `cJSON` 来解析服务请求的参数值:
 
     static int user_service_request_event_handler(const int devid, const char *serviceid, const int serviceid_len,
                                                 const char *request, const int request_len,
@@ -112,7 +121,7 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
 # <a name="设备事件">设备事件</a>
 
-示例中使用 `IOT_Linkkit_TriggerEvent` 上报事件. 其中展示了如何使用**IOT_Linkkit_Report**进行事件上报（对于异常情况的上报，详见example）:
+示例中使用 `IOT_Linkkit_TriggerEvent` 上报事件. 其中展示了如何使用**IOT_Linkkit_Report**进行事件上报(对于异常情况的上报, 详见example):
 
     void user_post_event(void)
     {
@@ -127,7 +136,7 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
 # <a name="关于上报消息的格式说明及示例">关于上报消息的格式说明及示例</a>
 
-上报属性时, 属性ID和值以JSON格式的形式放在`IOT_Linkkit_Report()`的`payload`中, 不同数据类型以及多个属性的格式示例如下:
+上报属性时, 属性ID和值以JSON格式的形式放在 `IOT_Linkkit_Report()` 的 payload 中, 不同数据类型以及多个属性的格式示例如下:
 ```
 /* 整型数据 */
 char *payload = "{\"Brightness\":50}";
@@ -158,7 +167,9 @@ IOT_Linkkit_Report(devid, ITM_MSG_POST_PROPERTY, payload, strlen(payload));
 
 ```
 
-上报事件时, 与上报属性的区别是, 事件ID需要单独拿出来, 放在`IOT_Linkkit_TriggerEvent()`的`eventid`中, 而事件的上报内容, 也就是物模型定义中事件的输出参数, 则使用与上报属性相同的格式进行上报, 示例如下:
+上报事件时, 与上报属性的区别是, 事件ID需要单独拿出来, 放在`IOT_Linkkit_TriggerEvent()`的`eventid`中
+
+而事件的上报内容, 也就是物模型定义中事件的输出参数, 则使用与上报属性相同的格式进行上报, 示例如下:
 ```
 /* 事件ID为Error, 其输出参数ID为ErrorCode, 数据类型为枚举型 */
 char *eventid = "Error";
@@ -173,6 +184,29 @@ IOT_Linkkit_TriggerEvent(devid, event_id, strlen(event_id), payload, strlen(payl
 
 /* 从上面的示例可以看出, 当事件的输出参数有多个时, payload的格式与多属性上报是相同的 */
 ```
+
+# <a name="基于MQTT Topic进行数据收发">基于MQTT Topic进行数据收发</a>
+
+*注意: 虽然物模型编程的 API 并未返回 MQTT 编程接口 `IOT_MQTT_XXX()` 所需要的 `pClient` 参数, 但基于MQTT Topic进行数据收发仍可和物模型编程混用*
+---
++ 所有MQTT数据收发的接口, 第1个参数都可接受参数 `0` 作为输入, 表示 **"使用当前唯一的MQTT通道进行数据收发等操作"**, 包括
+    - `IOT_MQTT_Construct`
+    - `IOT_MQTT_Destroy`
+    - `IOT_MQTT_Yield`
+    - `IOT_MQTT_CheckStateNormal`
+    - `IOT_MQTT_Subscribe`
+    - `IOT_MQTT_Unsubscribe`
+    - `IOT_MQTT_Publish`
+    - `IOT_MQTT_Subscribe_Sync`
+    - `IOT_MQTT_Publish_Simple`
+
++ 比如要在使用物模型编程API的程序代码段落中表示对某个Topic进行订阅, 可以用
+
+        IOT_MQTT_Subscribe(0, topic_request, IOTX_MQTT_QOS0, topic_callback, topic_context);
+
++ 比如要在使用物模型编程API的程序代码段落中表示在某个Topic进行发布(数据上报), 可以用
+
+        IOT_MQTT_Publish_Simple(0, topic, IOTX_MQTT_QOS0, payload, payload_len);
 
 # <a name="与物模型功能相关的API列表">与物模型功能相关的API列表</a>
 
