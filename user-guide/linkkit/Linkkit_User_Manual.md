@@ -2,12 +2,13 @@
 
 最新SDK长期分支:
 ---
-git clone git@github.com:aliyun/iotkit-embedded.git -b v3.0.1
+
+    git clone git@code.aliyun.com:linkkit/c-sdk.git -b v3.0.1
 
 最新SDK发布声明:
 ---
 + 发布日期: 2019/03/15
-+ 下载链接: [v3.0.1.zip](https://github.com/aliyun/iotkit-embedded/archive/v3.0.1.zip)
++ 下载链接: [v3.0.1.zip](https://code.aliyun.com/linkkit/c-sdk/repository/archive.zip?ref=v3.0.1)
 + 更新内容:
     - **新增对异步/通知式的底层TCP/IP协议栈的支持:** 专用于联发科 `MTK2503/MTK6261` 的 Nucleus 系统对接
         + 新增 `FEATURE_ASYNC_PROTOCOL_STACK` 开关支持异步协议栈, 详情介绍请看文档: [异步通知式底层通信模型](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/AsyncMQTT_Prog)

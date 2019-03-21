@@ -238,7 +238,7 @@ productKey是物联网平台为产品颁发的唯一标识. 这个参数很重�
 
 #### <a name="V3.0.1">V3.0.1</a>
 + 发布日期: 2019/03/15
-+ 下载链接: [v3.0.1.zip](https://github.com/aliyun/iotkit-embedded/archive/v3.0.1.zip)
++ 下载链接: [v3.0.1.zip](https://code.aliyun.com/linkkit/c-sdk/repository/archive.zip?ref=v3.0.1)
 + 更新内容:
     - **新增对异步/通知式的底层TCP/IP协议栈的支持:** 专用于联发科 `MTK2503/MTK6261` 的 Nucleus 系统对接
         + 新增 `FEATURE_ASYNC_PROTOCOL_STACK` 开关支持异步协议栈, 详情介绍请看文档: [异步通知式底层通信模型](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/AsyncMQTT_Prog)
@@ -266,7 +266,7 @@ productKey是物联网平台为产品颁发的唯一标识. 这个参数很重�
 
 #### <a name="V2.3.0">V2.3.0</a>
 + 发布日期: 2018/11/19
-+ 下载链接: [v2.3.0.zip](https://github.com/aliyun/iotkit-embedded/archive/v2.3.0.zip)
++ 下载链接: [v2.3.0.zip](https://code.aliyun.com/linkkit/c-sdk/repository/archive.zip?ref=v2.3.0)
 + 更新内容:
     - **新增一套物模型编程接口:** 风格为 `IOT_Linkkit_XXX()`, 旧版接口 `linkkit_xxx()` 仍然保留
         * 编程方式简化: 用户不再需要感知TSL, 不需要经历从控制台下载超长JSON然后转换C语言然后嵌入源码的冗繁过程
