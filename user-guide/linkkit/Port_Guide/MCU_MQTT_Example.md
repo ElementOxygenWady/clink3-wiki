@@ -439,7 +439,8 @@ example_subscribe的函数内容如下:
 
 设备端高级版具备所有基础版的功能, 基础版的功能选择在本文档前半部分中已经有详细描述, 这里不再赘述. 高级版功能需选中FEATURE_DEVICE_MODEL_ENABLED:
 
-![17](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/mcu_mqtt/17.png
+![17](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/mcu_mqtt/17.png)
+
 使用抽取脚本后, 将比基础版多产生一个文件夹:
 
 ![18](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/mcu_mqtt/18.png)
