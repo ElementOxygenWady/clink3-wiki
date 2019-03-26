@@ -20,8 +20,8 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
 
 # <a name="编译配置">编译配置</a>
 
-1. 运行`make menuconfig`，打开`FEATURE_HTTP2_COMM_ENABLED`选项使能HTTP2功能，保存后退出。
-2. 运行`make`即可编译出包含HTTP2文件上传的固件。
+1. 运行`make menuconfig`, 打开`FEATURE_HTTP2_COMM_ENABLED`选项使能HTTP2功能, 保存后退出
+2. 运行`make`即可编译出包含HTTP2文件上传的固件
 
 # <a name="例子程序讲解">例子程序讲解</a>
 
@@ -29,8 +29,8 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
 
 ## <a name="1. 与云端建立连接">1. 与云端建立连接</a>
 
-调用`IOT_HTTP2_UploadFile_Connect`建立HTTP2连接，用户指定设备的三元组信息和服务器地址/端口号。
-```
+调用`IOT_HTTP2_UploadFile_Connect`建立HTTP2连接, 用户指定设备的三元组信息和服务器地址/端口号
+
     http2_upload_conn_info_t conn_info;
     void *handle;
 
@@ -46,26 +46,25 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
     if(handle == NULL) {
         return -1;
     }
-```
-目前各个区域对应的域名和端口如下，其中`*`符号应使用设备的`ProductKey`替换，如`ProductKey`为`a1IgnOND7vI`时对应的URL、PORT如下:
-```
-#define HTTP2_ONLINE_SERVER_URL             "a1IgnOND7vI.iot-as-http2.cn-shanghai.aliyuncs.com"
-#define HTTP2_ONLINE_SERVER_PORT            443
-```
-```
-*.iot-as-http2.cn-shanghai.aliyuncs.com:443          // 上海正式
-*.iot-as-http2.us-west-1.aliyuncs.com:443            // 美西正式
-*.iot-as-http2.us-east-1.aliyuncs.com:443            // 美东正式
-*.iot-as-http2.eu-central-1.aliyuncs.com:443         // 德国正式
-*.iot-as-http2.ap-southeast-1.aliyuncs.com:443       // 新加坡正式
-*.iot-as-http2.ap-northeast-1.aliyuncs.com:443       // 日本正式
-```
-如果用户关心网络状态，可以注册相应的回调函数，目前支持网络断开连接，和网络重连成功两个回调函数。
+
+目前各个区域对应的域名和端口如下, 其中`*`符号应使用设备的`ProductKey`替换, 如`ProductKey`为`a1IgnOND7vI`时对应的URL/PORT如下:
+
+    #define HTTP2_ONLINE_SERVER_URL             "a1IgnOND7vI.iot-as-http2.cn-shanghai.aliyuncs.com"
+    #define HTTP2_ONLINE_SERVER_PORT            443
+
+    *.iot-as-http2.cn-shanghai.aliyuncs.com:443          // 上海正式
+    *.iot-as-http2.us-west-1.aliyuncs.com:443            // 美西正式
+    *.iot-as-http2.us-east-1.aliyuncs.com:443            // 美东正式
+    *.iot-as-http2.eu-central-1.aliyuncs.com:443         // 德国正式
+    *.iot-as-http2.ap-southeast-1.aliyuncs.com:443       // 新加坡正式
+    *.iot-as-http2.ap-northeast-1.aliyuncs.com:443       // 日本正式
+
+如果用户关心网络状态, 可以注册相应的回调函数, 目前支持网络断开连接, 和网络重连成功两个回调函数
 
 ## <a name="2. 文件上传">2. 文件上传</a>
 
-使用`IOT_HTTP2_UploadFile_Request`请求文件上传，例程以`UPLOAD_FILE_OPT_BIT_OVERWRITE`的方式上传，每次上传都会覆盖云端的文件。此接口为异步接口，用户可以插入多个上传请求到内部队列中。
-```
+使用`IOT_HTTP2_UploadFile_Request`请求文件上传, 例程以`UPLOAD_FILE_OPT_BIT_OVERWRITE`的方式上传, 每次上传都会覆盖云端的文件. 此接口为异步接口, 用户可以插入多个上传请求到内部队列中
+
     http2_upload_params_t fs_params;
     http2_upload_result_cb_t result_cb;
 
@@ -81,9 +80,9 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
     if(ret < 0) {
         return -1;
     }
-```
+
 例程中注册了2个回调函数, 分别用于接收上传的结果, 和接收云端返回的上传标示符(`upload_id`). 在SDK调用了`upload_file_result`后, 文件上传操作便结束了, 用户可进行下一步操作
-```
+
     void upload_file_result(const char *file_path, int result, void *user_data)
     {
         upload_end++;
@@ -98,112 +97,111 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
             memcpy(g_upload_id, upload_id, strlen(upload_id));
         }
     }
-```
-在上传过程中我们可以在log中看到HTTP2的报文交互：
+
+在上传过程中我们可以在log中看到HTTP2的报文交互:
 ---
-1. 设备端请求云端打开文件上传的通道：
-```
-[inf] on_frame_send_callback(143): [INFO] C ---------> S (HEADERS) stream_id [1]
-[inf] on_frame_send_callback(145): > :method: POST
-[inf] on_frame_send_callback(145): > :path: /stream/open/c/iot/sys/thing/file/upload
-[inf] on_frame_send_callback(145): > :scheme: https
-[inf] on_frame_send_callback(145): > x-auth-name: devicename
-[inf] on_frame_send_callback(145): > x-auth-param-client-id: a1IgnOND7vI.H2_FS01
-[inf] on_frame_send_callback(145): > x-auth-param-signmethod: hmacsha1
-[inf] on_frame_send_callback(145): > x-auth-param-product-key: a1IgnOND7vI
-[inf] on_frame_send_callback(145): > x-auth-param-device-name: H2_FS01
-[inf] on_frame_send_callback(145): > x-auth-param-sign: 8d6b80749ed63823dc16b2c1e7f049bbdd00bf2b
-[inf] on_frame_send_callback(145): > x-sdk-version: 301
-[inf] on_frame_send_callback(145): > x-sdk-version-name: 3.0.1
-[inf] on_frame_send_callback(145): > x-sdk-platform: c
-[inf] on_frame_send_callback(145): > content-length: 0
-[inf] on_frame_send_callback(145): > x-file-name: upload1M
-[inf] on_frame_send_callback(145): > x-file-overwrite: 1
-[inf] on_begin_headers_callback(393): [INFO] C <--------- S (HEADERS) stream_id [1]
-[inf] on_header_callback(363): < :status: 200
-[inf] on_header_callback(363): < x-request-id: 1103919500797702144
-[inf] on_header_callback(363): < x-next-append-position: 0
-[inf] on_header_callback(363): < x-data-stream-id: DS1103919500889976832
-[inf] on_header_callback(363): < x-file-upload-id: ULDS1103919500889976832
-[inf] on_header_callback(363): < x-response-status: 200
-```
-2. 通道打开成功，接收到云端返回的文件上传标示符并调用用户回调函数：
-```
-upload_id_received_handle|037 :: =========== file_path = upload1M, upload_id = ULDS1103919500889976832 ===========
-```
-3. 通道打开成功后，设备端通过HTTP2请求上传文件：
-```
-[inf] on_frame_send_callback(143): [INFO] C ---------> S (HEADERS) stream_id [3]
-[inf] on_frame_send_callback(145): > :method: POST
-[inf] on_frame_send_callback(145): > :path: /stream/send/c/iot/sys/thing/file/upload
-[inf] on_frame_send_callback(145): > :scheme: https
-[inf] on_frame_send_callback(145): > content-length: 1048576
-[inf] on_frame_send_callback(145): > x-data-stream-id: DS1103919500889976832
-[inf] on_frame_send_callback(145): > x-sdk-version: 301
-[inf] on_frame_send_callback(145): > x-sdk-version-name: 3.0.1
-[inf] on_frame_send_callback(145): > x-sdk-platform: c
-[inf] on_frame_send_callback(145): > x-file-upload-id: ULDS1103919500889976832
-[dbg] http2_stream_node_search(168): stream node not exist, stream_id = 3
-[inf] send_callback(63): send_callback data len 10249, session->remote_window_size=16777215!
-[inf] send_callback(72): send_callback data ends len = 10249!
-[dbg] http2_stream_node_search(168): stream node not exist, stream_id = 3
-[inf] iotx_http2_client_send(563): nghttp2_session_send 0
-[dbg] _http2_fs_part_send_sync(250): send len = 10240
-[inf] send_callback(63): send_callback data len 10249, session->remote_window_size=16766975!
-[inf] send_callback(72): send_callback data ends len = 10249!
-[inf] iotx_http2_client_send(563): nghttp2_session_send 0
-[dbg] _http2_fs_part_send_sync(250): send len = 20480
-[inf] send_callback(63): send_callback data len 10249, session->remote_window_size=16756735!
-[inf] send_callback(72): send_callback data ends len = 10249!
-[inf] iotx_http2_client_send(563): nghttp2_session_send 0
-[dbg] _http2_fs_part_send_sync(250): send len = 30720
-[inf] send_callback(63): send_callback data len 10249, session->remote_window_size=16746495!
-[inf] send_callback(72): send_callback data ends len = 10249!
-[inf] iotx_http2_client_send(563): nghttp2_session_send 0
-[dbg] _http2_fs_part_send_sync(250): send len = 40960
-```
-4. 文件上传结束，等待云端上传结构应答，应答中的`x-next-append-position`便是已上传文件的大小
-```
-[inf] on_frame_recv_callback(196): on_frame_recv_callback, type = 8
-[inf] on_frame_recv_callback(197): on_frame_recv_callback, stream_id = 3
-[inf] on_frame_recv_callback(205): stream user data is not exist
-[inf] on_begin_headers_callback(393): [INFO] C <--------- S (HEADERS) stream_id [3]
-[inf] on_header_callback(363): < :status: 200
-[inf] on_header_callback(363): < x-request-id: 1103919501166800896
-[inf] on_header_callback(363): < x-next-append-position: 1048576
-[inf] on_header_callback(363): < x-data-stream-id: DS1103919500889976832
-[inf] on_header_callback(363): < x-response-status: 200
-[inf] on_frame_recv_callback(196): [dbg] _http2_fs_part_send_sync(250): on_frame_recv_callback, type = 1
-[inf] on_frame_recv_callback(197): on_frame_recv_callback, stream_id = 3
-[inf] on_frame_recv_callback(205): send len = 1048576
-[inf] _http2_fs_node_handle(350): file offset = 1048576 now
-```
-5. 最后SDK会关闭文件上传通道：
-```
-[inf] on_frame_send_callback(143): [INFO] C ---------> S (HEADERS) stream_id [5]
-[inf] on_frame_send_callback(145): > :method: POST
-[inf] on_frame_send_callback(145): > :path: /stream/close/c/iot/sys/thing/file/upload
-[inf] on_frame_send_callback(145): > :scheme: https
-[inf] on_frame_send_callback(145): > x-data-stream-id: DS1103919500889976832
-[inf] on_frame_send_callback(145): > x-sdk-version: 301
-[inf] on_frame_send_callback(145): > x-sdk-version-name: 3.0.1
-[inf] on_frame_send_callback(145): > x-sdk-platform: c
-[dbg] http2_stream_node_search(168): stream node not exist, stream_id = 5
-[inf] iotx_http2_client_send(563): nghttp2_session_send 0
-[inf] on_begin_headers_callback(393): [INFO] C <--------- S (HEADERS) stream_id [5]
-[inf] on_header_callback(363): < :status: 200
-[inf] on_header_callback(363): < x-request-id: 1103919502177628160
-[inf] on_header_callback(363): < x-data-stream-id: DS1103919500889976832
-[inf] on_header_callback(363): < x-file-crc64ecma: 6947770692288575170
-[inf] on_header_callback(363): < x-response-status: 200
-[inf] on_header_callback(363): < x-file-store-id: 101184
-```
+1. 设备端请求云端打开文件上传的通道:
+
+    [inf] on_frame_send_callback(143): [INFO] C ---------> S (HEADERS) stream_id [1]
+    [inf] on_frame_send_callback(145): > :method: POST
+    [inf] on_frame_send_callback(145): > :path: /stream/open/c/iot/sys/thing/file/upload
+    [inf] on_frame_send_callback(145): > :scheme: https
+    [inf] on_frame_send_callback(145): > x-auth-name: devicename
+    [inf] on_frame_send_callback(145): > x-auth-param-client-id: a1IgnOND7vI.H2_FS01
+    [inf] on_frame_send_callback(145): > x-auth-param-signmethod: hmacsha1
+    [inf] on_frame_send_callback(145): > x-auth-param-product-key: a1IgnOND7vI
+    [inf] on_frame_send_callback(145): > x-auth-param-device-name: H2_FS01
+    [inf] on_frame_send_callback(145): > x-auth-param-sign: 8d6b80749ed63823dc16b2c1e7f049bbdd00bf2b
+    [inf] on_frame_send_callback(145): > x-sdk-version: 301
+    [inf] on_frame_send_callback(145): > x-sdk-version-name: 3.0.1
+    [inf] on_frame_send_callback(145): > x-sdk-platform: c
+    [inf] on_frame_send_callback(145): > content-length: 0
+    [inf] on_frame_send_callback(145): > x-file-name: upload1M
+    [inf] on_frame_send_callback(145): > x-file-overwrite: 1
+    [inf] on_begin_headers_callback(393): [INFO] C <--------- S (HEADERS) stream_id [1]
+    [inf] on_header_callback(363): < :status: 200
+    [inf] on_header_callback(363): < x-request-id: 1103919500797702144
+    [inf] on_header_callback(363): < x-next-append-position: 0
+    [inf] on_header_callback(363): < x-data-stream-id: DS1103919500889976832
+    [inf] on_header_callback(363): < x-file-upload-id: ULDS1103919500889976832
+    [inf] on_header_callback(363): < x-response-status: 200
+
+2. 通道打开成功, 接收到云端返回的文件上传标示符并调用用户回调函数:
+
+    upload_id_received_handle|037 :: =========== file_path = upload1M, upload_id = ULDS1103919500889976832 ===========
+
+3. 通道打开成功后, 设备端通过HTTP2请求上传文件:
+
+    [inf] on_frame_send_callback(143): [INFO] C ---------> S (HEADERS) stream_id [3]
+    [inf] on_frame_send_callback(145): > :method: POST
+    [inf] on_frame_send_callback(145): > :path: /stream/send/c/iot/sys/thing/file/upload
+    [inf] on_frame_send_callback(145): > :scheme: https
+    [inf] on_frame_send_callback(145): > content-length: 1048576
+    [inf] on_frame_send_callback(145): > x-data-stream-id: DS1103919500889976832
+    [inf] on_frame_send_callback(145): > x-sdk-version: 301
+    [inf] on_frame_send_callback(145): > x-sdk-version-name: 3.0.1
+    [inf] on_frame_send_callback(145): > x-sdk-platform: c
+    [inf] on_frame_send_callback(145): > x-file-upload-id: ULDS1103919500889976832
+    [dbg] http2_stream_node_search(168): stream node not exist, stream_id = 3
+    [inf] send_callback(63): send_callback data len 10249, session->remote_window_size=16777215!
+    [inf] send_callback(72): send_callback data ends len = 10249!
+    [dbg] http2_stream_node_search(168): stream node not exist, stream_id = 3
+    [inf] iotx_http2_client_send(563): nghttp2_session_send 0
+    [dbg] _http2_fs_part_send_sync(250): send len = 10240
+    [inf] send_callback(63): send_callback data len 10249, session->remote_window_size=16766975!
+    [inf] send_callback(72): send_callback data ends len = 10249!
+    [inf] iotx_http2_client_send(563): nghttp2_session_send 0
+    [dbg] _http2_fs_part_send_sync(250): send len = 20480
+    [inf] send_callback(63): send_callback data len 10249, session->remote_window_size=16756735!
+    [inf] send_callback(72): send_callback data ends len = 10249!
+    [inf] iotx_http2_client_send(563): nghttp2_session_send 0
+    [dbg] _http2_fs_part_send_sync(250): send len = 30720
+    [inf] send_callback(63): send_callback data len 10249, session->remote_window_size=16746495!
+    [inf] send_callback(72): send_callback data ends len = 10249!
+    [inf] iotx_http2_client_send(563): nghttp2_session_send 0
+    [dbg] _http2_fs_part_send_sync(250): send len = 40960
+
+4. 文件上传结束, 等待云端上传结构应答, 应答中的`x-next-append-position`便是已上传文件的大小
+
+    [inf] on_frame_recv_callback(196): on_frame_recv_callback, type = 8
+    [inf] on_frame_recv_callback(197): on_frame_recv_callback, stream_id = 3
+    [inf] on_frame_recv_callback(205): stream user data is not exist
+    [inf] on_begin_headers_callback(393): [INFO] C <--------- S (HEADERS) stream_id [3]
+    [inf] on_header_callback(363): < :status: 200
+    [inf] on_header_callback(363): < x-request-id: 1103919501166800896
+    [inf] on_header_callback(363): < x-next-append-position: 1048576
+    [inf] on_header_callback(363): < x-data-stream-id: DS1103919500889976832
+    [inf] on_header_callback(363): < x-response-status: 200
+    [inf] on_frame_recv_callback(196): [dbg] _http2_fs_part_send_sync(250): on_frame_recv_callback, type = 1
+    [inf] on_frame_recv_callback(197): on_frame_recv_callback, stream_id = 3
+    [inf] on_frame_recv_callback(205): send len = 1048576
+    [inf] _http2_fs_node_handle(350): file offset = 1048576 now
+
+5. 最后SDK会关闭文件上传通道:
+
+    [inf] on_frame_send_callback(143): [INFO] C ---------> S (HEADERS) stream_id [5]
+    [inf] on_frame_send_callback(145): > :method: POST
+    [inf] on_frame_send_callback(145): > :path: /stream/close/c/iot/sys/thing/file/upload
+    [inf] on_frame_send_callback(145): > :scheme: https
+    [inf] on_frame_send_callback(145): > x-data-stream-id: DS1103919500889976832
+    [inf] on_frame_send_callback(145): > x-sdk-version: 301
+    [inf] on_frame_send_callback(145): > x-sdk-version-name: 3.0.1
+    [inf] on_frame_send_callback(145): > x-sdk-platform: c
+    [dbg] http2_stream_node_search(168): stream node not exist, stream_id = 5
+    [inf] iotx_http2_client_send(563): nghttp2_session_send 0
+    [inf] on_begin_headers_callback(393): [INFO] C <--------- S (HEADERS) stream_id [5]
+    [inf] on_header_callback(363): < :status: 200
+    [inf] on_header_callback(363): < x-request-id: 1103919502177628160
+    [inf] on_header_callback(363): < x-data-stream-id: DS1103919500889976832
+    [inf] on_header_callback(363): < x-file-crc64ecma: 6947770692288575170
+    [inf] on_header_callback(363): < x-response-status: 200
+    [inf] on_header_callback(363): < x-file-store-id: 101184
+
 ## <a name="3. 断开连接">3. 断开连接</a>
 
-所有文件上传结束后使用`IOT_HTTP2_UploadFile_Disconnect`断开云端连接。
-```
-ret = IOT_HTTP2_UploadFile_Disconnect(handle);
-```
+所有文件上传结束后使用`IOT_HTTP2_UploadFile_Disconnect`断开云端连接
+
+    ret = IOT_HTTP2_UploadFile_Disconnect(handle);
 
 # <a name="功能API接口">功能API接口</a>
 
