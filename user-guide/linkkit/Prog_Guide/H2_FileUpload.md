@@ -31,33 +31,33 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
 
 调用`IOT_HTTP2_UploadFile_Connect`建立HTTP2连接, 用户指定设备的三元组信息和服务器地址/端口号
 
-        http2_upload_conn_info_t conn_info;
-        void *handle;
+    http2_upload_conn_info_t conn_info;
+    void *handle;
 
-        memset(&conn_info, 0, sizeof(http2_upload_conn_info_t));
-        conn_info.product_key = HTTP2_PRODUCT_KEY;
-        conn_info.device_name = HTTP2_DEVICE_NAME;
-        conn_info.device_secret = HTTP2_DEVICE_SECRET;
-        conn_info.url = HTTP2_ONLINE_SERVER_URL;
-        conn_info.port = HTTP2_ONLINE_SERVER_PORT;
+    memset(&conn_info, 0, sizeof(http2_upload_conn_info_t));
+    conn_info.product_key = HTTP2_PRODUCT_KEY;
+    conn_info.device_name = HTTP2_DEVICE_NAME;
+    conn_info.device_secret = HTTP2_DEVICE_SECRET;
+    conn_info.url = HTTP2_ONLINE_SERVER_URL;
+    conn_info.port = HTTP2_ONLINE_SERVER_PORT;
 
-        handle = IOT_HTTP2_UploadFile_Connect(&conn_info, NULL);
+    handle = IOT_HTTP2_UploadFile_Connect(&conn_info, NULL);
 
-        if(handle == NULL) {
-            return -1;
-        }
+    if(handle == NULL) {
+        return -1;
+    }
 
 目前各个区域对应的域名和端口如下, 其中`*`符号应使用设备的`ProductKey`替换, 如`ProductKey`为`a1IgnOND7vI`时对应的URL/PORT如下:
 
-        #define HTTP2_ONLINE_SERVER_URL             "a1IgnOND7vI.iot-as-http2.cn-shanghai.aliyuncs.com"
-        #define HTTP2_ONLINE_SERVER_PORT            443
+    #define HTTP2_ONLINE_SERVER_URL             "a1IgnOND7vI.iot-as-http2.cn-shanghai.aliyuncs.com"
+    #define HTTP2_ONLINE_SERVER_PORT            443
 
-        *.iot-as-http2.cn-shanghai.aliyuncs.com:443          // 上海正式
-        *.iot-as-http2.us-west-1.aliyuncs.com:443            // 美西正式
-        *.iot-as-http2.us-east-1.aliyuncs.com:443            // 美东正式
-        *.iot-as-http2.eu-central-1.aliyuncs.com:443         // 德国正式
-        *.iot-as-http2.ap-southeast-1.aliyuncs.com:443       // 新加坡正式
-        *.iot-as-http2.ap-northeast-1.aliyuncs.com:443       // 日本正式
+    *.iot-as-http2.cn-shanghai.aliyuncs.com:443          // 上海正式
+    *.iot-as-http2.us-west-1.aliyuncs.com:443            // 美西正式
+    *.iot-as-http2.us-east-1.aliyuncs.com:443            // 美东正式
+    *.iot-as-http2.eu-central-1.aliyuncs.com:443         // 德国正式
+    *.iot-as-http2.ap-southeast-1.aliyuncs.com:443       // 新加坡正式
+    *.iot-as-http2.ap-northeast-1.aliyuncs.com:443       // 日本正式
 
 如果用户关心网络状态, 可以注册相应的回调函数, 目前支持网络断开连接, 和网络重连成功两个回调函数
 
@@ -65,38 +65,38 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
 
 使用`IOT_HTTP2_UploadFile_Request`请求文件上传, 例程以`UPLOAD_FILE_OPT_BIT_OVERWRITE`的方式上传, 每次上传都会覆盖云端的文件. 此接口为异步接口, 用户可以插入多个上传请求到内部队列中
 
-        http2_upload_params_t fs_params;
-        http2_upload_result_cb_t result_cb;
+    http2_upload_params_t fs_params;
+    http2_upload_result_cb_t result_cb;
 
-        memset(&result_cb, 0, sizeof(http2_upload_result_cb_t));
-        result_cb.upload_completed_cb = upload_file_result;
-        result_cb.upload_id_received_cb = upload_id_received_handle;
+    memset(&result_cb, 0, sizeof(http2_upload_result_cb_t));
+    result_cb.upload_completed_cb = upload_file_result;
+    result_cb.upload_id_received_cb = upload_id_received_handle;
 
-        memset(&fs_params, 0, sizeof(fs_params));
-        fs_params.file_path = argv[1];      /* 文件名称以命令行参数传入 */
-        fs_params.opt_bit_map = UPLOAD_FILE_OPT_BIT_OVERWRITE;
+    memset(&fs_params, 0, sizeof(fs_params));
+    fs_params.file_path = argv[1];      /* 文件名称以命令行参数传入 */
+    fs_params.opt_bit_map = UPLOAD_FILE_OPT_BIT_OVERWRITE;
 
-        ret = IOT_HTTP2_UploadFile_Request(handle, &fs_params, &result_cb, NULL);
-        if(ret < 0) {
-            return -1;
-        }
+    ret = IOT_HTTP2_UploadFile_Request(handle, &fs_params, &result_cb, NULL);
+    if(ret < 0) {
+        return -1;
+    }
 
 例程中注册了2个回调函数, 分别用于接收上传的结果, 和接收云端返回的上传标示符(`upload_id`). 在SDK调用了`upload_file_result`后, 文件上传操作便结束了, 用户可进行下一步操作
 
-        void upload_file_result(const char *file_path, int result, void *user_data)
-        {
-            upload_end++;
-            EXAMPLE_TRACE("=========== file_path = %s, result = %d, finish num = %d ===========", file_path, result, upload_end);
-        }
+    void upload_file_result(const char *file_path, int result, void *user_data)
+    {
+        upload_end++;
+        EXAMPLE_TRACE("=========== file_path = %s, result = %d, finish num = %d ===========", file_path, result, upload_end);
+    }
 
-        void upload_id_received_handle(const char *file_path, const char *upload_id, void *user_data)
-        {
-            EXAMPLE_TRACE("=========== file_path = %s, upload_id = %s ===========", file_path, upload_id);
+    void upload_id_received_handle(const char *file_path, const char *upload_id, void *user_data)
+    {
+        EXAMPLE_TRACE("=========== file_path = %s, upload_id = %s ===========", file_path, upload_id);
 
-            if (upload_id != NULL) {
-                memcpy(g_upload_id, upload_id, strlen(upload_id));
-            }
+        if (upload_id != NULL) {
+            memcpy(g_upload_id, upload_id, strlen(upload_id));
         }
+    }
 
 在上传过程中我们可以在log中看到HTTP2的报文交互:
 ---
@@ -201,7 +201,7 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
 
 所有文件上传结束后使用`IOT_HTTP2_UploadFile_Disconnect`断开云端连接
 
-        ret = IOT_HTTP2_UploadFile_Disconnect(handle);
+    ret = IOT_HTTP2_UploadFile_Disconnect(handle);
 
 # <a name="功能API接口">功能API接口</a>
 
