@@ -1,6 +1,7 @@
 # <a name="目录">目录</a>
 + [功能概述](#功能概述)
 + [现有方案](#现有方案)
++ [使用步骤和常见问题](#使用步骤和常见问题)
 + [配网通用HAL移植说明](#配网通用HAL移植说明)
     * [配网依赖的Linkkit SDK公共HAL](#配网依赖的Linkkit SDK公共HAL)
     * [配网模块公共HAL](#配网模块公共HAL)
@@ -36,6 +37,9 @@ WiFi设备需要连接到WiFi热点(WiFi AP)之后才能与其它设备进行基
 
 <img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/3.0.1_awss/1-2.png" width="900" height="600" />
 
+# <a name="使用步骤和常见问题">使用步骤和常见问题</a>
+
+[IoT配网操作手册](https://code.aliyun.com/edward.yangx/public-docs/raw/21851e07768667f9d3baee9cffd07aa06551da9b/docs/iLOP_Awss_Steps.pdf)
 
 # <a name="配网通用HAL移植说明">配网通用HAL移植说明</a>
 
