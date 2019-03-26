@@ -2,9 +2,9 @@
 + [功能说明](#功能说明)
 + [编译配置](#编译配置)
 + [例子程序讲解](#例子程序讲解)
-        - [1. 与云端建立连接](#1. 与云端建立连接)
-        - [2. 文件上传](#2. 文件上传)
-        - [3. 断开连接](#3. 断开连接)
+    * [1. 与云端建立连接](#1. 与云端建立连接)
+    * [2. 文件上传](#2. 文件上传)
+    * [3. 断开连接](#3. 断开连接)
 + [功能API接口](#功能API接口)
     * [HTTP2建立连接](#HTTP2建立连接)
     * [文件上传请求](#文件上传请求)
@@ -27,7 +27,8 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
 
 本节以 `src/http2/http2_example_uploadfile.c` 为例讲解如何使用文件上传功能
 
-### <a name="1. 与云端建立连接">1. 与云端建立连接</a>
+## <a name="1. 与云端建立连接">1. 与云端建立连接</a>
+
 调用`IOT_HTTP2_UploadFile_Connect`建立HTTP2连接，用户指定设备的三元组信息和服务器地址/端口号。
 ```
     http2_upload_conn_info_t conn_info;
@@ -61,7 +62,8 @@ SDK的文件上传功能使用HTTP2流式传输协议, 将文件上传至阿里�
 ```
 如果用户关心网络状态，可以注册相应的回调函数，目前支持网络断开连接，和网络重连成功两个回调函数。
 
-### <a name="2. 文件上传">2. 文件上传</a>
+## <a name="2. 文件上传">2. 文件上传</a>
+
 使用`IOT_HTTP2_UploadFile_Request`请求文件上传，例程以`UPLOAD_FILE_OPT_BIT_OVERWRITE`的方式上传，每次上传都会覆盖云端的文件。此接口为异步接口，用户可以插入多个上传请求到内部队列中。
 ```
     http2_upload_params_t fs_params;
@@ -196,7 +198,8 @@ upload_id_received_handle|037 :: =========== file_path = upload1M, upload_id = U
 [inf] on_header_callback(363): < x-response-status: 200
 [inf] on_header_callback(363): < x-file-store-id: 101184
 ```
-### <a name="3. 断开连接">3. 断开连接</a>
+## <a name="3. 断开连接">3. 断开连接</a>
+
 所有文件上传结束后使用`IOT_HTTP2_UploadFile_Disconnect`断开云端连接。
 ```
 ret = IOT_HTTP2_UploadFile_Disconnect(handle);
