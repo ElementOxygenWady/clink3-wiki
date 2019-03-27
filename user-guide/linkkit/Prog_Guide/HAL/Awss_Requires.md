@@ -10,8 +10,6 @@
     * [HAL_Awss_Connect_Ap](#HAL_Awss_Connect_Ap)
     * [HAL_Awss_Get_Channelscan_Interval_Ms](#HAL_Awss_Get_Channelscan_Interval_Ms)
     * [HAL_Awss_Get_Connect_Default_Ssid_Timeout_Interval_Ms](#HAL_Awss_Get_Connect_Default_Ssid_Timeout_Interval_Ms)
-    * [HAL_Awss_Get_Conn_Encrypt_Type](#HAL_Awss_Get_Conn_Encrypt_Type)
-    * [HAL_Awss_Get_Encrypt_Type](#HAL_Awss_Get_Encrypt_Type)
     * [HAL_Awss_Get_Timeout_Interval_Ms](#HAL_Awss_Get_Timeout_Interval_Ms)
     * [HAL_Awss_Open_Monitor](#HAL_Awss_Open_Monitor)
     * [HAL_Awss_Switch_Channel](#HAL_Awss_Switch_Channel)
@@ -344,63 +342,6 @@ void
 返回值说明
 ---
 时时长, 单位是毫秒
-
------
-
-## <a name="HAL_Awss_Get_Conn_Encrypt_Type">HAL_Awss_Get_Conn_Encrypt_Type</a>
-
-原型
----
-```
-int HAL_Awss_Get_Conn_Encrypt_Type(void);
-```
-
-接口说明
----
-获取零配, 热点配网和路由器配网的安全等级
-
-参数说明
----
-void
-
-返回值说明
----
-| 值      | 说明
-|---------|-------------------------------------------------------------
-| 3       | aes128cfb with aes-key per product and aes-iv = random
-| 4       | aes128cfb with aes-key per device and aes-iv = random
-| 5       | aes128cfb with aes-key per manufacture and aes-iv = random
-| others  | 无效
-
------
-
-## <a name="HAL_Awss_Get_Encrypt_Type">HAL_Awss_Get_Encrypt_Type</a>
-
-原型
----
-```
-int HAL_Awss_Get_Encrypt_Type(void);
-```
-
-接口说明
----
-获取`smartconfig`服务的安全等级
-
-参数说明
----
-void
-
-返回值说明
----
-| 值      | 说明
-|---------|---------------------------------------------------------
-| 0       | open (no encrypt)
-| 1       | aes256cfb with default aes-key and aes-iv
-| 2       | aes128cfb with default aes-key and aes-iv
-| 3       | aes128cfb with aes-key per product and aes-iv = 0
-| 4       | aes128cfb with aes-key per device and aes-iv = 0
-| 5       | es128cfb with aes-key per manufacture and aes-iv = 0
-| others  | invalid
 
 -----
 

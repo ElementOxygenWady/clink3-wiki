@@ -88,8 +88,7 @@ WiFi设备需要连接到WiFi热点(WiFi AP)之后才能与其它设备进行基
 | 6       | [HAL_Awss_Switch_Channel](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Switch_Channel)                               | 设置Wi-Fi设备切换到指定的信道(channel)上
 | 7       | [HAL_Awss_Get_Channelscan_Interval_Ms](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Get_Channelscan_Interval_Ms)     | 获取在每个信道(channel)上扫描的时间长度, 单位是毫秒
 | 8       | [HAL_Wifi_Get_Mac](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Get_Mac)                                             | 获取设备的MAC地址, 格式应当是"XX:XX:XX:XX:XX:XX"
-| 9       | [HAL_Awss_Get_Conn_Encrypt_Type](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Get_Conn_Encrypt_Type)                 | 获取基于连接的配网服务(热点配网/路由器配网/零配)的安全等级
-| 10      | [HAL_Awss_Connect_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Connect_Ap)                                       | 要求Wi-Fi网卡连接指定热点(Access Point)的函数, bssid指定特定AP, 另外bssid也可能为空或无效值(全0或全0xff)
+| 9      | [HAL_Awss_Connect_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Connect_Ap)                                       | 要求Wi-Fi网卡连接指定热点(Access Point)的函数, bssid指定特定AP, 另外bssid也可能为空或无效值(全0或全0xff)
 
 注:
 ---

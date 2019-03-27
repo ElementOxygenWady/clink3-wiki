@@ -185,7 +185,6 @@ int awss_dev_ap_stop
 
 | 序号    | 函数名                                                                                                                                                              | 说明
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------
-| 1       | [HAL_Awss_Get_Encrypt_Type](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Get_Encrypt_Type)       | 获取smartconfig/设备热点配网服务的安全等级
-| 2       | [HAL_Awss_Close_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Close_Ap)                   | 关闭设备热点
-| 3       | [HAL_Awss_Open_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Open_Ap)                     | 打开设备热点配网
+| 1       | [HAL_Awss_Close_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Close_Ap)                   | 关闭设备热点
+| 2       | [HAL_Awss_Open_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Open_Ap)                     | 打开设备热点配网
 

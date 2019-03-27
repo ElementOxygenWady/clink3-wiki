@@ -221,10 +221,4 @@ awss_stop
 # <a name="需要对接的HAL接口">需要对接的HAL接口</a>
 除wifi配网概述里面列出的通用HAL API需要对接外, 还需要对接以下HAL:
 
-| 序号    | 函数名                                                                                                                                                          | 说明
-|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------
-| 1       | [HAL_Awss_Get_Encrypt_Type](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Get_Encrypt_Type)   | 获取smartconfig/设备热点配网服务的安全等级
-
-说明:
----
-配网的安全等级必须小于等于Link kit连云的安全等级, 比如Link kit连云设置为一型一密, 此处设置为4会出现配网失败的情况.
++ 无
