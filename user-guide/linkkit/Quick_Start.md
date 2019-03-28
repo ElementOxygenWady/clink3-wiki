@@ -1,4 +1,6 @@
 # <a name="目录">目录</a>
++ [Windows上的快速体验](#Windows上的快速体验)
+    * [使用方法](#使用方法)
 + [快速体验](#快速体验)
     * [准备开发环境](#准备开发环境)
         - [安装本地开发环境](#安装本地开发环境)
@@ -11,6 +13,29 @@
         - [创建产品和设备](#创建产品和设备)
         - [产品功能实现](#产品功能实现)
         - [观察数据](#观察数据)
+
+# <a name="Windows上的快速体验">Windows上的快速体验</a>
+
+以Linux环境体验开发流程之前, 也可以直接在Windows上, 通过下载和运行以下例子程序体验MQTT的连接和报文收发
+
++ [mqtt-tls-example.exe](https://code.aliyun.com/edward.yangx/public-docs/raw/master/progs/mqtt-tls-example.exe)
++ [mqtt-tcp-example.exe](https://code.aliyun.com/edward.yangx/public-docs/raw/master/progs/mqtt-tcp-example.exe)
+
+## <a name="使用方法">使用方法</a>
+
++ 下载后直接双击打开, 它们会以内置的设备三元组登录IoT云, 分别是用 `TLS连接+1883` 端口和 `TCP连接+1883` 端口
++ 若需定制端口号, 可以打开Windows的命令行, 在第1个参数填入使用的目的端口号, 例如
+
+        mqtt-tls-example.exe 443
+
++ 若需换成您自己的设备信息, 在第2个到第4个参数填入使用的三元组, 例如
+
+        mqtt-tcp-example.exe 1883 <productKey> <deviceName> <deviceSecret>
+
+图例
+---
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/windows_demo_capture.png" width="1000" height="500" align="center" />
+
 
 # <a name="快速体验">快速体验</a>
 
