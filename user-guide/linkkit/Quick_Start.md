@@ -30,11 +30,11 @@
 
 #### <a name="安装必备软件">安装必备软件</a>
 
-本SDK的开发编译环境使用如下软件: `make-4.1`, `git-2.7.4`, `gcc-5.4.0`, `gcov-5.4.0`, `lcov-1.12`, `bash-4.3.48`, `tar-1.28`, `mingw-5.3.1`
+本SDK的开发编译环境使用如下软件: `make-4.1`, `git-2.7.4`, `gcc-5.4.0`, `gcov-5.4.0`, `lcov-1.12`, `bash-4.3.48`, `tar-1.28`, `mingw-5.3.1`, `gawk-4.1.3`
 
 可使用如下命令行安装必要的软件:
 ```
-$ sudo apt-get install -y build-essential make git gcc
+$ sudo apt-get install -y build-essential make git gcc gawk
 ```
 
 ### <a name="通过Hacklab Web IDE进行开发">通过Hacklab Web IDE进行开发</a>

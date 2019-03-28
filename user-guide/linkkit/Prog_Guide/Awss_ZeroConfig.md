@@ -224,3 +224,4 @@ int awss_stop()
 | 序号    | 函数名                                                                                                                                                                          | 说明
 |---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------
 | 1       | [HAL_Wifi_Enable_Mgmt_Frame_Filter](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Enable_Mgmt_Frame_Filter)   | 在站点(Station)模式下使能或禁用对特定管理帧的过滤(只接受包含特定OUI的管理帧)
+| 2       | [HAL_Wifi_Send_80211_Raw_Frame](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Send_80211_Raw_Frame)   | 发送80211  raw数据
