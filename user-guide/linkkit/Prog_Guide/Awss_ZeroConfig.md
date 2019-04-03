@@ -444,7 +444,7 @@ SDK需要用户自行实现 [HAL_Awss_Open_Monitor](https://code.aliyun.com/edwa
     + [zconfig_protocol.h](https://code.aliyun.com/edward.yangx/public-docs/blob/master/docs/zconfig_protocol.h)
     + [zconfig_utils.h](https://code.aliyun.com/edward.yangx/public-docs/blob/master/docs/zconfig_utils.h)
 + 将上述文件和待测设备的其他代码一起编译
-+ 在适当的地方调用 `verify_raw_frame()` 函数, 确保待配网设备发出了Probe Request.
-+ 在适当的地方调用 `verify_rx_mng_raw_frame()` 函数, 该函数调用 `HAL_Awss_Open_Monitor` 进入监听模式, 监听主配设备是否对零配请求进行回复
++ 在适当的地方调用 `verify_raw_frame()` 函数, 确保待配网设备发出了符合上面要求的零配请求帧
++ 在适当的地方调用 `verify_rx_mng_raw_frame()` 函数, 该函数调用 `HAL_Awss_Open_Monitor` 进入监听模式, 监听主配设备是否对零配请求回复
 + 看设备端日志, 如果出现了 `verify got zeroconfig reply` 这样的日志, 说明成功收到了主配设备回复的零配应答报文
 

@@ -90,7 +90,6 @@
     009  HAL_Awss_Get_Channelscan_Interval_Ms
     010  HAL_Awss_Get_Connect_Default_Ssid_Timeout_Interval_Ms
     011  HAL_Awss_Get_Conn_Encrypt_Type
-    012  HAL_Awss_Get_Encrypt_Type
     013  HAL_Awss_Get_Timeout_Interval_Ms
     014  HAL_Awss_Open_Monitor
     015  HAL_Awss_Switch_Channel
@@ -350,8 +349,6 @@
 | HAL_Awss_Connect_Ap                                     | 要求Wi-Fi网卡连接指定热点(Access Point)的函数
 | HAL_Awss_Get_Channelscan_Interval_Ms                    | 获取在每个信道(`channel`)上扫描的时间长度, 单位是毫秒
 | HAL_Awss_Get_Connect_Default_Ssid_Timeout_Interval_Ms   | 获取配网服务(`AWSS`)超时时长到达之后, 去连接默认SSID时的超时时长, 单位是毫秒
-| HAL_Awss_Get_Conn_Encrypt_Type                          | 获取零配, 热点配网和路由器配网的安全等级
-| HAL_Awss_Get_Encrypt_Type                               | 获取`smartconfig`服务的安全等级
 | HAL_Awss_Get_Timeout_Interval_Ms                        | 获取配网服务(`AWSS`)的超时时间长度, 单位是毫秒
 | HAL_Awss_Open_Monitor                                   | 设置Wi-Fi网卡工作在监听(Monitor)模式, 并在收到802.11帧的时候调用被传入的回调函数
 | HAL_Awss_Switch_Channel                                 | 设置Wi-Fi网卡切换到指定的信道(channel)上
