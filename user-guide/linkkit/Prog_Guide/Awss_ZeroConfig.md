@@ -187,10 +187,10 @@ static void linkkit_event_monitor(int event)
 
 # <a name="API接口说明">API接口说明</a>
 
-| 序号    | 函数名                                                                                                                                              | 说明
-|---------|-------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------
-| 1       | [awss_start](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_start)                     | 开启配网服务(设备热点配网除外)
-| 2       | [awss_config_press](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_config_press)       | 使能配网, 开始解包
+| 序号    | 函数名                                                                                                                                          | 说明
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------
+| 1       | [awss_start](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_start)                 | 开启配网服务(设备热点配网除外)
+| 2       | [awss_config_press](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_config_press)   | 使能配网, 开始解包
 | 3       | [awss_stop](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_stop)                   | 关闭配网服务(设备热点配网除外)
 
 ## <a name="应用场景">应用场景</a>
@@ -228,10 +228,10 @@ int awss_stop()
 # <a name="需要对接的HAL接口">需要对接的HAL接口</a>
 除wifi配网概述里面列出的通用HAL API需要对接外, 还需要对接以下HAL:
 
-| 序号    | 函数名                                                                                                                                                                          | 说明
-|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------
-| 1       | [HAL_Wifi_Enable_Mgmt_Frame_Filter](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Enable_Mgmt_Frame_Filter)   | 在站点(Station)模式下使能或禁用对特定管理帧的过滤(只接受包含特定OUI的管理帧)
-| 2       | [HAL_Wifi_Send_80211_Raw_Frame](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Send_80211_Raw_Frame)   | 发送80211  raw数据# 零配模式WiFi配网的对接自查
+| 序号    | 函数名                                                                                                                                                                  | 说明
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------
+| 1       | [HAL_Wifi_Send_80211_Raw_Frame](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Send_80211_Raw_Frame)   | 在当前信道(channel)上以基本数据速率(1Mbps)发送裸的802.11帧(raw 802.11 frame)
+| 2       | [HAL_Awss_Open_Monitor](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Open_Monitor)                   | 设置Wi-Fi网卡工作在监听(Monitor)模式, 并在收到802.11帧的时候调用被传入的回调函数
 
 # <a name="零配模式WiFi配网的对接自查">零配模式WiFi配网的对接自查</a>
 
@@ -316,6 +316,8 @@ WiFi帧可以分为3种
 配网的信息将在 `Vendor Specific` 这个字段里面传播, **注意: 该字段包含设备名称等信息, 因此不能硬编码实现**
 
 ## <a name="Wireshark 抓包方法">Wireshark 抓包方法</a>
+
+> **注: Windows系统会过滤一些 WiFi 报文不传递给自己的应用程序, 导致 WireShark 软件抓不到空中包, 所以一般以 mac 电脑抓包**
 
 可以使用 Wireshark 软件对空气中的WiFi帧进行抓取来帮助自查, 以验证待配网设备是否发出正确的探测请求帧, 以及主配设备是否进行过回复, 步骤如下
 
