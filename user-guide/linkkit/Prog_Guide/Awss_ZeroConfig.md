@@ -282,7 +282,7 @@ WiFi帧可以分为3种
 
 零配用到的都是WiFi管理帧, 所有的WiFi管理帧都符合如下的帧格式
 
-<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/80211_mgmt_frame.png" width="800" height="240" />
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/80211_mgmt_frame.png" width="800" height="200" />
 
 探测请求帧格式
 ---
@@ -313,7 +313,9 @@ WiFi帧可以分为3种
 + `Vendor Specific`
 
 ---
-配网的信息将在 `Vendor Specific` 这个字段里面传播, **注意: 该字段包含设备名称等信息, 因此不能硬编码实现**
+配网的信息将在 `Vendor Specific` 这个字段里面传播, 其内部构造如下, **注意: 该字段包含设备名称等信息, 因此不能硬编码实现**
+
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/80211_vendor_ie.png" width="800" height="200" />
 
 ## <a name="Wireshark 抓包方法">Wireshark 抓包方法</a>
 
