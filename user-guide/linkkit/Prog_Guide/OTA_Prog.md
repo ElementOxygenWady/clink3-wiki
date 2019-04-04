@@ -216,7 +216,7 @@ if (NULL != fp) {
 ## <a name="用高级版接口实现的OTA例程">用高级版接口实现的OTA例程</a>
 > 现对照`src/dev_model/examples/linkkit_example_solo.c`分步骤讲解如何使用高级版的接口实现OTA的功能
 
-1. 初始化主设备，注册FOTA的回调函数，建立与云端的连接
+1. 初始化主设备, 注册FOTA的回调函数, 建立与云端的连接
 ---
 ```
 int res = 0;
@@ -262,13 +262,13 @@ if (res < 0) {
 }
 ```
 
-2. 实现上述代码中的回调函数`user_fota_event_handler`：
+2. 实现上述代码中的回调函数`user_fota_event_handler`:
 ---
 该回调函数在如下两种情况下会被触发:
 + 直接收到云端下发的新固件通知时
-+ 由设备端主动发起新固件查询，云端返回新固件通知时
++ 由设备端主动发起新固件查询, 云端返回新固件通知时
 
-在收到新固件通知后，可调用`IOT_Linkkit_Query`进行固件下载
+在收到新固件通知后, 可调用`IOT_Linkkit_Query`进行固件下载
 ```
 int user_fota_event_handler(int type, const char *version)
 {
@@ -285,13 +285,13 @@ int user_fota_event_handler(int type, const char *version)
     return 0;
 }
 ```
-**注意**：
-- 使用`ITM_MSG_QUERY_FOTA_DATA`选项调用`IOT_Linkkit_Query`时，此接口会阻塞直到镜像下载结束
-- `buffer_length`指定了镜像下载的分片大小(每个HTTP GET请求的Content-Length大小)，用户应根据设备网络性能合理配置分片大小以提高下载数据。
-- 若`IOT_Linkkit_Query`返回`FAIL_RETURN`则固件下载失败；返回`SUCCESS_RETURN`则固件下载成功。
+**注意**:
+- 使用`ITM_MSG_QUERY_FOTA_DATA`选项调用`IOT_Linkkit_Query`时, 此接口会阻塞直到镜像下载结束
+- `buffer_length`指定了镜像下载的分片大小(每个HTTP GET请求的Content-Length大小), 用户应根据设备网络性能合理配置分片大小以提高下载速度
+- 若`IOT_Linkkit_Query`返回`FAIL_RETURN`则固件下载失败. 返回`SUCCESS_RETURN`则固件下载成功
 
 
-3. 用户主动发起新固件查询：
+3. 用户主动发起新固件查询:
 ---
 ```
 IOT_Linkkit_Query(user_example_ctx->master_devid, ITM_MSG_REQUEST_FOTA_IMAGE,
