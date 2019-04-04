@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
 + 点击这个新增固件的"批量升级"按钮, 从中选择设备所属产品为 examples/ota/ota_mqtt-example.c 中三元组对应的产品,
 + 待升级版本号点开下拉框选当前版本号, "升级范围"选"定向升级", 再从"设备范围"中选当前的三元组对应的设备, 点击确定即可
 
-5. 下载OTA内容, 上报下载进度
+5. 下载OTA内容, 上报下载进度
 ---
 ```
     do {
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
         }
 
         /* get OTA information */
-        /* 获取已下载到的数据量, 文件总大小, md5信息, 版本号等信息 */
+        /* 获取已下载到的数据量, 文件总大小, md5信息, 版本号等信息 */
         IOT_OTA_Ioctl(h_ota, IOT_OTAG_FETCHED_SIZE, &size_downloaded, 4);
         IOT_OTA_Ioctl(h_ota, IOT_OTAG_FILE_SIZE, &size_file, 4);
         IOT_OTA_Ioctl(h_ota, IOT_OTAG_MD5SUM, md5sum, 33);
@@ -285,6 +285,11 @@ int user_fota_event_handler(int type, const char *version)
     return 0;
 }
 ```
+**注意**：
+- 使用`ITM_MSG_QUERY_FOTA_DATA`选项调用`IOT_Linkkit_Query`时，此接口会阻塞直到镜像下载结束
+- `buffer_length`指定了镜像下载的分片大小(每个HTTP GET请求的Content-Length大小)，用户应根据设备网络性能合理配置分片大小以提高下载数据。
+- 若`IOT_Linkkit_Query`返回`FAIL_RETURN`则固件下载失败；返回`SUCCESS_RETURN`则固件下载成功。
+
 
 3. 用户主动发起新固件查询：
 ---
