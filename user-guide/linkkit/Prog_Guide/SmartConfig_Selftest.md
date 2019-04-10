@@ -1,16 +1,16 @@
 # <a name="目录">目录</a>
-+ [知识背景](#知识背景)
-    * [监听模式](#监听模式)
+    * [知识背景](#知识背景)
+        - [监听模式](#监听模式)
     * [底层原理](#底层原理)
-+ [用手机app发送一键配网信息流](#用手机app发送一键配网信息流)
-    * [在手机上安装配网app](#在手机上安装配网app)
-    * [操作配网app发送报文](#操作配网app发送报文)
-+ [用自测工具和设备接收信息流](#用自测工具和设备接收信息流)
-    * [自测工具的获取](#自测工具的获取)
-    * [自测工具使用示例](#自测工具使用示例)
-    * [自测工具的能力概览](#自测工具的能力概览)
+    * [用手机app发送一键配网信息流](#用手机app发送一键配网信息流)
+        - [在手机上安装配网app](#在手机上安装配网app)
+        - [操作配网app发送报文](#操作配网app发送报文)
+    * [用自测工具和设备接收信息流](#用自测工具和设备接收信息流)
+        - [自测工具的获取](#自测工具的获取)
+        - [自测工具的使用](#自测工具的使用)
+        - [自测函数及测试方法详解](#自测函数及测试方法详解)
 
-# <a name="知识背景">知识背景</a>
+## <a name="知识背景">知识背景</a>
 
 一键配网的原理十分简单, 由于WiFi报文传播的物理介质是无处不在的空气, 所以
 
@@ -18,7 +18,7 @@
 + 设备在监听模式即可接收和上报给SDK
 + SDK解密到SSID和密码后, 作为入参调用 `HAL_Awss_Connect_Ap()` 接口, 设备就能连接上热点
 
-## <a name="监听模式">监听模式</a>
+### <a name="监听模式">监听模式</a>
 
 所谓监听模式, 就是SDK希望通过 `HAL_Awss_Open_Monitor(cb)` 调用, 使设备WiFi芯片进入如下的工作模式
 
@@ -52,10 +52,10 @@
 + 监听模式下设备底层应将感知到的所有组播报文, 无论如何传递给SDK
 + 目的 mac 地址的 `48` 个比特位中, 后 `23` 个是手机发送时可控制, 设备也可接收到的, **所以可使用这23个比特位编码和传递连接信息**
 
-# <a name="用手机app发送一键配网信息流">用手机app发送一键配网信息流</a>
+## <a name="用手机app发送一键配网信息流">用手机app发送一键配网信息流</a>
 为确认一键配网的相关HAL接口实现正确, 需用手机app向空中发送配网信息流, 通过设备是否可从空中正常接收到相应信息来判断
 
-## <a name="在手机上安装配网app">在手机上安装配网app</a>
+### <a name="在手机上安装配网app">在手机上安装配网app</a>
 
 + 公版app的下载说明: https://living.aliyun.com/doc#muti-app.html
 + 也可以通过扫描下面的二维码下载安装
@@ -63,7 +63,7 @@
 
 <img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/download_ilop_app.png" width="700" height="400" />
 
-## <a name="操作配网app发送报文">操作配网app发送报文</a>
+### <a name="操作配网app发送报文">操作配网app发送报文</a>
 
 + 手机连接上期望设备将要连接到的热点, 确保热点和设备距离足够近并无阻挡
 + 用二维码生成工具, 将以下文本转换成二维码
@@ -77,9 +77,9 @@
 <img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/app_awss_steps.gif" width="280" height="500" align="center" />
 </div>
 
-# <a name="用自测工具和设备接收信息流">用自测工具和设备接收信息流</a>
+## <a name="用自测工具和设备接收信息流">用自测工具和设备接收信息流</a>
 
-## <a name="自测工具的获取">自测工具的获取</a>
+### <a name="自测工具的获取">自测工具的获取</a>
 
 自测工具以源码形式提供, 需要用户下载它的C语言源文件后, 跟用户自己编写的 `HAL_XXX` 接口交叉编译到一起, 然后在待调试一键配网功能的开发板上运行使用
 
@@ -88,28 +88,45 @@
 ---
 可以点击以上链接下载压缩包到本地之后, 用 `WinRAR`, `7zip` 等压缩工具将这个压缩包文件解压成一系列的C语言源文件
 
-解压后的目录如下：
+解压后的内容及说明如下:
 
-    ├── include
-    │   ├── hal_awss.h                   //自测函数声明
-    │   ├── hal_common.h                 //HAL接口声明
-    │   ├── ieee80211.h                  
-    │   ├── ieee80211_radiotap.h
-    │   ├── smartconfig_ieee80211.h
-    │   └── zconfig_protocol.h
-    └── src
-        ├── hal_awss.c                   //自测函数实现
-        ├── haltest.c                    //自测函数调用示例
-        ├── ieee80211.c
-        ├── smartconfig_ieee80211.c
-        ├── TestProbeRx.c
-        └── wrapper.c                    //HAL接口实现
+    +-- include
+    |   +-- hal_awss.h
+    |   +-- hal_common.h
+    |   +-- ieee80211.h
+    |   +-- ieee80211_radiotap.h
+    |   +-- smartconfig_ieee80211.h
+    |   +-- zconfig_protocol.h
+    +-- src
+        +-- hal_awss.c
+        +-- haltest.c
+        +-- ieee80211.c
+        +-- smartconfig_ieee80211.c
+        +-- TestProbeRx.c
+        +-- wrapper.c
 
-所有自测函数声明在`hal_awss.h`中，用户需要自行实现`wrapper.c`中的HAL接口，然后参考`haltest.c`的调用方式进行自测。
+| 文件名                  | 说明
+|-------------------------|-----------------------------
+| `include/hal_awss.h`    | 自测函数声明
+| `include/hal_common.h`  | HAL接口声明
+| `src/hal_awss.c`        | 自测函数实现
+| `src/haltest.c`         | 自测函数调用示例
+| **`src/wrapper.c`**     | **被测试的HAL接口实现**
 
-## <a name="自测工具使用示例">自测工具使用示例</a>
 
-下面是`haltest.c`中的自测函数调用示例
+### <a name="自测工具的使用">自测工具的使用</a>
+
+自测工具的使用方式设计为
+---
++ 用户将 `src/wrapper.c` 中所有 `HAL_XXX()` 的函数内容实现替换为适合自己系统的代码
+    + 注意由 `#if 0 ... #endif` 包围的部分是我们提供的参考实现
+    + 这些参考实现由于是在特定的嵌入式Linux开发板上调通, **不能直接在其他的Linux开发板甚至非Linux开发板上直接使用, 列出仅为示意**
++ 用户将替换后的 `src/wrapper.c` 和其它的源文件编译到自己的固件中
++ 用户可以浏览 `include/hal_awss.h` 文件, 其中列举的函数 `verfiy_xxx()` 称为 **"自测函数"**, 每个自测函数可以验证一到多个 `HAL_XXX()` 实现
++ 用户可以选择合适的程序入口, 调用自测函数 `verify_xxx()`, 如果不知道如何调用, 可以参考 `src/haltest.c`, 这个文件是我们在嵌入式Linux开发板上验证过的
++ 用户自行编译 **嵌入了自己HAL实现的自测工具全部源码**, 通过观察 `verify_xxx()` 这类函数的运行输出, 来检验自己的 `HAL_XXX()` 实现是否基本正确
+
+> 下面是 `src/haltest.c` 中对自测函数进行调用的示意代码
 
     #include <stdio.h>
     #include <unistd.h>
@@ -145,13 +162,21 @@
         return 0;
     }
 
-## <a name="自测工具的能力概览">自测工具的能力概览</a>
+### <a name="自测函数及测试方法详解">自测函数及测试方法详解</a>
 
-自测工具提供以下函数用于自测，用户在适当的地方进行调用，工具会输出log用于确认当前HAL接口的正确性。以下自测函数包含的HAL为[WIFI配网概述](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision)中的[配网模块公共HAL](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision#%E9%85%8D%E7%BD%91%E6%A8%A1%E5%9D%97%E5%85%AC%E5%85%B1HAL)。一键配网仅使用这些公共HAL即可。
+> 根据上一节的说明, 自测工具通过提供 **"自测函数"**, 触发自测动作, 并输出log帮助用户确认某些HAL接口实现的正确性
+
+以下自测函数包含的HAL为 [WIFI配网概述](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision) 中的 [配网模块公共HAL](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision#%E9%85%8D%E7%BD%91%E6%A8%A1%E5%9D%97%E5%85%AC%E5%85%B1HAL)
+
+---
+*若使用一键配网模式, 仅需要对接这些公共HAL接口即可, 没有更多的HAL接口需要对接*
 
 verify_awss_preprocess
 ---
-对`HAL_Awss_Get_Timeout_Interval_Ms`、`HAL_Awss_Get_Channelscan_Interval_Ms`和`HAL_Wifi_Get_Mac`进行自测。这3个HAL返回的是一些配置参数，用户需要确认其正确性。输出日志例子如下：
++ 对 `HAL_Awss_Get_Timeout_Interval_Ms`, `HAL_Awss_Get_Channelscan_Interval_Ms` 和 `HAL_Wifi_Get_Mac` 进行自测
++ 这3个HAL返回的是一些配置参数, 用户需要确认这些参数的值符合自己填入的预期
+
+> 输出日志例子如下
 
     /***********************************************/
     /*   Verify HAL_Awss_Get_Timeout_Interval_Ms   */
@@ -174,7 +199,11 @@ verify_awss_preprocess
 
 verify_awss_open_monitor
 ---
-对`HAL_Awss_Open_Monitor`进行自测，将打开监听模式，输出日志为当前收到的配网模块帧类型的表格，如果其中有`SmartConfig Start Frame`、`SmartConfig Group Frame`和`SmartConfig  Data Frame`字样，说明当前监听模式可以接收到一键配网所需的帧类型。
++ 对 `HAL_Awss_Open_Monitor` 进行自测, 根据定义这将打开设备的监听模式, 开始抓取空中的WiFi报文, **所以运行的时候务必按照上文确保设备附近有运行配网app发送配网报文**
++ 输出日志为当前收到的配网模块帧类型的表格
++ 如果其中有 `SmartConfig Start Frame`, `SmartConfig Group Frame` 和 `SmartConfig  Data Frame` 字样, 说明当前监听模式可以接收到一键配网所需的帧类型
+
+> 输出日志例子如下
 
     /***********************************************/
     /*        Verify HAL_Awss_Open_Monitor         */
@@ -197,7 +226,10 @@ verify_awss_open_monitor
 
 verify_awss_close_monitor
 ---
-对`HAL_Awss_Close_Monitor`进行自测。用户调用该函数后，应该不再接收到任何配网帧类型。日志输出如下：
++ 对 `HAL_Awss_Close_Monitor` 进行自测, 观察是否可以按预期停止监听模式
++ 用户调用该函数后, 应该不再接收到任何配网帧类型, 上面的打印停止
+
+> 输出日志例子如下
 
     /***********************************************/
     /*        Verify HAL_Awss_Close_Monitor        */
@@ -205,11 +237,15 @@ verify_awss_close_monitor
 
 verify_awss_switch_channel
 ---
-对`HAL_Awss_Switch_Channel`进行自测。在监听模式打开的情况下，不断切换wifi信道进行侦听，可参考`haltest.c`进行自测。
++ 对 `HAL_Awss_Switch_Channel` 进行自测, 观察是否可以按预期切换到指定的WiFi信道(1-13)
++ 在监听模式打开的情况下, 不断切换wifi信道进行侦听, 可参考 `haltest.c`
 
 verfiy_awss_connect_ap
 ---
-对`HAL_Awss_Connect_Ap`进行自测。在调用该函数后，应当可以成功连上指定AP。日志输出如下：
++ 对 `HAL_Awss_Connect_Ap` 进行自测, 观察是否可以根据SSID和密码, 按预期连接到指定的AP热点上
++ 在调用该函数后, 应当可以成功连上指定AP
+
+> 输出日志例子如下, `0`表示成功, `-1`表示失败
 
     /***********************************************/
     /*          Verify HAL_Awss_Connect_Ap         */
@@ -218,7 +254,10 @@ verfiy_awss_connect_ap
 
 verify_awss_get_ap_info
 ---
-对`HAL_Wifi_Get_Ap_Info`进行自测。在调用该函数后，会打印获取到的ssid、passwd和bssid。日志输出如下：
++ 对 `HAL_Wifi_Get_Ap_Info` 进行自测, 观察是否可以按预期收集AP热点的连接信息
++ 在调用该函数后, 会打印获取到的ssid, 密码和bssid
+
+> 输出日志例子如下
 
     /***********************************************/
     /*         Verify HAL_Wifi_Get_Ap_Info         */
@@ -229,7 +268,10 @@ verify_awss_get_ap_info
 
 verify_awss_net_is_ready
 ---
-对`HAL_Sys_Net_Is_Ready`进行自测。在滴啊用该函数后，会获取当前网络状态。日志输出如下：
++ 对 `HAL_Sys_Net_Is_Ready` 进行自测, 观察是否可以按
++ 在调用该函数后, 会获取当前网络状态
+
+> 输出日志例子如下
 
     /***********************************************/
     /*         Verify HAL_Sys_Net_Is_Ready         */
