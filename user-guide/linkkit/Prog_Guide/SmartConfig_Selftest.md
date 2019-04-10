@@ -6,6 +6,9 @@
     * [在手机上安装配网app](#在手机上安装配网app)
     * [操作配网app发送报文](#操作配网app发送报文)
 + [用自测工具和设备接收信息流](#用自测工具和设备接收信息流)
+    * [自测工具的能力概览](#自测工具的能力概览)
+    * [自测工具的获取](#自测工具的获取)
+    * [自测工具使用示例](#自测工具使用示例)
 
 # <a name="知识背景">知识背景</a>
 
@@ -75,3 +78,141 @@
 </div>
 
 # <a name="用自测工具和设备接收信息流">用自测工具和设备接收信息流</a>
+
+## <a name="自测工具的能力概览">自测工具的能力概览</a>
+
+自测工具提供以下函数用于自测，用户在适当的地方进行调用，工具会输出log用于确认当前HAL接口的正确性。以下自测函数包含的HAL为[WIFI配网概述](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision)中的[配网模块公共HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision#%E9%85%8D%E7%BD%91%E6%A8%A1%E5%9D%97%E5%85%AC%E5%85%B1hal)。一键配网仅使用这些公共HAL即可。
+
+verify_awss_preprocess
+---
+对`HAL_Awss_Get_Timeout_Interval_Ms`、`HAL_Awss_Get_Channelscan_Interval_Ms`和`HAL_Wifi_Get_Mac`进行自测。这3个HAL返回的是一些配置参数，用户需要确认其正确性。输出日志例子如下：
+
+    /***********************************************/
+    /*   Verify HAL_Awss_Get_Timeout_Interval_Ms   */
+    /*   Awss Timeout Interval Ms:     600000 ms   */
+    /***********************************************/
+
+    /***********************************************/
+    /* Verify HAL_Awss_Get_Channelscan_Interval_Ms */
+    /* Awss Channel Scan Interval Ms:       250 ms */
+    /***********************************************/
+
+    /***********************************************/
+    /*           Verify HAL_Wifi_Get_Mac           */
+    /*         Wifi Mac: 11:22:33:44:55:66         */
+    /***********************************************/
+
+    /***********************************************/
+    /*   Verify HAL_Awss_Switch_Channel In Loop    */
+    /***********************************************/
+
+verify_awss_open_monitor
+---
+对`HAL_Awss_Open_Monitor`进行自测，将打开监听模式，输出日志为当前收到的配网模块帧类型的表格，如果其中有`SmartConfig Start Frame`、`SmartConfig Group Frame`和`SmartConfig  Data Frame`字样，说明当前监听模式可以接收到一键配网所需的帧类型。
+
+    /***********************************************/
+    /*        Verify HAL_Awss_Open_Monitor         */
+    /***********************************************/
+
+    |---------------------------------------------------------------------|
+    |          Frame Type         | Direction |  Packet Length  | Channel |
+    |-----------------------------|-----------|-----------------|---------|
+    |   SmartConfig  Data Frame   |   FromDS  |  1256 (0x04E8)  |     8   |
+    |   SmartConfig Start Frame   |   FromDS  |  1248 (0x04E0)  |     8   |
+    |   SmartConfig  Data Frame   |   FromDS  |  1256 (0x04E8)  |     8   |
+    |   SmartConfig  Data Frame   |   FromDS  |  0532 (0x0214)  |     9   |
+    |   SmartConfig  Data Frame   |   FromDS  |  0288 (0x0120)  |     1   |
+    |   SmartConfig  Data Frame   |   FromDS  |  0457 (0x01C9)  |     3   |
+    |   SmartConfig Group Frame   |   FromDS  |  1002 (0x03EA)  |     4   |
+    |   SmartConfig Group Frame   |   FromDS  |  0994 (0x03E2)  |     4   |
+    |   SmartConfig  Data Frame   |   FromDS  |  0284 (0x011C)  |     4   |
+    |   SmartConfig  Data Frame   |   FromDS  |  0421 (0x01A5)  |     4   |
+    |   SmartConfig  Data Frame   |   FromDS  |  0413 (0x019D)  |     4   |
+
+verify_awss_close_monitor
+---
+对`HAL_Awss_Close_Monitor`进行自测。用户调用该函数后，应该不再接收到任何配网帧类型。日志输出如下：
+
+    /***********************************************/
+    /*        Verify HAL_Awss_Close_Monitor        */
+    /***********************************************/
+
+verify_awss_switch_channel
+---
+对`HAL_Awss_Switch_Channel`进行自测。在监听模式打开的情况下，不断切换wifi信道进行侦听，可参考`haltest.c`进行自测。
+
+verfiy_awss_connect_ap
+---
+对`HAL_Awss_Connect_Ap`进行自测。在调用该函数后，应当可以成功连上指定AP。日志输出如下：
+
+    /***********************************************/
+    /*          Verify HAL_Awss_Connect_Ap         */
+    /*                  Result:  0                 */
+    /***********************************************/
+
+verify_awss_get_ap_info
+---
+对`HAL_Wifi_Get_Ap_Info`进行自测。在调用该函数后，会打印获取到的ssid、passwd和bssid。日志输出如下：
+
+    /***********************************************/
+    /*         Verify HAL_Wifi_Get_Ap_Info         */
+    /*                  Result:  0                 */
+    /*           SSID:       test_ssid             */
+    /*           PASSWD:     test_passwd           */
+    /***********************************************/
+
+verify_awss_net_is_ready
+---
+对`HAL_Sys_Net_Is_Ready`进行自测。在滴啊用该函数后，会获取当前网络状态。日志输出如下：
+
+    /***********************************************/
+    /*         Verify HAL_Sys_Net_Is_Ready         */
+    /*                  Result:  0                 */
+    /***********************************************/
+
+## <a name="自测工具的获取">自测工具的获取</a>
+
+自测工具以源码形式提供, 需要用户下载它的C语言源文件后, 跟用户自己编写的 `HAL_XXX` 接口交叉编译到一起, 然后在待调试一键配网功能的开发板上运行使用
+
+[下载地址](https://code.aliyun.com/edward.yangx/public-docs/raw/master/progs/smartconfig_hal_test.zip)
+
+---
+可以点击以上链接下载压缩包到本地之后, 用 `WinRAR`, `7zip` 等压缩工具将这个压缩包文件解压成一系列的C语言源文件
+
+## <a name="自测工具使用示例">自测工具使用示例</a>
+
+下面是自测函数调用示例
+
+    #include <stdio.h>
+    #include <unistd.h>
+    #include "hal_common.h"
+
+    #define TEST_SWITCH_CHANNEL_INTERNVAL_MS (250)
+
+    ...
+    ...
+
+    int main(int argc, char *argv[])
+    {
+        int time_passed = 0;
+        uint8_t bssid[ETH_ALEN] = {0x11,0x22,0x33,0x44,0x55,0x66};
+
+        verify_awss_preprocess();
+        verify_awss_close_monitor();
+        verify_awss_open_monitor();
+
+        while(1) {
+            if (time_passed > 10 *1000) {
+                break;
+            }
+            verify_awss_switch_channel(switch_channel());
+            usleep(TEST_SWITCH_CHANNEL_INTERNVAL_MS*1000);
+            time_passed += TEST_SWITCH_CHANNEL_INTERNVAL_MS;
+        }
+
+        verfiy_awss_connect_ap(5000, "ssid", "passwd", AWSS_AUTH_TYPE_WPAPSKWPA2PSK, AWSS_ENC_TYPE_AES, bssid, 6);
+        verify_awss_get_ap_info();
+        verify_awss_net_is_ready();
+
+        return 0;
+    }

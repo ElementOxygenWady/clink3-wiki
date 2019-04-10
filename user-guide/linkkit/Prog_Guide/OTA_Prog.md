@@ -285,10 +285,10 @@ int user_fota_event_handler(int type, const char *version)
     return 0;
 }
 ```
-**注意**:
-- 使用`ITM_MSG_QUERY_FOTA_DATA`选项调用`IOT_Linkkit_Query`时, 此接口会阻塞直到镜像下载结束
-- `buffer_length`指定了镜像下载的分片大小(每个HTTP GET请求的Content-Length大小), 用户应根据设备网络性能合理配置分片大小以提高下载速度
-- 若`IOT_Linkkit_Query`返回`FAIL_RETURN`则固件下载失败. 返回`SUCCESS_RETURN`则固件下载成功
+**注意**：
+- 使用`ITM_MSG_QUERY_FOTA_DATA`选项调用`IOT_Linkkit_Query`时，此接口会阻塞直到镜像下载结束
+- `buffer_length`指定了镜像下载的分片大小(每个HTTP GET请求的Content-Length大小)，用户应根据设备网络性能和Flash Page大小合理配置分片大小以提高固件升级速度。
+- 若`IOT_Linkkit_Query`返回`FAIL_RETURN`则固件下载失败；返回`SUCCESS_RETURN`则固件下载成功。
 
 
 3. 用户主动发起新固件查询:
