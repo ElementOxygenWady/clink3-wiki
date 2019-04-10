@@ -6,9 +6,9 @@
     * [在手机上安装配网app](#在手机上安装配网app)
     * [操作配网app发送报文](#操作配网app发送报文)
 + [用自测工具和设备接收信息流](#用自测工具和设备接收信息流)
-    * [自测工具的能力概览](#自测工具的能力概览)
     * [自测工具的获取](#自测工具的获取)
     * [自测工具使用示例](#自测工具使用示例)
+    * [自测工具的能力概览](#自测工具的能力概览)
 
 # <a name="知识背景">知识背景</a>
 
@@ -79,9 +79,75 @@
 
 # <a name="用自测工具和设备接收信息流">用自测工具和设备接收信息流</a>
 
+## <a name="自测工具的获取">自测工具的获取</a>
+
+自测工具以源码形式提供, 需要用户下载它的C语言源文件后, 跟用户自己编写的 `HAL_XXX` 接口交叉编译到一起, 然后在待调试一键配网功能的开发板上运行使用
+
+[下载地址](https://code.aliyun.com/edward.yangx/public-docs/raw/master/progs/smartconfig_hal_test.zip)
+
+---
+可以点击以上链接下载压缩包到本地之后, 用 `WinRAR`, `7zip` 等压缩工具将这个压缩包文件解压成一系列的C语言源文件
+
+解压后的目录如下：
+
+    ├── include
+    │   ├── hal_awss.h                   //自测函数声明
+    │   ├── hal_common.h                 //HAL接口声明
+    │   ├── ieee80211.h                  
+    │   ├── ieee80211_radiotap.h
+    │   ├── smartconfig_ieee80211.h
+    │   └── zconfig_protocol.h
+    └── src
+        ├── hal_awss.c                   //自测函数实现
+        ├── haltest.c                    //自测函数调用示例
+        ├── ieee80211.c
+        ├── smartconfig_ieee80211.c
+        ├── TestProbeRx.c
+        └── wrapper.c                    //HAL接口实现
+
+所有自测函数声明在`hal_awss.h`中，用户需要自行实现`wrapper.c`中的HAL接口，然后参考`haltest.c`的调用方式进行自测。
+
+## <a name="自测工具使用示例">自测工具使用示例</a>
+
+下面是`haltest.c`中的自测函数调用示例
+
+    #include <stdio.h>
+    #include <unistd.h>
+    #include "hal_common.h"
+
+    #define TEST_SWITCH_CHANNEL_INTERNVAL_MS (250)
+
+    ...
+    ...
+
+    int main(int argc, char *argv[])
+    {
+        int time_passed = 0;
+        uint8_t bssid[ETH_ALEN] = {0x11,0x22,0x33,0x44,0x55,0x66};
+
+        verify_awss_preprocess();
+        verify_awss_close_monitor();
+        verify_awss_open_monitor();
+
+        while(1) {
+            if (time_passed > 10 *1000) {
+                break;
+            }
+            verify_awss_switch_channel(switch_channel());
+            usleep(TEST_SWITCH_CHANNEL_INTERNVAL_MS*1000);
+            time_passed += TEST_SWITCH_CHANNEL_INTERNVAL_MS;
+        }
+
+        verfiy_awss_connect_ap(5000, "ssid", "passwd", AWSS_AUTH_TYPE_WPAPSKWPA2PSK, AWSS_ENC_TYPE_AES, bssid, 6);
+        verify_awss_get_ap_info();
+        verify_awss_net_is_ready();
+
+        return 0;
+    }
+
 ## <a name="自测工具的能力概览">自测工具的能力概览</a>
 
-自测工具提供以下函数用于自测，用户在适当的地方进行调用，工具会输出log用于确认当前HAL接口的正确性。以下自测函数包含的HAL为[WIFI配网概述](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision)中的[配网模块公共HAL](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision#%E9%85%8D%E7%BD%91%E6%A8%A1%E5%9D%97%E5%85%AC%E5%85%B1hal)。一键配网仅使用这些公共HAL即可。
+自测工具提供以下函数用于自测，用户在适当的地方进行调用，工具会输出log用于确认当前HAL接口的正确性。以下自测函数包含的HAL为[WIFI配网概述](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision)中的[配网模块公共HAL](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision#%E9%85%8D%E7%BD%91%E6%A8%A1%E5%9D%97%E5%85%AC%E5%85%B1HAL)。一键配网仅使用这些公共HAL即可。
 
 verify_awss_preprocess
 ---
@@ -169,50 +235,3 @@ verify_awss_net_is_ready
     /*         Verify HAL_Sys_Net_Is_Ready         */
     /*                  Result:  0                 */
     /***********************************************/
-
-## <a name="自测工具的获取">自测工具的获取</a>
-
-自测工具以源码形式提供, 需要用户下载它的C语言源文件后, 跟用户自己编写的 `HAL_XXX` 接口交叉编译到一起, 然后在待调试一键配网功能的开发板上运行使用
-
-[下载地址](https://code.aliyun.com/edward.yangx/public-docs/raw/master/progs/smartconfig_hal_test.zip)
-
----
-可以点击以上链接下载压缩包到本地之后, 用 `WinRAR`, `7zip` 等压缩工具将这个压缩包文件解压成一系列的C语言源文件
-
-## <a name="自测工具使用示例">自测工具使用示例</a>
-
-下面是自测函数调用示例
-
-    #include <stdio.h>
-    #include <unistd.h>
-    #include "hal_common.h"
-
-    #define TEST_SWITCH_CHANNEL_INTERNVAL_MS (250)
-
-    ...
-    ...
-
-    int main(int argc, char *argv[])
-    {
-        int time_passed = 0;
-        uint8_t bssid[ETH_ALEN] = {0x11,0x22,0x33,0x44,0x55,0x66};
-
-        verify_awss_preprocess();
-        verify_awss_close_monitor();
-        verify_awss_open_monitor();
-
-        while(1) {
-            if (time_passed > 10 *1000) {
-                break;
-            }
-            verify_awss_switch_channel(switch_channel());
-            usleep(TEST_SWITCH_CHANNEL_INTERNVAL_MS*1000);
-            time_passed += TEST_SWITCH_CHANNEL_INTERNVAL_MS;
-        }
-
-        verfiy_awss_connect_ap(5000, "ssid", "passwd", AWSS_AUTH_TYPE_WPAPSKWPA2PSK, AWSS_ENC_TYPE_AES, bssid, 6);
-        verify_awss_get_ap_info();
-        verify_awss_net_is_ready();
-
-        return 0;
-    }

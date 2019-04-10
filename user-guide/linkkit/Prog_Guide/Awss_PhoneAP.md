@@ -179,11 +179,11 @@ static void linkkit_event_monitor(int event)
 
 # <a name="API接口说明">API接口说明</a>
 
-| 序号    | 函数名                                                                                                                                              | 说明
-|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------
-| 1       | [awss_start](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_start)                     | 开启配网服务(设备热点配网除外)
-| 2       | [awss_config_press](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_config_press)       | 使能配网, 开始解包
-| 3       | [awss_stop](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_stop)                       | 关闭配网服务(设备热点配网除外)
+| 序号    | 函数名                                                                                                                                          | 说明
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------
+| 1       | [awss_start](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_start)                 | 开启配网服务(设备热点配网除外)
+| 2       | [awss_config_press](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_config_press)   | 使能配网, 开始解包
+| 3       | [awss_stop](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_stop)                   | 关闭配网服务(设备热点配网除外)
 
 ## <a name="应用场景">应用场景</a>
 
@@ -221,8 +221,7 @@ awss_stop
 
 除wifi配网概述里面列出的通用HAL API需要对接外, 还需要对接以下HAL:
 
-| 序号    | 函数名                                                                                                                                                                      | 说明
-|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------
-| 1       | [HAL_Wifi_Send_80211_Raw_Frame](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Send_80211_Raw_Frame)       | 在当前信道(channel)上以基本数据速率(1Mbps)发送裸的802.11帧(raw 802.11 frame)
-| 2       | [HAL_Wifi_Scan](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Scan) | 启动一次WiFi的空中扫描
+| 序号    | 函数名                                                                                                                                  | 说明
+|---------|-----------------------------------------------------------------------------------------------------------------------------------------|-------------------------
+| 1       | [HAL_Wifi_Scan](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Scan)   | 启动一次WiFi的空中扫描
 
