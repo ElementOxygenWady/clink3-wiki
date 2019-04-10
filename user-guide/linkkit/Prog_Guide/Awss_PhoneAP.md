@@ -221,7 +221,5 @@ awss_stop
 
 除wifi配网概述里面列出的通用HAL API需要对接外, 还需要对接以下HAL:
 
-| 序号    | 函数名                                                                                                                                  | 说明
-|---------|-----------------------------------------------------------------------------------------------------------------------------------------|-------------------------
-| 1       | [HAL_Wifi_Scan](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Scan)   | 启动一次WiFi的空中扫描
++ 无
 
