@@ -115,7 +115,7 @@ char _device_secret[IOTX_DEVICE_SECRET_LEN + 1]   = "t9GmMf2jb3LgWfXBaZD2r3aJrfV
 #endif
 ```
 
-<em>注: 请在物联网平台的管理控制台将topic  </em><em><code>/${productKey}/${deviceName}/get</code></em><em> 设置为&quot;可订阅可发布&quot;权限, 下面的代码中将会用到</em>
+<em>注: 请在物联网平台的管理控制台将topic  </em><em><code>/${productKey}/${deviceName}/user/get</code></em><em> 设置为&quot;可订阅可发布&quot;权限, 下面的代码中将会用到</em>
 
 #### <a name="初始化与建立连接">初始化与建立连接</a>
 
@@ -155,7 +155,7 @@ if (NULL == pclient) {
 
 在示例文件中定义了如下的topic:
 ```
-/${productKey}/${deviceName}/get
+/${productKey}/${deviceName}/user/get
 ```
 
 下面的代码片段示例了如何向这个Topic发送数据
@@ -163,7 +163,7 @@ if (NULL == pclient) {
 int example_publish(void *handle)
 {
     int             res = 0;
-    const char     *fmt = "/%s/%s/get";
+    const char     *fmt = "/%s/%s/user/get";
     char           *topic = NULL;
     int             topic_len = 0;
     char           *payload = "{\"message\":\"hello!\"}";
@@ -200,7 +200,7 @@ event_handle|080 :: publish success, packet-id=306 //消息发送成功，得到
 
 #### <a name="从云端订阅并处理数据">从云端订阅并处理数据</a>
 
-注: 示例程序为了尽量简单的演示发布/订阅, 代码中对topic `/${productKey}/${deviceName}/get`进行了订阅, 意味着设备发送给物联网平台的数据将会被物联网平台发送回设备
+注: 示例程序为了尽量简单的演示发布/订阅, 代码中对topic `/${productKey}/${deviceName}/user/get`进行了订阅, 意味着设备发送给物联网平台的数据将会被物联网平台发送回设备
 
 下面的代码订阅指定的topic并指定接收到数据时的处理函数:
 ```
@@ -289,7 +289,7 @@ $ ./output/release/bin/mqtt-example
 在Linux的console里面也可以看见示例程序打印的来自云端的数据:
 ```
 example_message_arrive|031 :: Message Arrived:
-example_message_arrive|032 :: Topic  : /a1MZxOdcBnO/test_01/get
+example_message_arrive|032 :: Topic  : /a1MZxOdcBnO/test_01/user/get
 example_message_arrive|033 :: Payload: {"message":"hello!"}
 example_message_arrive|034 ::
 ```

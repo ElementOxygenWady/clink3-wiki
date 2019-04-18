@@ -22,7 +22,7 @@ void *IOT_MQTT_Construct(iotx_mqtt_param_t *pInitParams)
 
 接口说明
 ---
-与云端建立MQTT连接, 在调用该接口连接云端前应先使用 [#IOT_SetupConnInfo](#IOT_SetupConnInfo) 向云端进行设备认证, 得到连接云端所需参数
+与云端建立MQTT连接, 入参`pInitParams`为`NULL`时将会使用默认参数建连。
 
 参数说明
 ---
@@ -48,6 +48,7 @@ typedef struct {
     const char                 *username;
     const char                 *password;
     const char                 *pub_key;
+    const char                 *customize_info;
     uint8_t                    clean_session;
     uint32_t                   request_timeout_ms;
     uint32_t                   keepalive_interval_ms;
@@ -57,19 +58,21 @@ typedef struct {
 } iotx_mqtt_param_t, *iotx_mqtt_param_pt;
 ```
 
-+ `port`: 云端服务器端口, 可通 [IOT_SetupConnInfo](#IOT_SetupConnInfo) 输出参数得到
-+ `host`: 云端服务器地址, 可通 [IOT_SetupConnInfo](#IOT_SetupConnInfo) 输出参数得到
-+ `client_id`: MQTT客户端ID, 可通 [IOT_SetupConnInfo](#IOT_SetupConnInfo) 输出参数得到
-+ `username`: 登录MQTT服务器用户名, 可通 [IOT_SetupConnInfo](#IOT_SetupConnInfo) 输出参数得到
-+ `password`: 登录MQTT服务器密码, 可通 [IOT_SetupConnInfo](#IOT_SetupConnInfo) 输出参数得到
-+ `pub_key`: MQTT连接加密方式及密钥, 可通 [IOT_SetupConnInfo](#IOT_SetupConnInfo) 输出参数得到
++ `port`: 云端服务器端口
++ `host`: 云端服务器地址
++ `client_id`: MQTT客户端ID
++ `username`: 登录MQTT服务器用户名
++ `password`: 登录MQTT服务器密码
++ `pub_key`: MQTT连接加密方式及密钥
 + `clean_session`: 选择是否使用MQTT协议的clean session特性
 + `request_timeout_ms`: MQTT消息发送的超时时间
 + `keepalive_interval_ms`: MQTT心跳超时时间
 + `write_buf_size`: MQTT消息发送buffer最大长度
 + `read_buf_size`: MQTT消息接收buffer最大长度
 + `handle_event`: 用户回调函数, 用与接收MQTT模块的事件信息
++ `customize_info`: 用户自定义上报信息，是以逗号为分隔符kv字符串，如用户的厂商信息，模组信息自定义字符串为"pid=123456,mid=abcd";
 
+**`pInitParams`结构体的成员配置为0或NULL时将使用内部默认参数**
 -----
 
 ## <a name="IOT_MQTT_Destroy">IOT_MQTT_Destroy</a>

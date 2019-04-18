@@ -273,10 +273,11 @@ WiFi帧可以分为3种
 | `0000`          | `00`        | Association Request     | 关联请求
 | `0001`          | `00`        | Association Response    | 关联应答
 | **`0100`**      | **`00`**    | **Probe Request**       | **探测请求**
+| **`0101`**      | **`00`**    | **Probe Resonse**       | **探测响应**
 | `1000`          | `00`        | Beacon                  | 信标
 | `1010`          | `00`        | Disassociation          | 断开关联
 
-> 所以对接零配只需要用到表格中的 `Probe Request`帧即可, 即探测请求帧, 既用来探测WiFi连接信息, 也用来获取主配设备传递过来的WiFi连接信息
+> 所以对接零配只需要用到表格中的 `Probe Request`和`Probe Respose`帧即可, 即探测请求帧和探测响应帧, 既用来探测WiFi连接信息, 也用来获取主配设备传递过来的WiFi连接信息
 
 ### <a name="WiFi管理帧格式">WiFi管理帧格式</a>
 
@@ -289,7 +290,6 @@ WiFi帧可以分为3种
 探测请求帧即 `Probe Request` 帧, 在零配中
 
 + 它由待配网设备广播发送, 已入网的主配设备接收时, **待配网设备用这种方式向周围的设备广播表达自己需要被配网**
-+ 它有已入网的主配设备单播发送, 待配网设备接收时, **已入网设备用这种方式向待配网设备单播表达当前SSID和密码这样的连接信息**
 
 | 字段名                          | 描述                                                                | 长度(字节)
 |---------------------------------|---------------------------------------------------------------------|-------------
@@ -316,6 +316,14 @@ WiFi帧可以分为3种
 配网的信息将在 `Vendor Specific` 这个字段里面传播, 其内部构造如下, **注意: 该字段包含设备名称等信息, 因此不能硬编码实现**
 
 <img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/80211_vendor_ie.png" width="800" height="200" />
+
+---
+探测响应帧即 `Probe Response` 帧, 在零配中
++ 它有已入网的主配设备单播发送, 待配网设备接收时, **已入网设备用这种方式向待配网设备单播表达当前SSID和密码这样的连接信息**
+
+
+帧格式与`Probe Request`非常相似，也包含Vendor Specific字段，这里不再展开
+
 
 ## <a name="Wireshark 抓包方法">Wireshark 抓包方法</a>
 
@@ -395,7 +403,7 @@ SDK需要用户自行实现 [HAL_Awss_Open_Monitor](https://code.aliyun.com/edwa
 > `HAL_Awss_Open_Monitor()` 的参数是一个函数指针, 该指针指向的函数应当在 WiFi 网卡嗅探到 WiFi 帧时被调用到, SDK在其中解析应答类型的 `Probe Request` 报文得到SSID和密码
 
 ---
-待配网设备收到的探测应答帧的格式与探测请求帧的帧格式相同, 因为它们同属 `Probe Request` 的管理帧, 但 `Vendor Specific` 字段内容有区别
+待配网设备收到的探测应答帧的格式与探测请求帧的帧格式相同, 因为它们同属 `Probe Response` 的管理帧, 但 `Vendor Specific` 字段内容有区别
 
 + 在这个字段的第6个字节, 零配应答帧的数据为 `0xab`,  而零配请求帧中为 `0xaa`
 + 探测应答帧的 `Vendor Specific` 字段包含了 SSID 和密码
@@ -404,35 +412,34 @@ SDK需要用户自行实现 [HAL_Awss_Open_Monitor](https://code.aliyun.com/edwa
 ---
 
 ```
-0x40, 0x00, /* management type, in frame control */
-0x00, 0x00, /* duration */
-0xff, 0xff, 0xff, 0xff, 0xff, 0xff, /* DA */
-0xb0, 0xf8, 0x93, 0x10, 0x58, 0x35, /* SA, to be replaced with wifi mac */
-0xff, 0xff, 0xff, 0xff, 0xff, 0xff, /* BSSID */
-0xc0, 0x79, /* seq */
-0x00, 0x00, /* hidden ssid */
-0x01, 0x08, 0x82, 0x84, 0x8b, 0x96, 0x8c, 0x92, 0x98, 0xa4, /* supported rates */
-0x32, 0x04, 0xb0, 0x48, 0x60, 0x6c, /* extended supported rates */
-0xdd, 0x37, 0xd8, 0x96, 0xe0, 0xab, /* vendor specific start - 这一行除了第二个字节(表示长度), 其他几个字段要和本例子相同 */
-0x01, 0x14, 0x1a, 0x48, 0xf6, 0x66, /* vendor specific continue - 从这里开始内容是变化的, 不必和示例相同 */
-0x5a, 0x1a, 0x6d, 0xf1, 0x58, 0xc5, 0xb3, 0xef, 0x7e, 0xf0, 0xef, 0xeb, 0x39, 0x78, 0x28, 0xee,
-0x01, 0x0c, 0x6c, 0x69, 0x6e, 0x6b, 0x6b, 0x69, 0x74, 0x2d, 0x74, 0x65, 0x73, 0x74, 0x08, 0xc8,
-0xfb, 0xc4, 0xe9, 0x47, 0x3e, 0x81, 0x1e, 0xcc, 0x08, 0xfb, 0x7c, 0xcb, 0x10, /* vendor specific end */
-0x3f, 0x84, 0x10, 0x9e /* FCS */
+0x50 ,0x0 ,  /* management type, in frame control */
+0x3a ,0x1 ,   /* duration */
+0xb0 ,0xf8 ,0x93 ,0x10 ,0x58 ,0x24 , /* DA */
+0x78 ,0xda ,0x7 ,0x6d ,0x5 ,0xe1 ,  /* SA, to be replaced with wifi mac */
+0x40 ,0x31 ,0x3c ,0x5 ,0xb1 ,0x89 ,   /* BSSID */
+0xb0 ,0xea ,  /*sequence num*/
+0xc8 ,0x24 ,0xe8 ,0x6f ,0x5d ,0x1 ,0x0 ,0x0 ,0x64 ,0x0 ,0x1 ,0x0 ,  /* Fixed parameters */
+0x0 ,0xb ,0x74 ,0x6d ,0x61 ,0x6c ,0x6c ,0x5f ,0x67 ,0x65 ,0x6e ,0x69 ,0x65 , /* ssid parameter set */
+0x1 ,0x4 ,0x2 ,0x4 ,0xb ,0x16 ,   /*supported rate */
+0xdd ,0x35 ,0xd8 ,0x96 ,0xe0 ,0xab , /* vendor specific start - 这一行除了第二个字节(表示长度), 其他几个字段要和本例子相同 */
+0x1 ,0x14 ,0xb0 ,0xc8 ,0xfa ,0xc2 ,0xb7 ,  /* vendor specific continue - 从这里开始内容是变化的, 不必和示例相同 */
+0xbf ,0x4 ,0xe2 ,0x30 ,0x10 ,0x6a ,0x17 ,0x9d ,0x54 ,0x55 ,0xc4 ,0xec ,0x73 ,0xb0 ,0x4e ,
+0x1 ,0x8 ,0x69 ,0x70 ,0x63 ,0x5f ,0x64 ,0x65 ,0x6d ,0x6f ,0xa ,0xb9 ,0xd0 ,0x31 ,0xc6 ,
+0xd6 ,0x19 ,0x6c ,0x53 ,0xb7 , 0x7a ,0x40 ,0x31 ,   /* vendor specific end */
+0x3c ,0x5 ,0xb1 ,0x89 /* FCS */
 ```
 
 可通过 WireShark 软件抓包检查设备收到的内容符合以下样本:
 ---
-
-[下载正确接收的 Probe Request 帧样本](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/zero_config/mk3060_tt_test_01_send_probe_request.pcapng)
+[下载正确接收的 Probe Request 帧样本](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/zero_config/tianmaojingling_response.pcapng)
 
 筛选这种帧的过滤条件为
 
-    (wlan.da == ff:ff:ff:ff:ff:ff) && (wlan.tag.vendor.oui.type == 171)
+(wlan.tag.vendor.oui.type == 171)
 
 得到样本展示的截图如下
 
-<img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/zero_config/demo_rx_updated.jpg" width="1000" height="500" />
+<img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/zero_config/rx_%E5%A4%A9%E7%8C%AB%E7%B2%BE%E7%81%B5.jpg" width="1000" height="500" />
 
 可通过测试工具程序自查
 ---

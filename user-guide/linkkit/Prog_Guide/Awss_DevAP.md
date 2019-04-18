@@ -15,6 +15,7 @@
 
 <img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/3.0.1_awss/13.png"  />
 
++ 注：由于设备热点配网需要开启热点模式，而设备一般无法同时开启设备热点与混杂模式，故设备热点配网与其他配网模式不能同时开启，为做区分，我们提供了单独的api（awss_dev_ap_start和awss_dev_ap_stop）用于开启和关闭设备热点配网。
 
 # <a name="如何配置使用这种配网模式">如何配置使用这种配网模式</a>
 通过menuconfig选择配网模块并选定手机热点配网:
@@ -161,6 +162,7 @@ static void linkkit_event_monitor(int event)
 |---------|-------------------------------------------------------------------------------------------------------------------------------------------------|---------------------
 | 1       | [awss_dev_ap_start](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_dev_ap_start)       | 开启设备热点配网
 | 2       | [awss_dev_ap_stop](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#awss_dev_ap_stop)     | 关闭设备热点配网
+| 3       |[iotx_event_regist_cb](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Awss_Provides#iotx_event_regist_cb) | 注册linkkit（包括配网）生命周期内相关事件通知
 
 
 ## <a name="应用场景">应用场景</a>
@@ -169,10 +171,13 @@ int awss_dev_ap_start
 
 调用该API用于启动设备热点配网服务. 启动配网服务的场景包括:
 
-设备首次上电, 设备上不存在热点SSID/密码.
-用户希望设备使用设备热点方式重新进行配网
-调用该配网服务后, 设备进入配网发现状态, 用于让网络中的其它设备发现自己的存在
-设备上电时若已有SSID/密码, 直接调用HAL_Awss_Connect_Ap()去连接WiFi热点
++ 设备首次上电, 设备上不存在热点SSID/密码.
+
++ 用户希望设备使用设备热点方式重新进行配网.
+
+调用该配网服务后, 设备进入配网发现状态, 用于让网络中的其它设备发现自己的存在，若设备上电时已有SSID/密码, 会直接调用HAL_Awss_Connect_Ap()去连接WiFi热点。
+
+此接口无入参，设备热点的ssid与password生成规则有配网模块内部处理，无需用户关心。
 
 int awss_dev_ap_stop
 ---
@@ -182,6 +187,18 @@ int awss_dev_ap_stop
 + 希望通过其他途径配网
 
 # <a name="需要对接的HAL接口">需要对接的HAL接口</a>
+
++ 实现[sdk公共hal](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/WiFi_Provision#%E9%85%8D%E7%BD%91%E4%BE%9D%E8%B5%96%E7%9A%84linkkit-sdk%E5%85%AC%E5%85%B1hal) 
+
++ 实现配网公共HAL中必须的API
+
+| 序号    | 函数名      | 说明                                                                                                                                                                       
+|---------|--------|------------
+| 1       | [HAL_Wifi_Get_Mac](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Get_Mac)                                             | 获取设备的MAC地址, 格式应当是"XX:XX:XX:XX:XX:XX"
+| 2      | [HAL_Awss_Connect_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Connect_Ap)                                       | 要求Wi-Fi网卡连接指定热点(Access Point)的函数, bssid指定特定AP, 另外bssid也可能为空或无效值(全0或全0xff)
+
+
++ 除公共部分HAL API外，用户还必须实现以下特有HAL API，否则设备热点配网无法正常工作。
 
 | 序号    | 函数名                                                                                                                                                              | 说明
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------
