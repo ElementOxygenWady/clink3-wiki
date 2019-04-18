@@ -433,7 +433,7 @@ SDK需要用户自行实现 [HAL_Awss_Open_Monitor](https://code.aliyun.com/edwa
 
 筛选这种帧的过滤条件为
 
-(wlan.tag.vendor.oui.type == 171)
+    (wlan.tag.vendor.oui.type == 171)
 
 得到样本展示的截图如下
 
