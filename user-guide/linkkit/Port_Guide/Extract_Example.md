@@ -165,6 +165,9 @@ SDK虽然不假设用户惯用什么方式编译源码, 但也不假设用户一
 
 对每个 `HAL_XXX` 接口都有详细的注释和文档, 用户所**需要做的只是填充完 `output/eng/wrappers/wrapper.c` 中所有的空函数, 所需的源码就全部就绪了**
 
+*注: 若移植到Linux平台时, 直接复制使用 `wrappers/os/ubuntu` 下的参考实现中 `HAL_Timer_XXX()` 的部分, 则编译的时候需要加上 `-lrt` 的链接选项*
+---
+
 ## <a name="结束">结束</a>
 
 到此为止整个SDK的抽取都已经讲解完毕, 您可以将 `output/eng` 下的所有目录加入自己的工程中编译和集成, 并参考 `output/examples` 下的例程开始调用SDK提供的API了

@@ -97,10 +97,14 @@
 
 # <a name="需要对接的HAL接口">需要对接的HAL接口</a>
 
-| 函数名                                                                                                                                  | 说明
-|-----------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------
-| [HAL_Malloc](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Malloc)        | 申请一片内存并返回其起始地址
-| [HAL_Free](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Free)            | 释放入参中指定的内存区域
-| [HAL_Printf](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Printf)        | 格式化的打印字符串显示到输出终端上
-| [HAL_Snprintf](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Snprintf)    | 格式化的打印字符串到目标缓冲区内存中
+| 函数名                                                                                                                                          | 说明
+|-------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------
+| [HAL_Malloc](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Malloc)                | 申请一片内存并返回其起始地址
+| [HAL_Free](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Free)                    | 释放入参中指定的内存区域
+| [HAL_Printf](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Printf)                | 格式化的打印字符串显示到输出终端上
+| [HAL_Snprintf](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_Snprintf)            | 格式化的打印字符串到目标缓冲区内存中
+| [HAL_SSL_Establish](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_SSL_Establish)   | 根据指定的服务器网络地址, 服务器端口号和证书文件建立TLS连接, 返回对应的连接句柄
+| [HAL_SSL_Destroy](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_SSL_Destroy)       | 销毁由参数handle指定的TLS连接
+| [HAL_SSL_Read](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_SSL_Read)             | 从指定的TLS连接中读取数据
+| [HAL_SSL_Write](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/MQTT_Requires#HAL_SSL_Write)           | 向指定的TLS连接中写入数据
 
