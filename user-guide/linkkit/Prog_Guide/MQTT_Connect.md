@@ -88,7 +88,7 @@ SDK的断网探测机制
 
 | 变量名                                  | 位置                                | 含义                                                    | 调节说明
 |-----------------------------------------|-------------------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------
-| `IOTX_DM_CLIENT_KEEPALIVE_INTERVAL_MS`  | `src/dev_model/iotx_dm_config.h`    | 使用 `IOT_Linkkit_XXX()` 接口时SDK实际上的心跳间隔      | 相当于下面的 `CONFIG_MQTT_KEEPALIVE_INTERVAL_MIN`, 只不过影响的接口不同, 默认为`30`, 代表半分钟, 改的越小, 心跳可以越频繁
+| `IOTX_DM_CLIENT_KEEPALIVE_INTERVAL_MS`  | `src/dev_model/iotx_dm_config.h`    | 使用 `IOT_Linkkit_XXX()` 接口时SDK实际上的心跳间隔      | 使用高级版接口时, 用户不必设置心跳间隔, SDK根据这个宏决定, 默认为`30`, 代表半分钟, 改的越小, 心跳可以越频繁
 | `CONFIG_MQTT_KEEPALIVE_INTERVAL_MIN`    | `src/mqtt/mqtt_api.h`               | 使用 `IOT_MQTT_XXX()` 接口时可设置的最小心跳间隔        | 默认为`30`, 代表半分钟, 改的越小, 心跳可以越频繁, 对应在`2.3.0`上是改 `KEEP_ALIVE_INTERVAL_DEFAULT_MIN`
 | `IOTX_MC_KEEPALIVE_PROBE_MAX`           | `src/mqtt/impl/iotx_mqtt_config.h`  | 可容忍心跳丢失的次数上限, 也即上文所说的阈值            | 默认值为`1`, 代表最快`2`个心跳周期发现断网, 改的越小, 对断网判定越敏感
 | `mqtt_params.keepalive_interval_ms`     | `.../mqtt_example.c` 或业务代码     | 使用 `IOT_MQTT_XXX()` 接口时用户设置的心跳间隔          | 调用 `IOT_MQTT_Construct()` 的时候用户传入的参数结构体中的一个成员, 不传参时, SDK默认用`60`秒
