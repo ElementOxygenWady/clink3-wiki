@@ -34,7 +34,7 @@
 
 图例
 ---
-<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/windows_demo_capture.png" width="1000" height="500" align="center" />
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/windows_demo_capture.png" width="1000" height="600" align="center" />
 
 
 # <a name="快速体验">快速体验</a>
