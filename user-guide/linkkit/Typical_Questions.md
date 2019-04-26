@@ -32,6 +32,7 @@
     * [B.12 TLS连接问题](#B.12 TLS连接问题)
         - [设备端TLS密码算法](#设备端TLS密码算法)
         - [云端TLS密码算法](#云端TLS密码算法)
+    * [B.13 配网绑定问题](#B.13 配网绑定问题)
 
 
 # <a name="附录B 典型咨询问题">附录B 典型咨询问题</a>
@@ -608,3 +609,13 @@ HTTPS进行设备认证时, Server会返回的错误码及其含义
 + `SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA`
 + `SSL_RSA_WITH_RC4_128_MD5`
 + `TLS_EMPTY_RENEGOTIATION_INFO_SCSV`
+
+## <a name="B.13 配网绑定问题">B.13 配网绑定问题</a>
+
+iOS手机用云智能app绑定失败
+---
+这是因为iOS版本的云智能app无法解决`5683`端口上的占用问题, 使得绑定环节中, 手机收不到设备的回复.
+
+> 可考虑在WiFi模组的`AliOS Things`开源版本上应用如下patch规避
++ [aos2.0.0的patch](https://code.aliyun.com/edward.yangx/public-docs/blob/master/patches/aos20-bugID-20066702-awss-add-connectap-info-response-to-i.patch)
++ [aos1.3.2的patch](https://code.aliyun.com/edward.yangx/public-docs/blob/master/patches/aos132_fix_ios_app.patch)
