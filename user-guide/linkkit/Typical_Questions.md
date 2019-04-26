@@ -617,5 +617,6 @@ iOS手机用云智能app绑定失败
 这是因为iOS版本的云智能app无法解决`5683`端口上的占用问题, 使得绑定环节中, 手机收不到设备的回复.
 
 > 可考虑在WiFi模组的`AliOS Things`开源版本上应用如下patch规避
+
 + [aos2.0.0的patch](https://code.aliyun.com/edward.yangx/public-docs/blob/master/patches/aos20-bugID-20066702-awss-add-connectap-info-response-to-i.patch)
 + [aos1.3.2的patch](https://code.aliyun.com/edward.yangx/public-docs/blob/master/patches/aos132_fix_ios_app.patch)
