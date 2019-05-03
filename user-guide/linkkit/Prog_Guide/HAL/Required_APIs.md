@@ -142,7 +142,7 @@
     062  HAL_SSL_Read
     063  HAL_SSL_Write
     064  HAL_Sys_Net_Is_Ready
-    065  HAL_Sys_reboot
+    065  HAL_Sys_reboot(在2.3.0及以后版本中不需要实现)
     066  HAL_TCP_Destroy
     067  HAL_TCP_Establish
     068  HAL_TCP_Read

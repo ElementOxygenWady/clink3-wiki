@@ -26,7 +26,6 @@
     * [HAL_SleepMs](#HAL_SleepMs)
     * [HAL_Snprintf](#HAL_Snprintf)
     * [HAL_Srandom](#HAL_Srandom)
-    * [HAL_Sys_reboot](#HAL_Sys_reboot)
     * [HAL_Timer_Create](#HAL_Timer_Create)
     * [HAL_Timer_Delete](#HAL_Timer_Delete)
     * [HAL_Timer_Start](#HAL_Timer_Start)
@@ -691,28 +690,6 @@ void
 
 -----
 
-
-## <a name="HAL_Sys_reboot">HAL_Sys_reboot</a>
-
-原型
----
-```
-void HAL_Sys_reboot(void);
-```
-
-接口说明
----
-系统立即重启
-
-参数说明
----
-void
-
-返回值说明
----
-void
-
------
 
 
 ## <a name="HAL_Timer_Create">HAL_Timer_Create</a>
