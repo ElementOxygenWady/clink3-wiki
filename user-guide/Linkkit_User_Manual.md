@@ -90,7 +90,7 @@ SDK手册目录
     * [旧版的物模型API快速开始](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Archived/Deprecated_QuickStart)
     * [TSL静态集成和动态拉取](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Archived/TSL_Operation)
     * [旧版的物模型API编程指南](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Archived/Deprecated_ProgGuide)
-+ [最佳实践](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Best_Practice/Practice_Home)
-    * [厂商使用自有MQTT连接阿里云IoT平台](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Best_Practice/PrivMQTT_Access)
++ **最佳实践**
+    * [移植WiFi配网中的一键配网到嵌入式Linux](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Best_Practice/Smartconfig_on_Linux)
     * [NBIoT设备连接飞燕平台](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Best_Practice/NBIoT_Access)
     * [使用I-cube-Aliyun连接阿里云IoT平台](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Vendors/Icube)
