@@ -88,23 +88,11 @@ WiFi设备需要连接到WiFi热点(WiFi AP)之后才能与其它设备进行基
 | 6       | [HAL_Awss_Switch_Channel](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Switch_Channel)                               | 设置Wi-Fi设备切换到指定的信道(channel)上
 | 7       | [HAL_Awss_Get_Channelscan_Interval_Ms](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Get_Channelscan_Interval_Ms)     | 获取在每个信道(channel)上扫描的时间长度, 单位是毫秒
 | 8       | [HAL_Wifi_Get_Mac](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Wifi_Get_Mac)                                             | 获取设备的MAC地址, 格式应当是"XX:XX:XX:XX:XX:XX"
-| 9      | [HAL_Awss_Connect_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Connect_Ap)                                       | 要求Wi-Fi网卡连接指定热点(Access Point)的函数, bssid指定特定AP, 另外bssid也可能为空或无效值(全0或全0xff)
+| 9       | [HAL_Awss_Connect_Ap](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Awss_Requires#HAL_Awss_Connect_Ap)                                       | 要求Wi-Fi网卡连接指定热点(Access Point)的函数, bssid指定特定AP, 另外bssid也可能为空或无效值(全0或全0xff)
 
 注:
 ---
 + 配网通用HAL, 仅配网模块调用
-
-关于WiFi配网后绑定环节的说明
----
-+ 设备端连接到云端之后会立即发送一个 token 到云端, 然后记录 token 的时间
-    - 设备端不会周期的发送 token 到云端, 即使 token 已超时
-    - 设备端收到来自手机的 token 查询时, 如果发现 token 已超时, 将会立即发送 token 到云端, 然后再响应手机端的查询
-    - 设备端收到来自手机的 token 查询/并且 token 未超时, 将立即应答未超时的 token . 然后再生成新的 token 上报云端, 更新 token 超时时间
-    - 云端收到设备端的 token 时会一直保存 token , 直到绑定成功或者 token 超时才会删除, 因此如果设备端在短时间内上报多个 token , 云端都会进行记录
-    - 配网成功时设备端会主动通告 token , 然后手机端可以收到 token 之后到云端去进行设备绑定, 然后云端将会删除该 token 的记录
-        + 但是设备端并不知道上报云端的 token 已经被删除了
-        + 所以如果手机立即再去设备端查询 token, 设备端还是会返回一个在云端已经无效的 token, 此时手机端去绑定设备就会收到无效 token 的错误
-
 
 # <a name="扩展 ">扩展 </a>
 
