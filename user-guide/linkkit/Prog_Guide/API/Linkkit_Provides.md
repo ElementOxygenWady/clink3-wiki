@@ -441,6 +441,11 @@ typedef enum {
 + IOTX_IOCTL_SEND_PROP_SET_REPLY: 控制当SDK收到云端的设置属性的消息时, 是否需要向云端发送应答消息, `data`的数据类型为`int *`. 当data的值为1时, SDK需要向云端发送设置属性的应答消息. 当data的值为0时, SDK不需要向云端发送设置属性的应答消息
 + IOTX_IOCTL_SET_SUBDEV_SIGN: 预留
 + IOTX_IOCTL_GET_SUBDEV_LOGIN: 预留
++ IOTX_IOCTL_QUERY_DEVID: 获取ProductKey，DeviceName对应的子设备的Devid。输入为指向iotx_linkkit_dev_meta_info_t类型数据的指针；输出为Devid，如果子设备不存在则返回-1。以linkkit_example_gateway.c为例，下面代码即可获取子设备数组中subdevArr[2]对应的devid。
+    ```
+    int subdev_id = 0;
+    subdev_id = IOT_Ioctl(IOTX_IOCTL_QUERY_DEVID, (void *)&subdevArr[2]);
+    ```
 
 -----
 
