@@ -270,18 +270,18 @@ void do_subdev_ota(int devid)
 ```
 2. 对接**智能生活开放平台**时, 只有在收到云端下发的`ITE_PERMIT_JOIN`事件后, 才可以执行子设备添加流程
     > 当用户通过通过App扫码发起子设备添加时, App将会向云端发送PermitJoin命令, 之后云端会将该命令转发给网关. `ITE_PERMIT_JOIN`事件会下发子设备的的`productKey`和允许子设备接入的时间窗口`timeoutSec`(一般为60秒), 厂商可在此窗口时间内去执行子设备的发现和绑定, 并执行添加子设备流程上报云端, 上报成功后便可以在App界面查看到添加的子设备. 此功能让子设备的添加被有效的管控起来, 只有在窗口时间内才可以添加子设备
-```
-int user_permit_join_event_handler(const char *product_key, const int time)
-{
-    user_example_ctx_t *user_example_ctx = user_example_get_ctx();
 
-    EXAMPLE_TRACE("Product Key: %s, Time: %d", product_key, time);
+        int user_permit_join_event_handler(const char *product_key, const int time)
+        {
+            user_example_ctx_t *user_example_ctx = user_example_get_ctx();
+        
+            EXAMPLE_TRACE("Product Key: %s, Time: %d", product_key, time);
+        
+            user_example_ctx->permit_join = 1;
+        
+            return 0;
+        }
 
-    user_example_ctx->permit_join = 1;
-
-    return 0;
-}
-```
 3. 在SDK主目录下运行`make menuconfig`, 进入`Device Model Configurations`中打开`FEATURE_DEVICE_MODEL_GATEWAY`后保存退出, 再运行`make`命令即可编译出网关例程
 
 
