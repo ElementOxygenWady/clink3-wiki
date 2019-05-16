@@ -282,7 +282,7 @@ int user_permit_join_event_handler(const char *product_key, const int time)
     return 0;
 }
 ```
-3. 在SDK主目录的`make.setting`文件中添加`FEATURE_DEVICE_MODEL_GATEWAY=y`, 再运行`make`命令即可编译出网关例程
+3. 在SDK主目录下运行`make menuconfig`, 进入`Device Model Configurations`中打开`FEATURE_DEVICE_MODEL_GATEWAY`后保存退出, 再运行`make`命令即可编译出网关例程
 
 
 # <a name="网关相关API">网关相关API</a>
