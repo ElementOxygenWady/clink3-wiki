@@ -273,7 +273,7 @@ typedef enum {
 -----
 
 ## <a name="HAL_ThreadDelete">HAL_ThreadDelete</a>
-
+(在3.0.1+sp1及之后版本中不需要实现)
 原型
 ---
 ```
@@ -297,7 +297,7 @@ void
 -----
 
 ## <a name="HAL_ThreadDetach">HAL_ThreadDetach</a>
-
+(在3.0.1+sp1及之后版本中不需要实现)
 原型
 ---
 ```

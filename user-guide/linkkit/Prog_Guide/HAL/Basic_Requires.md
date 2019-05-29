@@ -63,7 +63,7 @@ void
 -----
 
 ## <a name="HAL_GetChipID">HAL_GetChipID</a>
-
+(在3.0.1及以后版本中不需要实现）
 原型
 ---
 ```
@@ -185,7 +185,7 @@ int HAL_GetFirmwareVersion(_OU_ char version[FIRMWARE_VERSION_MAXLEN]);
 -----
 
 ## <a name="HAL_GetModuleID">HAL_GetModuleID</a>
-
+(在3.0.1+sp1及以后版本中不需要实现）
 原型
 ---
 ```
@@ -209,7 +209,7 @@ int HAL_GetModuleID(_OU_ char mid_str[MID_STR_MAXLEN]);
 -----
 
 ## <a name="HAL_GetPartnerID">HAL_GetPartnerID</a>
-
+(在3.0.1+sp1及以后版本中不需要实现）
 原型
 ---
 ```
@@ -447,7 +447,7 @@ void *HAL_Malloc(_IN_ uint32_t size);
 
 
 ## <a name="HAL_Printf">HAL_Printf</a>
-
+(在3.0.1+sp1及以后版本中使用宏定义:#define HAL_Printf xxxprintf）
 原型
 ---
 ```
@@ -828,7 +828,7 @@ void
 -----
 
 ## <a name="HAL_UTC_Get">HAL_UTC_Get</a>
-
+(在3.0.1及之后版本中不需要实现)
 原型
 ---
 ```
@@ -850,7 +850,7 @@ void
 -----
 
 ## <a name="HAL_UTC_Set">HAL_UTC_Set</a>
-
+(在3.0.1及之后版本中不需要实现)
 原型
 ---
 ```

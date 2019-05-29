@@ -6,9 +6,10 @@
     * [HAL_DTLSSession_write](#HAL_DTLSSession_write)
     * [HAL_UDP_close_without_connect](#HAL_UDP_close_without_connect)
     * [HAL_UDP_create](#HAL_UDP_create)
-    * [HAL_UDP_read](#HAL_UDP_read)
+    * [HAL_UDP_create_without_connect](#HAL_UDP_create_without_connect)
+    * [HAL_UDP_joinmulticast](#HAL_UDP_joinmulticast)
     * [HAL_UDP_readTimeout](#HAL_UDP_readTimeout)
-    * [HAL_UDP_recv](#HAL_UDP_recv)
+    * [HAL_UDP_recvfrom](#HAL_UDP_recvfrom)
     * [HAL_UDP_send](#HAL_UDP_send)
     * [HAL_UDP_write](#HAL_UDP_write)
 
@@ -18,7 +19,7 @@
 原型
 ---
 ```
-DTLSContext *HAL_DTLSSession_create(coap_dtls_options_t  *p_options);
+DTLSContext *HAL_DTLSSession_create(_IN_ coap_dtls_options_t  *p_options);
 ```
 
 接口说明
@@ -50,7 +51,7 @@ DTLS会话句柄
 原型
 ---
 ```
-unsigned int HAL_DTLSSession_free(DTLSContext *context);
+unsigned int HAL_DTLSSession_free(_IN_ DTLSContext *context);
 ```
 
 接口说明
@@ -91,10 +92,10 @@ define DTLS_READ_DATA_FAILED           (DTLS_ERROR_BASE | 8)       // 数据读�
 原型
 ---
 ```
-unsigned int HAL_DTLSSession_read(DTLSContext       *context,
-                                  unsigned char     *p_data,
-                                  unsigned int      *p_datalen,
-                                  unsigned int      timeout_ms);
+unsigned int HAL_DTLSSession_read(_IN_ DTLSContext       *context,
+                                  _OUT_ unsigned char     *p_data,
+                                  _OUT_ unsigned int      *p_datalen,
+                                  _IN_ unsigned int      timeout_ms);
 ```
 
 接口说明
@@ -124,9 +125,9 @@ unsigned int HAL_DTLSSession_read(DTLSContext       *context,
 原型
 ---
 ```
-unsigned int HAL_DTLSSession_write(DTLSContext          *context,
-                                   const unsigned char  *p_data,
-                                   unsigned int         *p_datalen);
+unsigned int HAL_DTLSSession_write(_IN_ DTLSContext          *context,
+                                   _IN_ const unsigned char  *p_data,
+                                   _IN_ unsigned int         *p_datalen);
 ```
 
 接口说明
@@ -139,7 +140,7 @@ unsigned int HAL_DTLSSession_write(DTLSContext          *context,
 |-------------|---------------------|---------|-----------------------------------------------------
 | context     | DTLSContext *       | 输入    | DTLS会话句柄
 | p_data      | unsigned char *     | 输入    | 指向发送数据缓冲区的指针
-| p_datalen   | unsigned int *      | 输入    | 指向发送数据长度变量的指针, 用于指定发送字节长度
+| p_datalen   | unsigned int *      | 输入/输出| 指向发送数据长度变量的指针, 用于指定发送字节长度,出参时代表实际写入长度
 
 返回值说明
 ---
@@ -155,7 +156,7 @@ unsigned int HAL_DTLSSession_write(DTLSContext          *context,
 原型
 ---
 ```
-int HAL_UDP_close_without_connect(intptr_t sockfd)
+int HAL_UDP_close_without_connect(_IN_ intptr_t sockfd)
 ```
 
 接口说明
@@ -205,20 +206,46 @@ intptr_t HAL_UDP_create(_IN_ char *host, _IN_ unsigned short port);
 
 -----
 
-## <a name="HAL_UDP_read">HAL_UDP_read</a>
+## <a name="HAL_UDP_create_without_connect">HAL_UDP_create_without_connect</a>
 
 原型
 ---
 ```
-int HAL_UDP_read(
-            _IN_ intptr_t p_socket,
-            _OU_ unsigned char *p_data,
-            _OU_ unsigned int datalen);
+intptr_t HAL_UDP_create_without_connect(_IN_ const char *host, _IN_ unsigned short port)
 ```
 
 接口说明
 ---
-从指定UDP连接中读取数据, 此接口为阻塞接口
+建立指定目的地址和目的端口的UDP连接
+
+参数说明
+---
+| 参数    | 数据类型        | 方向    | 说明
+|---------|-----------------|---------|-----------------
+| host    | const char *    | 输入    | UDP目的地址
+| port    | unsigned short  | 输入    | UDP目的端口
+
+返回值说明
+---
+| 值      | 说明
+|---------|-------------------------------------
+| < 0     | 创建失败
+| >= 0    | 创建成功, 返回值为UDP socket句柄
+
+-----
+
+## <a name="HAL_UDP_joinmulticast">HAL_UDP_joinmulticast</a>
+
+原型
+---
+```
+int HAL_UDP_joinmulticast(_IN_ intptr_t sockfd,
+                          _IN_ char *p_group);
+```
+
+接口说明
+---
+加入组播或广播组
 
 参数说明
 ---
@@ -226,15 +253,14 @@ int HAL_UDP_read(
 |-------------|-------------|---------|-------------------------------------
 | sockfd      | intptr_t    | 输入    | 指定用来发送组播请求的UDP socket
 | p_group     | char *      | 输入    | 指定要加入的组播组名称
-|            |            |        |
+
 
 返回值说明
 ---
 | 值      | 说明
 |---------|---------------------
-| < 0     | UDP连接出现错误
-| = 0     | 发送成功
-| > 0     | 读取到的数据字节数
+| < 0     | 操作失败
+| = 0     | 操作成功
 
 -----
 
@@ -257,19 +283,30 @@ int HAL_UDP_readTimeout(
 
 参数说明
 ---
-
+| 参数        | 数据类型         | 方向    | 说明
+|-------------|----------------|---------|-------------------------------------
+| p_socket    | intptr_t       | 输入    | 指定用来发送组播请求的UDP socket
+| p_data      | unsigned char *| 输出    | 指向数据接收缓冲区的指针
+| datalen     | unsigned int   | 输入    | 指定读数据长度
+|timeout_ms   | unsigned int   | 输入    | 读超时时间
 
 返回值说明
 ---
+| 值      | 说明
+|---------|---------------------
+| < 0     | 接收过程中出现错误或异常
+| = 0     | 在指定的`timeout_ms`时间内, 没有接收到任何数据
+| > 0     | 在指定的`timeout_ms`时间内, 实际接收到的数据字节数
 
 -----
 
-## <a name="HAL_UDP_recv">HAL_UDP_recv</a>
+## <a name="HAL_UDP_recvfrom">HAL_UDP_recvfrom</a>
 
 原型
 ---
 ```
-int HAL_UDP_recv(_IN_ intptr_t sockfd,
+int HAL_UDP_recvfrom(_IN_ intptr_t sockfd,
+                 _IN_ NetworkAddr *p_remote,
                  _OU_ unsigned char *p_data,
                  _IN_ unsigned int datalen,
                  _IN_ unsigned int timeout_ms);
@@ -284,6 +321,7 @@ int HAL_UDP_recv(_IN_ intptr_t sockfd,
 | 参数        | 数据类型            | 方向    | 说明
 |-------------|---------------------|---------|-----------------------------
 | sockfd      | intptr_t            | 输入    | UDP socket句柄
+| p_remote    | NetworkAddr *       | 输入    | 指定的url及端口号
 | p_data      | unsigned char *     | 输出    | 指向数据接收缓冲区的指针
 | datalen     | unsigned int        | 输入    | 接收缓冲区的字节大小
 | timeout_ms  | unsigned int        | 输入    | 阻塞的超时时间, 单位ms

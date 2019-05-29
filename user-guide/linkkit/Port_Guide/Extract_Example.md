@@ -144,7 +144,7 @@ SDK虽然不假设用户惯用什么方式编译源码, 但也不假设用户一
 | **二进制文件**  | **说明**                                        | **产生方式**
 |-----------------|-------------------------------------------------|---------------------------------------------------------------------------------------------
 | `libiot_sdk.a`  | SDK主库文件, 提供所有形如 `IOT_XXX` 的用户API   | 从 `output/eng` 下除了 `output/wrapper/*` 的目录产生
-| `libiot_hal.a`  | 支撑SDK的HAL库, 提供形如 `HAL_XXX` 的底层接口   | 从 `output/eng/wrappers` 下源文件产生, 其中 `output/eng/wrappers/wrapper.c` 需要用户填写
+| `libiot_hal.a`  | 支撑SDK的HAL库, 提供形如 `HAL_XXX` 的底层接口   | 从 `output/eng/wrappers` 下源文件产生, 其中 `output/eng/wrappers/wrapper.c` 需要用户填写(3.0.1+sp1及之后版本更名wrappers/wrappers.c)
 | `xxx-example`   | 功能点的例子程序                                | 从 `output/examples/xxx` 下源文件产生, **需要通过 `output` 目录下运行 `make prog` 命令编译**
 
 <img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/example_output_makefile.png" width="600" hegiht="400" align=center />
