@@ -4,6 +4,7 @@
     * [根据硬件平台对接HAL接口](#根据硬件平台对接HAL接口)
     * [开发和编译demo程序](#开发和编译demo程序)
     * [运行demo程序完成一键配网](#运行demo程序完成一键配网)
+    * [Wireshark 抓包方法](#Wireshark 抓包方法)
 
 # <a name="移植WiFi配网中的一键配网到嵌入式Linux">移植WiFi配网中的一键配网到嵌入式Linux</a>
 
@@ -54,8 +55,36 @@ SDK对外界的依赖都以 `HAL_XXX` 形式的接口表达, 需要对接的已�
 
 直接用以上链接中的 `wrapper.c` 覆盖示意性的空函数列举文件 `output/eng/wrapper.c`
 
----
 *实现 `HAL_Awss_Open_Monitor()` 等接口时, 使用了 `ieee80211_radiotap.h` 中定义的结构体, 因此要将 `ieee80211_radiotap.h` 也放置在 `output/eng` 目录下供 `wrapper.c` 引用*
+
+---
+其中, 必须要实现的HAL的说明如下:
+
++ `HAL_Awss_Open_Monitor`
+
+        这个HAL实现的思路是用 iwconfig wlan0 mode monitor 将WiFi进入到Monitor模式.
+        创建RAW_SOCKET(TCP/UDP类型的套接字只能够访问传输层以及传输层以上的数据, 因为当IP层把数据传递给传输层时, 下层的数据包头已经被丢掉了, 而RAW_SOCKET却可以访问传输层以下的数据)
+
+        通过 setsockopt(sock, SOL_SOCKET, SO_BINDTODEVICE, (char *)&ifr, sizeof(ifr)) 将它跟网卡绑定. 创建一个收包线程, 不断调用 recvfrom() 去收前述RAW_SOCKET中收包
++ `HAL_Awss_Switch_Channel`
+
+        调用 iwconfig wlan0 channel 去实现信道的切换
+
++ `HAL_Wifi_Get_IP`
+
+        获取本机的IP地址, 已有参考实现
+
++ `HAL_Wifi_Get_Ap_Info`
+
+        读取设备所连接的AP的ssid/passwd/bssid
+
++ `HAL_Awss_Connect_Ap`
+
+        根据ssid/passwd, 连接AP
+
+其他HAL, 比如 `HAL_MutexCreate` 跟 `HAL_Wifi_Get_Mac`, 是linkkit跑起来所需要的基础的hal, 不是配网所必需的
+
+HAL的自验证, 请见[一键配网自验证](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_Smartconfig)
 
 ## <a name="开发和编译demo程序">开发和编译demo程序</a>
 
@@ -116,7 +145,7 @@ SDK对外界的依赖都以 `HAL_XXX` 形式的接口表达, 需要对接的已�
 > 假设tftp服务器(Ubuntu开发主机)的ip地址为`192.168.1.104`
 
     cd /tmp
-    tftp -g -r linkkit-example-solo -l linkkit-example-solo 192.168.1.104 
+    tftp -g -r linkkit-example-solo -l linkkit-example-solo 192.168.1.104
 
 启动demo程序
 ---
@@ -125,10 +154,10 @@ SDK对外界的依赖都以 `HAL_XXX` 形式的接口表达, 需要对接的已�
     cd /tmp
     chmod 777 linkkit-example-solo
 
-    ./linkkit-example-solo > logs & # 运行demo程序并将输出的日志保存到 /tmp/logs 文件
+    ./linkkit-example-solo > /tmp/logs & # 运行demo程序并将输出的日志保存到 /tmp/logs 文件
     ifconfig eth0 down && sleep 100 && ifconfig eth0 up # 断开以太网卡后休眠100秒, 确保使用WiFi网卡通信, 体现一键配网功能
 
-*注: 需确保设备开机后没有其他后台程序在调用SDK的API运行，如果有的话需先停止这些程序*
+*注: 需确保设备开机后没有其他后台程序在调用SDK的API运行, 如果有的话需先停止这些程序*
 
 在手机上的云智能app开始配网
 ---
@@ -151,7 +180,7 @@ SDK对外界的依赖都以 `HAL_XXX` 形式的接口表达, 需要对接的已�
 以下日志表明demo程序已使用SSID和密码, 成功连接到无线路由器, 具备了IP通信的条件
 
     [dbg] __awss_start(62): awss connect ssid:aos-linux-test1 success
-  
+
 配网成功时, app的截图为
 
 <img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/3.0.1_awss/done_awss.jpg" width="300">
@@ -159,3 +188,38 @@ SDK对外界的依赖都以 `HAL_XXX` 形式的接口表达, 需要对接的已�
 之后可点击 **"开始使用"** 按钮, 进入设备绑定环节, 绑定成功时, app的截图为
 
 <img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/3.0.1_awss/done_binding.jpg" width="300">
+
+捷高摄像头没有配网有关的指示灯, 因此没法从设备上观察出配网过程设备的状态变化, 只能通过app观察进度来判断
+
+另外, 由于上述例子是以 `./linkkit-example-solo > /tmp/logs &` 的方式运行的, 在运行结束后可以分析这个 `logs` 文件查看设备在连接过程中出现的问题
+
+---
+一键配网过程中, 可以通过wireshark抓包, 具体抓包的过程见
+
+## <a name="Wireshark 抓包方法">Wireshark 抓包方法</a>
+
+> **注: Windows系统会过滤一些 WiFi 报文不传递给自己的应用程序, 导致 WireShark 软件抓不到空中包, 所以一般以 mac 系统抓包**
+
+可以使用 Wireshark 软件对空气中的WiFi帧进行抓取来帮助自查, 以验证待配网设备是否发出正确的探测请求帧, 以及主配设备是否进行过回复, 步骤如下
+
+在mac电脑安装 Wireshark 软件
+---
+
+点击齿轮状的 Capture Options (图中的红框)进入设置, 参考下图
+
+<br>
+<img src="http://linkkit-export.oss-cn-shanghai.aliyuncs.com/zero_config/wireshark_setting_1.jpg" width="800" height="400" />
+
+配置 Wireshark 软件为抓包模式
+---
+
+反向选择其他所有Interface, 仅仅保留wifi interface, 并且勾选其中的 Promiscuous 和 Monitor 两种抓包模式, 具体见下图
+
+<br>
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/80211_wireshark_config.png" width="800"/>
+
+一键配网过程的抓包样本
+---
+参考
+<br>
+<img src="https://linkkit-export.oss-cn-shanghai.aliyuncs.com/3.0.1_awss/sample_broadcast.jpg" width="800"/>
