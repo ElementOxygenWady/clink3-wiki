@@ -92,11 +92,11 @@ SDK对外界的依赖都以 `HAL_XXX` 形式的接口表达, 需要对接的已�
 
 配网中需要让app扫描的二维码可用[工具网页](https://cli.im), 输入以下字符串生成
 
-    http://www.taobao.com?pk=a1X2bEnP82z
+    http://www.taobao.com?pk=a1I98ylaERB
 
 其中 `a1I98ylaERB` 是demo程序使用的设备产品标识, 是从[阿里云IoT控制台](https://iot.console.aliyun.com)申请得到的 `a1I98ylaERB`
 
-设备开启的热点是以`adh_`为前缀, 后接`Product key`
+设备开启的热点是以`adh_`为前缀, 后接`ProductKey`
 
 观察成功解密SSID和密码
 ---
