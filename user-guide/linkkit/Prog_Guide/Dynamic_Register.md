@@ -11,7 +11,7 @@
 使用的流程示意
 ---
 
-<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/dynreg_console_flow.png" width="1200" height="200" />
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/dynreg_console_flow.png" width="1200"/>
 
 它工作时, IoT设备端和外界发生网络通信的交互过程是
 ---
@@ -23,7 +23,7 @@
 + DS: DeviceSecret, 某台设备的设备密钥
 
 
-<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/dynreg_network_flow.png" width="800" height="600" />
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/dynreg_network_flow.png" width="800"/>
 
 *注1: 用户必须将获取的DeviceSecret持久化到设备, 以备后续使用. 若获取的DeviceSecret丢失可能导致设备无法上线等严重后果, 云端服务器不会接受已激活设备重复的动态注册请求*
 
