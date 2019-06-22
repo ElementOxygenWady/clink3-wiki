@@ -19,4 +19,5 @@ V2.3.0版本的重要补丁
 | 2019/04/30      | [`faf728d9`](https://code.aliyun.com/linkkit/c-sdk/commit/faf728d9833cad61e7bf061f485266a69951d1c2.diff)    | 在WiFi配网功能中, 调用`awss_stop()`接口概率性失效, 表现为获取到SSID和密码后SDK仍在扫描信道, 且不退出监听模式    | 调整控制变量解决
 | 2019/04/30      | [`f6e10946`](https://code.aliyun.com/linkkit/c-sdk/commit/f6e109462f2a9a137dff112a26b61963ec1d741b.diff)    | 在TLS加密上云通信时用`1883`端口, 有时会因为防火墙软件设置而无法建连成功                                         | 使用更通用的`443`端口建立连云通道
 | 2019/04/30      | [`b5877227`](https://code.aliyun.com/linkkit/c-sdk/commit/b5877227e87355f3a17335b579eb3a3bd1e9c5a1.diff)    | 网关子设备的上线信息缺失, 阻碍问题定位和控制台显示                                                              | 按新上线的云端协议补齐丢失的信息
+| 2019/03/11      | [`3968ea37`](https://code.aliyun.com/linkkit/c-sdk/commit/3968ea37e5d9cade5dc04661398da19d68fd94eb.diff)    | 在设备绑定功能中, 低概率出现手机App或天猫精灵从设备查询到的Token与云侧不一致, 导致绑定失败                      | 调整Token更新与应答查询的顺序
 
