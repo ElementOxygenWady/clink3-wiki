@@ -168,7 +168,7 @@
 
 修改cmake文件
 ---
-从链接中下载patch文件: [cmake patch](https://linkkit-export.oss-cn-shanghai.aliyuncs.com/windows_cmake_2018_1127.patch)
+从链接中下载patch文件: [cmake patch](https://code.aliyun.com/edward.yangx/public-docs/raw/master/patches/windows_cmake_v230_2019_0624.patch)
 
 通过gitbash执行下列命令:
 
