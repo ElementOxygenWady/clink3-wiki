@@ -176,11 +176,11 @@ int HAL_GetFirmwareVersion(_OU_ char version[FIRMWARE_VERSION_MAXLEN]);
 ---
 | 参数        | 数据类型| 方向    | 说明
 |-------------|---------|---------|-------------------------------------
-| version     | char[]  | 输出    | 存放`FirmwareVesion`的字符串缓冲区
+| version     | char[]  | 输出    | 存放`FirmwareVersion`的字符串缓冲区
 
 返回值说明
 ---
-实际获取到的`FirmwareVesion`字符串长度
+实际获取到的`FirmwareVersion`字符串长度
 
 -----
 
