@@ -5,6 +5,8 @@ V3.0.1版本的重要补丁
 
 | **修复日期**    | **补丁地址**                                                                                                | **症状描述**                                                                                                | **修复备注**
 |-----------------|-------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|-----------------------------------------
+| 2019/06/25      | [`1a7807aa`](https://code.aliyun.com/linkkit/c-sdk/commit/1a7807aa2249aa48ab185847d4faeccd1fa9fc86.diff)    | 在设备绑定过程中, 若本地控制功能(ALCS)被同时启用, 低概率会出现CoAP服务重复初始化导致的绑定失败              | 增加锁保护确保服务启动互斥
+| 2019/06/25      | [`f94d723d`](https://code.aliyun.com/linkkit/c-sdk/commit/f94d723d09131cc0a797a5d6d8c55f85dce91646.diff)    | 若设备连接的局域网路由器工作不稳定, 可能因为阿里云服务器域名解析为IP地址失败, 出现连云失败                  | 若域名解析失败重试8次
 | 2019/06/22      | [`9b5e1ffd`](https://code.aliyun.com/linkkit/c-sdk/commit/9b5e1ffdc79e2ab07e970a148aa58d0cf3ecc58b.diff)    | 若云端下推的MQTT报文长度超过`CONFIG_MQTT_MESSAGE_MAXLEN`(默认是1024字节), 低概率出现连接断开, 程序崩溃      | 设置报文类型为 `MQTT_CPT_RESERVED`
 | 2019/06/04      | [`c8d32cc1`](https://code.aliyun.com/linkkit/c-sdk/commit/c8d32cc1c2ed7ed7e78d9f4c9ac2b5394e27d9c4.diff)    | 对于在Windows主机上开发的用户, 如果不使用微软的Visual Studio而是比如Eclipse开发环境, 可能会出现编译失败     | 将为了VS产生dll库定义的标记全部删除
 | 2019/06/04      | [`f19b7548`](https://code.aliyun.com/linkkit/c-sdk/commit/f19b7548f85b3260046c0583b3b3fcd6c309e5b4.diff)    | 在设备绑定功能中, 概率性出现手机App上绑定失败, 调试时可发现设备上报给云的Token与手机获取到的不匹配          | 将Token的生成提前到向外传输它之前
