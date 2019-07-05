@@ -4,7 +4,6 @@
 + [快速体验](#快速体验)
     * [准备开发环境](#准备开发环境)
         - [安装本地开发环境](#安装本地开发环境)
-        - [通过Hacklab Web IDE进行开发](#通过Hacklab Web IDE进行开发)
     * [以MQTT Topic编程方式接入设备](#以MQTT Topic编程方式接入设备)
         - [创建产品和设备](#创建产品和设备)
         - [产品功能实现](#产品功能实现)
@@ -61,10 +60,6 @@
 ```
 $ sudo apt-get install -y build-essential make git gcc gawk
 ```
-
-### <a name="通过Hacklab Web IDE进行开发">通过Hacklab Web IDE进行开发</a>
-
-如果您不打算在您的PC或者笔记本电脑上安装Ubuntu, 也可通过阿里云IoT提供的Hacklab Web IDE环境直接进行设备开发, Hacklab Web IDE是一个云端的Linux开发环境, 已经将必要的软件安装完毕, 只要您拥有一个阿里云账号, 就可以通过浏览器登录进行开发, 点击此处登录[Hacklab Web IDE](https://hacklab.aliyun.com/)
 
 ## <a name="以MQTT Topic编程方式接入设备">以MQTT Topic编程方式接入设备</a>
 ### <a name="创建产品和设备">创建产品和设备</a>
