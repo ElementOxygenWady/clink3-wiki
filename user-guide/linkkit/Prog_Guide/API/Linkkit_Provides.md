@@ -13,7 +13,7 @@
     * [ITE_CONNECT_SUCC](#ITE_CONNECT_SUCC)
     * [ITE_DISCONNECTED](#ITE_DISCONNECTED)
     * [ITE_RAWDATA_ARRIVED](#ITE_RAWDATA_ARRIVED)
-    * [ITE_SERVICE_REQUST](#ITE_SERVICE_REQUST)
+    * [ITE_SERVICE_REQUEST](#ITE_SERVICE_REQUEST)
     * [ITE_PROPERTY_SET](#ITE_PROPERTY_SET)
     * [ITE_PROPERTY_GET](#ITE_PROPERTY_GET)
     * [ITE_REPORT_REPLY](#ITE_REPORT_REPLY)
@@ -351,7 +351,7 @@ typedef enum {
     ...
     ITE_DISCONNECTED,
     ITE_RAWDATA_ARRIVED,
-    ITE_SERVICE_REQUST,
+    ITE_SERVICE_REQUEST,
     ITE_PROPERTY_SET,
     ITE_PROPERTY_GET,
     ITE_REPORT_REPLY,
@@ -373,7 +373,7 @@ typedef enum {
 | [ITE_CONNECT_SUCC](#ITE_CONNECT_SUCC)                   | int callback(void);                                                                                                                                             | 与云端连接成功时
 | [ITE_DISCONNECTED](#ITE_DISCONNECTED)                   | int callback(void);                                                                                                                                             | 与云端连接断开时
 | [ITE_RAWDATA_ARRIVED](#ITE_RAWDATA_ARRIVED)             | int callback(const int devid, const unsigned char *payload, const int payload_len);                                                                             | Linkkit收到收到raw data数据时
-| [ITE_SERVICE_REQUST](#ITE_SERVICE_REQUST)               | int callback(const int devid, const char *serviceid, const int serviceid_len, const char *request, const int request_len, char **response, int *response_len);  | Linkkit收到收到服务(同步/异步)调用请求时
+| [ITE_SERVICE_REQUEST](#ITE_SERVICE_REQUEST)               | int callback(const int devid, const char *serviceid, const int serviceid_len, const char *request, const int request_len, char **response, int *response_len);  | Linkkit收到收到服务(同步/异步)调用请求时
 | [ITE_PROPERTY_SET](#ITE_PROPERTY_SET)                   | int callback(const int devid, const char *request, const int request_len);                                                                                      | Linkkit收到收到属性设置请求时
 | [ITE_PROPERTY_GET](#ITE_PROPERTY_GET)                   | int callback(const int devid, const char *request, const int request_len, char **response, int *response_len);                                                  | Linkkit收到收到属性获取的请求时
 | [ITE_REPORT_REPLY](#ITE_REPORT_REPLY)                   | int callback(const int devid, const int msgid, const int code, const char *reply, const int reply_len);                                                         | Linkkit收到收到上报消息的应答时
@@ -529,7 +529,7 @@ int callback(const int devid, const unsigned char *payload, const int payload_le
 
 -----
 
-## <a name="ITE_SERVICE_REQUST">ITE_SERVICE_REQUST</a>
+## <a name="ITE_SERVICE_REQUEST">ITE_SERVICE_REQUEST</a>
 
 原型
 ---

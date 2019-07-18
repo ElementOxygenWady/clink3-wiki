@@ -48,7 +48,7 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
 这样可以更新在云端的设备影子中保存的设备属性值, 用户可在此处对收到的属性值进行处理
 
-*注: 该回调函数是在example初始化时使用 `IOT_RegisterCallback` 注册的 `ITE_SERVICE_REQUST` 事件对应的回调函数:*
+*注: 该回调函数是在example初始化时使用 `IOT_RegisterCallback` 注册的 `ITE_SERVICE_REQUEST` 事件对应的回调函数:*
 
     static int user_property_set_event_handler(const int devid, const char *request, const int request_len)
     {

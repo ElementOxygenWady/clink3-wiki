@@ -240,7 +240,7 @@ void do_subdev_ota(int devid)
 
 + 在`ITE_RAWDATA_ARRIVED`事件回调中接收云端下发的透传数据
 
-+ 在`ITE_SERVICE_REQUST`事件回调中接收服务请求(同步服务和异步服务)
++ 在`ITE_SERVICE_REQUEST`事件回调中接收服务请求(同步服务和异步服务)
 
 + 在`ITE_PROPERTY_SET`事件回调中处理云端下发的属性设置
 
