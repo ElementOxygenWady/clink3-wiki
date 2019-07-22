@@ -22,16 +22,15 @@
 
 ## <a name="使用方法">使用方法</a>
 
-+ 下载后直接双击打开, 它们会以内置的设备三元组登录IoT云, 分别是用 `TLS连接+1883` 端口和 `TCP连接+1883` 端口
-+ 若需定制端口号, 可以打开Windows的命令行, 在第1个参数填入使用的目的端口号, 例如
++ 下载后直接双击打开, 若需定制端口号或设备三元组, 可在程序刚开始时出现的交互界面, 按`y`或`Y`键进入修改
 
-        mqtt-tls-example.exe 443
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/win_demo_customize.png" width="1000" height="600" align="center" />
 
-+ 若需换成您自己的设备信息, 在第2个到第4个参数填入使用的三元组, 例如
++ 若不做任何定制, 它们将以内置的设备三元组登录IoT云, 分别使用 `TLS连接+1883` 端口和 `TCP连接+1883` 端口
 
-        mqtt-tcp-example.exe 1883 <productKey> <deviceName> <deviceSecret>
+*除了连接的端口号(可改为`443`)和设备三元组信息, 建连成功后的暂停间隔也可定制, 默认会有`15`秒的停顿*
 
-图例
+运行图例
 ---
 <img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/windows_demo_capture.png" width="1000" height="600" align="center" />
 
