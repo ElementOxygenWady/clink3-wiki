@@ -24,7 +24,7 @@
 
 + 下载后直接双击打开, 若需定制端口号或设备三元组, 可在程序刚开始时出现的交互界面, 按`y`或`Y`键进入修改
 
-<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/win_demo_customize.png" width="1000" height="600" align="center" />
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/win_demo_customize.png" width="1000" align="center" />
 
 + 若不做任何定制, 它们将以内置的设备三元组登录IoT云, 分别使用 `TLS连接+1883` 端口和 `TCP连接+1883` 端口
 
@@ -32,7 +32,7 @@
 
 运行图例
 ---
-<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/windows_demo_capture.png" width="1000" height="600" align="center" />
+<img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/windows_demo_capture.png" width="1000" align="center" />
 
 
 # <a name="快速体验">快速体验</a>
