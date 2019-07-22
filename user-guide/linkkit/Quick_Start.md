@@ -27,8 +27,7 @@
 <img src="https://code.aliyun.com/edward.yangx/public-docs/raw/master/images/win_demo_customize.png" width="1000" align="center" />
 
 + 若不做任何定制, 它们将以内置的设备三元组登录IoT云, 分别使用 `TLS连接+1883` 端口和 `TCP连接+1883` 端口
-
-*除了连接的端口号(可改为`443`)和设备三元组信息, 建连成功后的暂停间隔也可定制, 默认会有`15`秒的停顿*
++ 除了连接的端口号(可改为`443`)和设备三元组信息, 建连成功后的暂停间隔也可定制, 默认会有`15`秒的停顿
 
 运行图例
 ---
