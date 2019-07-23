@@ -310,8 +310,8 @@ typedef enum {
 + ITM_MSG_QUERY_TOPOLIST: 查询设备的拓扑关系列表
 + ITM_MSG_QUERY_FOTA_DATA: 查询FOTA升级的固件数据
 + ITM_MSG_QUERY_COTA_DATA: 查询COTA升级的远程配置数据
-+ ITM_MSG_REQUEST_COTA: 查询是否有可用的新固件
-+ ITM_MSG_REQUEST_FOTA_IMAGE: 查询是否有可用的远程配置数据
++ ITM_MSG_REQUEST_FOTA_IMAGE: 查询是否有可用的新固件
++ ITM_MSG_REQUEST_COTA: 查询是否有可用的远程配置数据
 
 -----
 
