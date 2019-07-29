@@ -5,7 +5,7 @@ V2.3.0版本的重要补丁
 
 | **修复日期**    | **补丁地址**                                                                                                | **症状描述**                                                                                                    | **修复备注**
 |-----------------|-------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------
-| 2019/07/29      | [`bc646282`](https://code.aliyun.com/linkkit/c-sdk/commit/bc6462829119f86c0ac64084c9d5c68e29c475d3.diff)    | 如果用户直接复制SDK的HAL参考实现在Linux设备上使用, 在MIPS架构设备上可能因Linux内核不进行UDP而绑定失败           | UDP广播改用兼容性更强写法
+| 2019/07/29      | [`bc646282`](https://code.aliyun.com/linkkit/c-sdk/commit/bc6462829119f86c0ac64084c9d5c68e29c475d3.diff)    | 如果用户直接复制SDK的HAL参考实现在Linux设备上使用, 在MIPS架构设备上可能因Linux内核不进行UDP广播而绑定失败       | UDP广播改用兼容性更强写法
 | 2019/07/24      | [`eddb99cf`](https://code.aliyun.com/linkkit/c-sdk/commit/eddb99cfc97615fe60b57f37b328b65e1aa7db64.diff)    | 在WiFi配网功能中, 若连云不稳定, 设备概率性会刚完成绑定后就从手机app的设备发现列表中消失                         | 用hash重新实现`HAL_KV_XXX()`
 | 2019/07/24      | [`dea6b6f2`](https://code.aliyun.com/linkkit/c-sdk/commit/dea6b6f21c096b6dfc074eab4a7b8d6f33aaae92.diff)    | 如果用户直接复制SDK的HAL参考实现在Linux设备上使用, 将设备断网静置数个小时, 概率性发生内存越界写而程序崩溃       | DNS解析失败时回收socket资源
 | 2019/07/05      | [`464f9382`](https://code.aliyun.com/linkkit/c-sdk/commit/464f938265456ff67700477dbfb1989fb10f976a.diff)    | 在WiFi配网功能中, 用户调用接口`awss_stop()`不能停止先前调用`awss_start()`的线程, 导致无法按预期退出配网过程     | 增加SDK内部状态同步
