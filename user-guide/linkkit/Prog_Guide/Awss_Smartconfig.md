@@ -481,7 +481,8 @@ verfiy_awss_connect_ap
 verify_awss_get_ap_info
 ---
 + 对 `HAL_Wifi_Get_Ap_Info` 进行自测, 观察是否可以按预期收集AP热点的连接信息
-+ 在调用该函数后, 会打印获取到的ssid, 密码和bssid
++ 在调用该函数后, 如果连接上了路由器, 那么会则打印获取到的ssid, 密码和bssid
++ 该函数的返回值是0, 无论是否连接上了路由器
 
 > 输出日志例子如下
 
@@ -490,11 +491,12 @@ verify_awss_get_ap_info
     /*                  Result:  0                 */
     /*           SSID:       test_ssid             */
     /*           PASSWD:     test_passwd           */
+    /*           PASSWD:     test_bssid            */
     /***********************************************/
 
 verify_awss_net_is_ready
 ---
-+ 对 `HAL_Sys_Net_Is_Ready` 进行自测, 观察是否可以按
++ 对 `HAL_Sys_Net_Is_Ready` 进行自测, 观察是否可以在联网的情况下返回1, 在没有联网的情况下返回0
 + 在调用该函数后, 会获取当前网络状态
 
 > 输出日志例子如下
