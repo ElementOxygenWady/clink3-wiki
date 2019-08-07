@@ -491,7 +491,7 @@ verify_awss_get_ap_info
     /*                  Result:  0                 */
     /*           SSID:       test_ssid             */
     /*           PASSWD:     test_passwd           */
-    /*           PASSWD:     test_bssid            */
+    /*           BSSID:      test_bssid            */
     /***********************************************/
 
 verify_awss_net_is_ready
