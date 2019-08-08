@@ -68,6 +68,8 @@
 
 以下按照从下到上的顺序, 逐个对每个层次做更加详细的说明
 
+V2.3.0及以前版本
+---
 + 所有HAL层函数的声明都在 `include/iot_import.h` 这个头文件中列出
 + 各功能点引入的HAL层接口依赖在`include/imports/iot_import_*.h`中列出
 + 这些`include/imports`目录下的子文件, 都被`include/iot_import.h`包含
