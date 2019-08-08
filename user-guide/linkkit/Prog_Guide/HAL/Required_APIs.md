@@ -27,8 +27,7 @@
         |                           |
         |   C-SDK Interface Layer   |
         |                           |
-        |       IOT_XXX_YYY() APIs  |
-        |   linkkit_mmm_nnn() APIs  |
+        |     IOT_XXX_YYY() APIs    |
         |                           |
         +---------------------------+
         |                           |
