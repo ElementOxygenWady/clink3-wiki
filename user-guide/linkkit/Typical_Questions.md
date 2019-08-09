@@ -170,7 +170,6 @@ Topic订阅设备超过1000怎么处理
     -    -g3 --coverage \
          -D_PLATFORM_IS_LINUX_ \
          -D__UBUNTU_SDK_DEMO__ \
-    +    -fPIC \
 
     @@ -19,6 +18,7 @@ CONFIG_ENV_CFLAGS   += \
          -DCONFIG_MQTT_RX_MAXLEN=5000 \
@@ -182,7 +181,7 @@ Topic订阅设备超过1000怎么处理
      CONFIG_ENV_CFLAGS   += -rdynamic
 
 + **改动点1:** 确保`CFLAGS`中没有`-g3 --coverage`这样的编译选项
-+ **改动点2:** 新增一行 `CONFIG_LIB_EXPORT := dynamic`, 同时新增一个CFLAGS选项-fPIC
++ **改动点2:** 新增一行 `CONFIG_LIB_EXPORT := dynamic`
 + **改动点3:** 重新运行 `make reconfig` 选择刚才修改到的 `config.ubuntu.x86` 配置文件, 或者被定制的config文件, **然后以 `make all` 而不是 `make` 的方式来编译**
 
 ---
