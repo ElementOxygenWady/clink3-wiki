@@ -5,6 +5,7 @@ V2.3.0版本的重要补丁
 
 | **修复日期**    | **补丁地址**                                                                                                | **症状描述**                                                                                                    | **修复备注**
 |-----------------|-------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------
+| 2019/08/09      | [`e83bb2ed`](https://code.aliyun.com/linkkit/c-sdk/commit/e83bb2ed2ac2a9b9f876f3cc8a5757c94bad1e2c.diff)    | 用 `make all` 命令配合config文件中的 `CONFIG_LIB_EXPORT := dynamic` 产生动态库形态的SDK时, 编译失败             | 修复头文件搜索路径缺失
 | 2019/08/06      | [`db414c7e`](https://code.aliyun.com/linkkit/c-sdk/commit/db414c7edb3615c7ffa11970b1f3cd18458338ab.diff)    | 关闭 `MQTT_DIRECT` 功能使用预认证方式鉴权时, 在部分资源紧张的设备上出现栈内存空间不足的崩溃                     | 将3KB以上栈空间挪到堆上
 | 2019/08/05      | [`f5bca1c1`](https://code.aliyun.com/linkkit/c-sdk/commit/f5bca1c1f5bb90ae1139cf7c9c548edd16b70803.diff)    | 对海外的部分客户, 由于设备到阿里云服务器延时太高, 出现 `MQTT+TLS` 连接建立不稳定或易失败情况                    | SSL连接增加PSK/Ticket优化选项
 | 2019/08/05      | [`68fcf24c`](https://code.aliyun.com/linkkit/c-sdk/commit/68fcf24c0b650db1d4aed54019ad06cdabc83b44.diff)    | 在家庭路由器开启了WiFi隔离或者局域网通信不稳定的情况下, 设备绑定无法成功                                        | 增加更多的Token传递通道
