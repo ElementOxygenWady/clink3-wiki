@@ -41,26 +41,13 @@
 ## <a name="SDK配置与代码抽取">SDK配置与代码抽取</a>
 SDK中有各种功能模块, 用户需要决定:
 
-
-
 + 需要使用哪些功能(SDK配置)
-
-
-
 
 SDK提供了配置工具用于配置需要使能哪些功能, 每个功能的配置选项名称类似FEATURE_MQTT_XXX, 下面的章节中会讲解具体有哪些功能可供配置
 
-
-
-
 + SDK如何与外部模组进行数据交互
 
-
-
-
 SDK使用MQTT与阿里云物联网平台通信, MCU连接的模组有的只支持TCP/有的支持MQTT, 因此SDK与模组的数据交互模式存在差异, 比如如果模组支持MQTT Client/那么在MCU上就可以不用编译SDK中自带的MQTT Client了, SDK收到用户APP发送过来的数据时只需要将数据内容发送给模组即可, 由模组将数据组装成MQTT协议报文后发送到物联网平台
-
-
 
 对于模组只支持TCP的情况, 意味着MCU上需要使能SDK自带的MQTT Client, 由MQTT Client将用户数据封装成MQTT协议之后通过通信模组上的TCP模块将数据发送到阿里云物联网平台
 
@@ -202,7 +189,7 @@ Link Kit SDK被设计为可以在不同的操作系统上运行, 或者甚至在
 
 
 #### <a name="必须实现函数:">必须实现函数:</a>
-| ** **	| 函数名 | 说明
+| **#**	| 函数名 | 说明
 |---|---|---
 | 1	| HAL_Malloc | 对应标准C库中的malloc(), 按入参长度开辟一片可用内存, 并返回首地址 |
 | 2	| HAL_Free	| 对应标准C库中的free(), 将入参指针所指向的内存空间释放, 不再使用 |
@@ -217,7 +204,7 @@ Link Kit SDK被设计为可以在不同的操作系统上运行, 或者甚至在
 #### <a name="OS相关可选函数">OS相关可选函数</a>
 如果MCU没有运行OS, 或者SDK的MQTT API并没有在多个线程中被调用, 以下函数可以不用修改wrapper.c中相关的函数实现. 在有OS场景下并且MQTT API被APP在多个线程中调用, 则需要用户对接以下函数:
 
-| ** ** |	函数名	| 说明 |
+| **#** |	函数名	| 说明 |
 |---|---|---
 | 1	| HAL_MutexCreate |	创建一个互斥锁, 返回值可以传递给HAL_MutexLock/Unlock |
 | 2	| HAL_MutexDestroy |	销毁一个互斥锁, 这个锁由入参标识 |
@@ -235,7 +222,7 @@ Link Kit SDK被设计为可以在不同的操作系统上运行, 或者甚至在
 #### <a name="TCP相关HAL">TCP相关HAL</a>
 如果用户未选择ATM, 用户适配时调用模组提供的TCP AT指令实现四个TCP HAL函数. 下面是对这些函数的说明, 也可访问[SDK官方文档](https://help.aliyun.com/document_detail/100111.html)页面了解更多说明
 
-| ** | 函数名 |	说明 |
+| **#** | 函数名 |	说明 |
 |---|---|---
 | 1 | HAL_TCP_Establish | 建立一个TCP连接 <br> 注意: <br> + 入参host是一个域名, 需要转换为IP地址<br> + 返回值是tcp的socket号 |
 | 2 | HAL_TCP_Destroy | 关闭tcp连接, 入参是HAL_TCP_Establish的返回值, 返回值0表示成功 |
@@ -247,7 +234,7 @@ Link Kit SDK被设计为可以在不同的操作系统上运行, 或者甚至在
 
 如果用户选择使用ATM, 并且未使能AT 使用, 用户适配时调用模组提供的TCP AT指令实现相应的ATM HAL函数, **无需实现上述TCP HAL+**. 下面是对这些函数的说明:
 
-| ** | 接口名 | 说明 |
+| **#** | 接口名 | 说明 |
 |---|---|---
 | 1 | HAL_AT_CONN_Init | 该接口需要对通信模组进行相关初始化, 使通信模组达到可以工作的状态 |
 | 2 | HAL_AT_CONN_Deinit | 该接口需要提供对通信模组的去初始化操作 |
@@ -459,7 +446,7 @@ struct at_conn_input {
 如果选择了at_parser框架, 则需要对接以下四个UART HAL函数, 函数声明见at_wrapper.h. 如果用户不使用at_parser框架请忽略该步骤
 
 
-| ** | 接口名 | 说明 |
+| **#** | 接口名 | 说明 |
 |---|---|---
 | 1 | HAL_AT_Uart_Init | 该接口对UART进行配置(波特率/停止位等)并初始化 |
 | 2 | HAL_AT_Uart_Deinit | 该接口对UART去初始化 |
@@ -469,7 +456,7 @@ struct at_conn_input {
 ##### <a name="产品相关HAL">产品相关HAL</a>
 下面的HAL用于获取产品的身份认证信息, 设备厂商需要设计如何在设备上烧写设备身份信息, 并通过下面的HAL函数将其读出后提供给SDK:
 
-| ** ** | 函数名 | 说明 |
+| **#** | 函数名 | 说明 |
 |---|---|---
 | 1	| HAL_GetProductKey |	获取设备的ProductKey, 用于标识设备的产品型号 |
 | 2	| HAL_GetDeviceName	| 获取设备的DeviceName, 用于唯一标识单个设备 |
