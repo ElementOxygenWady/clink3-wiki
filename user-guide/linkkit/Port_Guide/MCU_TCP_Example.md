@@ -516,7 +516,7 @@ clean:
 
 从程序入口的 main() 函数看起, 第一步是调用AT模块初始化函数IoT_ATM_Init(), 使模组处于ready状态, 第二步是调用用户提供的HAL函数获取产品信息
 
-```
+```C
 int main(int argc, char *argv[])
 {
     void *      pclient = NULL;
