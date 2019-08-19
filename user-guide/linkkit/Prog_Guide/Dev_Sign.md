@@ -50,39 +50,45 @@
 准备出入参结构体
 ---
 
-    int main(int argc, char *argv[])
-    {
-        iotx_mqtt_region_types_t region = IOTX_CLOUD_REGION_SHANGHAI;
-        iotx_dev_meta_info_t meta;
-        iotx_sign_mqtt_t sign_mqtt;
+```c
+int main(int argc, char *argv[])
+{
+    iotx_mqtt_region_types_t region = IOTX_CLOUD_REGION_SHANGHAI;
+    iotx_dev_meta_info_t meta;
+    iotx_sign_mqtt_t sign_mqtt;
 
-        memset(&meta,0,sizeof(iotx_dev_meta_info_t));
-        memcpy(meta.product_key,EXAMPLE_PRODUCT_KEY,strlen(EXAMPLE_PRODUCT_KEY));
-        memcpy(meta.product_secret,EXAMPLE_PRODUCT_SECRET,strlen(EXAMPLE_PRODUCT_SECRET));
-        memcpy(meta.device_name,EXAMPLE_DEVICE_NAME,strlen(EXAMPLE_DEVICE_NAME));
-        memcpy(meta.device_secret,EXAMPLE_DEVICE_SECRET,strlen(EXAMPLE_DEVICE_SECRET));
+    memset(&meta,0,sizeof(iotx_dev_meta_info_t));
+    memcpy(meta.product_key,EXAMPLE_PRODUCT_KEY,strlen(EXAMPLE_PRODUCT_KEY));
+    memcpy(meta.product_secret,EXAMPLE_PRODUCT_SECRET,strlen(EXAMPLE_PRODUCT_SECRET));
+    memcpy(meta.device_name,EXAMPLE_DEVICE_NAME,strlen(EXAMPLE_DEVICE_NAME));
+    memcpy(meta.device_secret,EXAMPLE_DEVICE_SECRET,strlen(EXAMPLE_DEVICE_SECRET));
+```
 
 准备一个类型为 `iotx_dev_meta_info_t` 的结构体变量, 把需要计算签名的设备标识信息填入其中即可
 
 然后调用 `dev_sign` 功能点唯一的一个用户接口 `IOT_Sign_MQTT()`, 计算签名
 ---
 
-        if (IOT_Sign_MQTT(region,&meta,&sign_mqtt) < 0) {
-            return -1; 
-        }
+```c
+    if (IOT_Sign_MQTT(region,&meta,&sign_mqtt) < 0) {
+        return -1; 
+    }
+```
 
 结果就在输出参数 `sign_mqtt` 中, 它是一个 `iotx_sign_mqtt_t` 类型的结构体变量
 
 打印签名结果或者去连MQTT服务器
 ---
 
-    #if 0   /* Uncomment this if you want to show more information */
-        HAL_Printf("sign_mqtt.hostname: %s\n",sign_mqtt.hostname);
-        HAL_Printf("sign_mqtt.port    : %d\n",sign_mqtt.port);
-        HAL_Printf("sign_mqtt.username: %s\n",sign_mqtt.username);
-        HAL_Printf("sign_mqtt.password: %s\n",sign_mqtt.password);
-        HAL_Printf("sign_mqtt.clientid: %s\n",sign_mqtt.clientid);
-    #endif
+```c
+#if 0   /* Uncomment this if you want to show more information */
+    HAL_Printf("sign_mqtt.hostname: %s\n",sign_mqtt.hostname);
+    HAL_Printf("sign_mqtt.port    : %d\n",sign_mqtt.port);
+    HAL_Printf("sign_mqtt.username: %s\n",sign_mqtt.username);
+    HAL_Printf("sign_mqtt.password: %s\n",sign_mqtt.password);
+    HAL_Printf("sign_mqtt.clientid: %s\n",sign_mqtt.clientid);
+#endif
+```
 
 为了减轻用户对接实现 `HAL_Printf` 的负担, `IOT_Sign_MQTT()` 在执行的过程中不会做任何打印动作, 如果想观察结果可打开上述注释
 
@@ -102,7 +108,9 @@
 原型
 ---
 
-    int32_t IOT_Sign_MQTT(iotx_mqtt_region_types_t region, iotx_dev_meta_info_t *meta, iotx_sign_mqtt_t *signout);
+```c
+int32_t IOT_Sign_MQTT(iotx_mqtt_region_types_t region, iotx_dev_meta_info_t *meta, iotx_sign_mqtt_t *signout);
+```
 
 接口说明
 ---
