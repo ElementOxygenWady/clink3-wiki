@@ -20,14 +20,13 @@
 ## <a name="应用场景说明">应用场景说明</a>
 应用场景: 设备的硬件由一个MCU加上一个通信模组构成, 设备的应用逻辑运行在MCU上, 模组上支持了TCP但是并不支持MQTT, MCU通过模组提供的AT指令来控制模组何时连接云端服务以及收发数据
 
-
 ![image](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/atm/f1.png)
 
 
 对于这样的场景, 设备厂商需要将Link Kit SDK集成并运行在MCU上, 让Link Kit SDK通过通信模组连接到阿里云物联网平台
 
 ## <a name="文档目标">文档目标</a>
-下面的文档关注于讲解用户如何把SDK移植到MCU, 并与通信模组协作来与阿里云物联网平台通信. 为了简化移植过程, 下面的文档在MCU上以开发一个基础版产品作为案例进行讲解, <u>如果用户需要在MCU上使用SDK的其它功能, 可以在MCU上将基础版的example正确运行之后, 再重新配置SDK, 选中其它功能再进行产品功能开发. </u>
+下面的文档关注于讲解用户如何把SDK移植到MCU, 并与通信模组协作来与阿里云物联网平台通信. 为了简化移植过程, 下面的文档在MCU上以开发一个基础版产品作为案例进行讲解, 如果用户需要在MCU上使用SDK的其它功能, 可以在MCU上将基础版的example正确运行之后, 再重新配置SDK, 选中其它功能再进行产品功能开发
 
 
 ## <a name="设备端开发过程">设备端开发过程</a>
@@ -53,7 +52,7 @@ SDK使用MQTT与阿里云物联网平台通信, MCU连接的模组有的只支�
 
 ![image](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/atm/f3.png)
 
-MQTT Client与给模组协作的时候, 开发者需要编写一个TCP连接管理模块去实现如下功能:
+MQTT Client与模组协作的时候, 开发者需要编写一个TCP连接管理模块去实现如下功能:
 
 + 控制模组发起到阿里云物联网平台的TCP连接, 并记录模组返回的TCP连接ID
 + 当MQTT Client发送数据时, 将数据通过MQTT Client创建的模组TCP连接ID进行数据发送
@@ -66,9 +65,8 @@ MQTT Client与给模组协作的时候, 开发者需要编写一个TCP连接管�
 
 Link Kit SDK中包含了一个模组TCP连接和数据缓存的模块, 称为AT TCP, 如果开发者在MCU上尚未实现这样一个模组TCP连接和数据缓存的模块, 可以使用SDK提供的AT TCP
 
-
-
 MCU与模组之间通常使用UART进行连接, 因此开发者需要开发代码对UART进行初始化, 通过UART接收来自模组的数据, 由于UART是一个字符一个字符的接收数据, 因此开发者还需要对收到的数据组装并判断AT指令是否承载TCP数据, 如果是才能将TCP数据发送给TCP连接管理模块. 这个模块与SDK/模组的关系如下图所示:
+
 ![image](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/atm/f5.png)
 
 Link Kit SDK中包含了一个AT解析的模块, 称为AT Parser,   如果开发者尚未实现这样的一个功能模块, 可以使能Link Kit SDK中的AT Parser模块以减少开发工作量
@@ -87,9 +85,8 @@ Link Kit SDK中包含了一个AT解析的模块, 称为AT Parser,   如果开发
 | FEATURE_MQTT_COMM_ENABLED | 是否需要为MQTT提供API | 必选 |
 | FEATURE_MQTT_DEFAULT_IMPL | 使能后将包含SDK中的MQTT实现, 并提供TCP HAL函数用于在TCP上收发MQTT数据 | 必选 |
 | FEATURE_MQTT_ATM_ENABLED | 是否使能SDK中的ATM模块 | 可选 |
-| FEATURE_AT_TCP_ENABLED | 是否使能AT TCP模块, 当本模块被使能后, AT TCP将会提供TCP HAL实现, 也就是说开发者无需再实现TCP HAL, 但是开发者需要实现AT TCP HAL | 可选 |
-| FEATURE_AT_PARSER_ENABLED | 是否使能AT Parser模块, 当本模块被使能后, AT Parser将会提供AT TCP HAL实现, 也就是说开发者无需再实现AT TCP HAL, 但是开发者需要实现AT Parser HAL | 可选 |
-
+| FEATURE_AT_TCP_ENABLED | 是否使能AT TCP模块, 当本模块被使能后, AT TCP将会提供TCP HAL实现<br>也就是说开发者无需再实现TCP HAL, 但是开发者需要实现AT TCP HAL | 可选 |
+| FEATURE_AT_PARSER_ENABLED | 是否使能AT Parser模块, 当本模块被使能后, AT Parser将会提供AT TCP HAL实现<br>也就是说开发者无需再实现AT TCP HAL, 但是开发者需要实现AT Parser HAL | 可选 |
 
 
 ## <a name="配置SDK">配置SDK</a>
@@ -98,20 +95,19 @@ SDK包含的功能较多, 为了节约对MCU RAM/Flash资源的消耗, 用户需
 ### <a name="运行配置命令">运行配置命令</a>
 + Linux系统
 
-
 进入SDK的根目录下, 运行命令
+
 ```
 make menuconfig
 ```
+
 + Windows系统
 
 运行SDK根目录下的config.bat
 
-
 ```
 config.bat
 ```
-
 
 ### <a name="使能需要的SDK功能">使能需要的SDK功能</a>
 

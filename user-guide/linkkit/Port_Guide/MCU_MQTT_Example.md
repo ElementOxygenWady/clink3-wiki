@@ -22,7 +22,7 @@
 
 # <a name="应用场景说明">应用场景说明</a>
 
-应用场景: 设备的硬件由一个MCU加上一个通信模组构成, 设备的应用逻辑运行在MCU上, 通信模组支持MQTT功能并提供AT指令给MCU使用, MCU控制模组何时连接云端服务以及收发数
+应用场景: 设备的硬件由一个MCU加上一个通信模组构成, 设备的应用逻辑运行在MCU上, 通信模组支持MQTT功能并提供AT指令给MCU使用, MCU控制模组何时连接云端服务以及收发数据
 
 ![1](http://linkkit-export.oss-cn-shanghai.aliyuncs.com/mcu_mqtt/1.png)
 
