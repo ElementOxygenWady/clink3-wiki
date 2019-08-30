@@ -877,22 +877,23 @@ int main(int argc, char **argv)
 ```c
 while (1) {
 
-        /* 从网络收取云端下发的报文 */
-        IOT_Linkkit_Yield(2000);
-
-        /* 物模型属性上报示例 */
-        res = IOT_Linkkit_Report(IOTX_LINKKIT_DEV_TYPE_MASTER, ITM_MSG_POST_PROPERTY, (uint8_t *)ALINK2_PROP_POST_DATA_TMP, strlen(ALINK2_PROP_POST_DATA_TMP));
-        EXAMPLE_TRACE("post property, res = %d", res);
-
-        /* 物模型事件上报示例 */
-        res = IOT_Linkkit_TriggerEvent(IOTX_LINKKIT_DEV_TYPE_MASTER, "Empty", strlen("Empty"), ALINK2_EVENT_POST_EMPTY, strlen(ALINK2_EVENT_POST_EMPTY));
-        EXAMPLE_TRACE("post event, res = %d", res);
-
-        if (++cnt > 2) {
-            IOT_Linkkit_Close(IOTX_LINKKIT_DEV_TYPE_MASTER);
-            break;
-        }
+    /* 从网络收取云端下发的报文 */
+    IOT_Linkkit_Yield(2000);
+    
+    /* 物模型属性上报示例 */
+    res = IOT_Linkkit_Report(IOTX_LINKKIT_DEV_TYPE_MASTER, ITM_MSG_POST_PROPERTY, (uint8_t *)ALINK2_PROP_POST_DATA_TMP, strlen(ALINK2_PROP_POST_DATA_TMP));
+    EXAMPLE_TRACE("post property, res = %d", res);
+    
+    /* 物模型事件上报示例 */
+    res = IOT_Linkkit_TriggerEvent(IOTX_LINKKIT_DEV_TYPE_MASTER, "Empty", strlen("Empty"), ALINK2_EVENT_POST_EMPTY, strlen(ALINK2_EVENT_POST_EMPTY));
+    EXAMPLE_TRACE("post event, res = %d", res);
+    
+    if (++cnt > 2) {
+        IOT_Linkkit_Close(IOTX_LINKKIT_DEV_TYPE_MASTER);
+        break;
     }
+
+}
 ```
 
 与基础版示例相同, 登录阿里网物联网平台的商家后台, 选中指定的设备, 可以查看是否收到来自设备的消息
