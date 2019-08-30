@@ -28,6 +28,7 @@ SDK手册目录
     * **不直接网络通信的MCU上集成SDK示例**
         - [MCU+支持MQTT的通信模组](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/MCU_MQTT_Example)
         - [MCU+支持TCP的通信模组](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/MCU_TCP_Example)
+        - [MCU+支持TLS的通信模组](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/MCU_TLS_Example)
     * **通信模组上集成SDK示例**
         - [乐鑫ESP8266+AliOS](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_ESP8266)
         - [庆科MK3080+AliOS](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Port_Guide/Build_MK3080)
