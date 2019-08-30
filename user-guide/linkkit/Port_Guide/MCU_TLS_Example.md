@@ -728,15 +728,15 @@ example_subscribe的函数内容如下:
 以下段落演示MQTT的发布功能, 即将业务报文上报到云平台:
 
 ```c
- while (1) {
-        if (0 == loop_cnt % 20) {
-            example_publish(pclient);
-        }
-
-        IOT_MQTT_Yield(pclient, 200);
-
-        loop_cnt += 1;
+while (1) {
+    if (0 == loop_cnt % 20) {
+        example_publish(pclient);
     }
+
+    IOT_MQTT_Yield(pclient, 200);
+
+    loop_cnt += 1;
+}
 ```
 
 下面是example_publish函数体的部分内容:
@@ -857,7 +857,7 @@ int main(int argc, char **argv)
 创建本地设备资源, 建立与云端的连接:
 
 ```c
-/* Create Master Device Resources */
+    /* Create Master Device Resources */
     user_example_ctx->master_devid = IOT_Linkkit_Open(IOTX_LINKKIT_DEV_TYPE_MASTER, &dev_info);
     if (user_example_ctx->master_devid < 0) {
         EXAMPLE_TRACE("IOT_Linkkit_Open Failed\n");
@@ -876,23 +876,21 @@ int main(int argc, char **argv)
 
 ```c
 while (1) {
-
     /* 从网络收取云端下发的报文 */
     IOT_Linkkit_Yield(2000);
-    
+
     /* 物模型属性上报示例 */
     res = IOT_Linkkit_Report(IOTX_LINKKIT_DEV_TYPE_MASTER, ITM_MSG_POST_PROPERTY, (uint8_t *)ALINK2_PROP_POST_DATA_TMP, strlen(ALINK2_PROP_POST_DATA_TMP));
     EXAMPLE_TRACE("post property, res = %d", res);
-    
+
     /* 物模型事件上报示例 */
     res = IOT_Linkkit_TriggerEvent(IOTX_LINKKIT_DEV_TYPE_MASTER, "Empty", strlen("Empty"), ALINK2_EVENT_POST_EMPTY, strlen(ALINK2_EVENT_POST_EMPTY));
     EXAMPLE_TRACE("post event, res = %d", res);
-    
+
     if (++cnt > 2) {
         IOT_Linkkit_Close(IOTX_LINKKIT_DEV_TYPE_MASTER);
         break;
     }
-
 }
 ```
 
