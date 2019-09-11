@@ -76,20 +76,20 @@ Topic订阅设备超过1000怎么处理
 
 | 连接参数                                | 所属模块    | 含义                                                    | 默认值      | 备注
 |-----------------------------------------|-------------|---------------------------------------------------------|:-----------:|-------------------------------------------------------------
-| `CONFIG_MQTT_REQUEST_TIMEOUT`           | MQTT        | MQTT request timeout 间隔时间                           | 2s          | 曾用名`IOTX_MC_REQUEST_TIMEOUT_DEFAULT_MS`
-| `IOTX_MC_KEEPALIVE_PROBE_MAX`           | MQTT        | MQTT keepalive 允许心跳丢失最大次数                     | 1           | 改的越小, 重连越快, 也可能掉线次数越多
-| `CONFIG_MQTT_KEEPALIVE_INTERVAL`        | MQTT        | MQTT keepalive 心跳默认间隔时间                         | 60s         | 不在 `mqtt_params` 中指定时, SDK默认填上的时间
-| `CONFIG_MQTT_KEEPALIVE_INTERVAL_MIN`    | MQTT        | 可被设置的最短心跳间隔                                  | 30s         | 曾用名`KEEP_ALIVE_INTERVAL_DEFAULT_MIN`
-| `CONFIG_MQTT_KEEPALIVE_INTERVAL_MAX`    | MQTT        | 可被设置的最长心跳间隔                                  | 180s        | 曾用名`KEEP_ALIVE_INTERVAL_DEFAULT_MAX`
-| `IOTX_MC_RECONNECT_INTERVAL_MIN_MS`     | MQTT        | MQTT reconnect 最小间隔时间                             | 1000ms      | 首次断线重连时的起始重试间隔
-| `IOTX_MC_RECONNECT_INTERVAL_MAX_MS`     | MQTT        | MQTT reconnect 最大间隔时间                             | 60000ms     | 断线的间隔会越来越稀疏, 最终达到这个数值不再增加
-| `CONFIG_MQTT_MESSAGE_MAXLEN`            | MQTT        | MQTT 最大 Packet Length                                 | 1024        | 曾用值`1280`
-| `CONFIG_GUIDER_AUTH_TIMEOUT`            | MQTT        | 使用HTTP预认证方式鉴权连接时, 等待云端应答的最长超时    | 10s         | 超过这个时间将会不再等待放弃建连
-| `DM_MSG_CACHE_TIMEOUT_MS_DEFAULT`       | DevModel    | 使用物模型时, 等待云端应答的最长超时                    | 10s         | 超时无应答, 会报错 `{"id":0,"code":100000,...}`
-| `CONFIG_MQTT_TX_MAXLEN`                 | DevModel    | 使用物模型时, MQTT的最大上行报文长度                    | 1024        |
-| `CONFIG_MQTT_RX_MAXLEN`                 | DevModel    | 使用物模型时, MQTT的最大下行报文长度                    | 1024        |
-| `IOTX_DM_CLIENT_KEEPALIVE_INTERVAL_MS`  | DevModel    | 使用物模型时, MQTT建连将会使用的心跳间隔                | 30s         |
-| `MBEDTLS_SSL_MAX_CONTENT_LEN`           | TLS         | 使用TLS加密通道连接时, 报文缓冲区的最大长度             | 4096        | 对应握手连接内存峰值为25KB, 标准TLS需16KB, 峰值52KB
+| `CONFIG_MQTT_REQUEST_TIMEOUT`           | MQTT        | MQTT request timeout 间隔时间                           | `2s`        | 曾用名`IOTX_MC_REQUEST_TIMEOUT_DEFAULT_MS`
+| `IOTX_MC_KEEPALIVE_PROBE_MAX`           | MQTT        | MQTT keepalive 允许心跳丢失最大次数                     | `1`         | 改的越小, 重连越快, 也可能掉线次数越多
+| `CONFIG_MQTT_KEEPALIVE_INTERVAL`        | MQTT        | MQTT keepalive 心跳默认间隔时间                         | `60s`       | 不在 `mqtt_params` 中指定时, SDK默认填上的时间
+| `CONFIG_MQTT_KEEPALIVE_INTERVAL_MIN`    | MQTT        | 可被设置的最短心跳间隔                                  | `30s`       | 曾用名`KEEP_ALIVE_INTERVAL_DEFAULT_MIN`
+| `CONFIG_MQTT_KEEPALIVE_INTERVAL_MAX`    | MQTT        | 可被设置的最长心跳间隔                                  | `180s`      | 曾用名`KEEP_ALIVE_INTERVAL_DEFAULT_MAX`
+| `IOTX_MC_RECONNECT_INTERVAL_MIN_MS`     | MQTT        | MQTT reconnect 最小间隔时间                             | `1000ms`    | 首次断线重连时的起始重试间隔
+| `IOTX_MC_RECONNECT_INTERVAL_MAX_MS`     | MQTT        | MQTT reconnect 最大间隔时间                             | `60s`       | 断线的间隔会越来越稀疏, 最终达到这个数值不再增加
+| `CONFIG_MQTT_MESSAGE_MAXLEN`            | MQTT        | MQTT 最大 Packet Length                                 | `1024`      | 曾用值`1280`
+| `CONFIG_GUIDER_AUTH_TIMEOUT`            | MQTT        | 使用HTTP预认证方式鉴权连接时, 等待云端应答的最长超时    | `10s`       | 超过这个时间将会不再等待放弃建连
+| `DM_MSG_CACHE_TIMEOUT_MS_DEFAULT`       | DevModel    | 使用物模型时, 等待云端应答的最长超时                    | `10s`       | 超时无应答, 会报错 `{"id":0,"code":100000,...}`
+| `CONFIG_MQTT_TX_MAXLEN`                 | DevModel    | 使用物模型时, MQTT的最大上行报文长度                    | `1024`      |
+| `CONFIG_MQTT_RX_MAXLEN`                 | DevModel    | 使用物模型时, MQTT的最大下行报文长度                    | `1024`      |
+| `IOTX_DM_CLIENT_KEEPALIVE_INTERVAL_MS`  | DevModel    | 使用物模型时, MQTT建连将会使用的心跳间隔                | `30s `      |
+| `MBEDTLS_SSL_MAX_CONTENT_LEN`           | TLS         | 使用TLS加密通道连接时, 报文缓冲区的最大长度             | `4096`      | 对应握手连接内存峰值为25KB, 标准TLS需16KB, 峰值52KB
 
 
 ## <a name="B.2 移植阶段问题">B.2 移植阶段问题</a>
