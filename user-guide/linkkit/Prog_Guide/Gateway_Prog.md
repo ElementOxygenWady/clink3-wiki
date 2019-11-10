@@ -136,15 +136,14 @@ int example_add_subdev(iotx_linkkit_dev_meta_info_t *meta_info)
 + 注销子设备: SDK不提供注销子设备的API, 防止因用户错误调用导致子设备被意外删除
 
 + 删除子设备拓扑关系: SDK提供了删除拓扑关系的API, 用户可以用`ITM_MSG_DELETE_TOPO`选项调用`IOT_Linkkit_Report`以删除参数`devid`指定的子设备拓扑关系
-
-+ 子设备OTA: 用户使用`IOT_Ioctl`配置要升级的子设备, 再用`IOT_Linkkit_Query`来触发子设备升级
-
 + 子设备网关多对多: 当子设备A已在网关A下面登录时, 如果需要移动到网关B下面, 那么需要在网关B上面进行子设备的登录, 流程不变, 但在SDK运行前需要按照如下代码进行配置:
 
 ```c
 int proxy_register = 1;
 IOT_Ioctl(IOTX_IOCTL_SET_PROXY_REGISTER, (void *)&proxy_register);
 ```
+
++ 子设备OTA: 用户使用`IOT_Ioctl`配置要升级的子设备, 再用`IOT_Linkkit_Query`来触发子设备升级
 
 调用IOT_RegisterCallback注册固件升级所用的回调函数user_fota_event_handler
 

@@ -2,6 +2,7 @@
 + [设备属性](#设备属性)
 + [设备服务](#设备服务)
 + [设备事件](#设备事件)
++ [上报历史数据](#上报历史数据)
 + [关于上报消息的格式说明及示例](#关于上报消息的格式说明及示例)
 + [基于MQTT Topic进行数据收发](#基于MQTT Topic进行数据收发)
 + [与物模型功能相关的API列表](#与物模型功能相关的API列表)
@@ -65,8 +66,13 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
 
 # <a name="设备服务">设备服务</a>
 
-在设备端示例程序中, 当收到服务调用请求时, 会进入如下回调函数, 以下代码使用了开源软件 `cJSON` 来解析服务请求的参数值:
-
+设备端必须注册服务请求回调函数，用于接收云端的服务请求并在处理完成后发送相应的服务响应数据。SDK支持2种类型的服务请求回调函数，这两种类型的回调函数在服务响应方式上有较大区别：
+1. 必须通过回调函数参数返回应答数据，使用`ITE_SERVICE_REQUEST`事件类型注册回调函数，回调函数原型为:
+    ```
+    DECLARE_EVENT_CALLBACK(ITE_SERVICE_REQUEST, int (*cb)(const int, const char *, const int, const char *, const int, char **, int *))
+    ```
+    ```
+    IOT_RegisterCallback(ITE_SERVICE_REQUEST, user_service_request_event_handler);
     static int user_service_request_event_handler(const int devid, const char *serviceid, const int serviceid_len,
                                                 const char *request, const int request_len,
                                                 char **response, int *response_len)
@@ -108,6 +114,7 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
             *response = (char *)HAL_Malloc(*response_len);
             if (*response == NULL) {
                 EXAMPLE_TRACE("Memory Not Enough");
+                cJSON_Delete(root);
                 return -1;
             }
             memset(*response, 0, *response_len);
@@ -118,6 +125,65 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
         cJSON_Delete(root);
         return 0;
     }
+    ```
+2. 通过特定的API发送服务应答数据实现异步响应，使用`ITE_SERVICE_REQUEST_EXT`事件类型注册回调函数，事件类型和回调函数原型为:
+    ```
+    DECLARE_EVENT_CALLBACK(ITE_SERVICE_REQUEST_EXT, int (*cb)(int, const char *, int, const char *, int, const char *, int, void *))
+    ```
+    用户使用`IOT_Linkkit_AnswerService`实现服务响应,
+    ```
+    int IOT_Linkkit_AnswerService(int devid, char *serviceid, int serviceid_len, char *payload, int payload_len,
+                              void *p_service_ctx);
+    ```
+    ```
+    IOT_RegisterCallback(ITE_SERVICE_REQUEST, user_service_request_ext_event_handler);
+    static int user_service_request_ext_event_handler(const int devid, const char *serviceid, const int serviceid_len,
+                                                      const char *request, const int request_len, void *p_service_ctx)
+    {
+        int add_result = 0;
+        cJSON *root = NULL, *item_number_a = NULL, *item_number_b = NULL;
+        const char *response_fmt = "{\"Result\": %d}";
+        char response[30] = {0};
+        int response_len = 0;
+
+        EXAMPLE_TRACE("Service Request Received, Service ID: %.*s, Payload: %s", serviceid_len, serviceid, request);
+
+        /* Parse Root */
+        root = cJSON_Parse(request);
+        if (root == NULL || !cJSON_IsObject(root)) {
+            EXAMPLE_TRACE("JSON Parse Error");
+            return -1;
+        }
+
+        if (strlen("Operation_Service") == serviceid_len && memcmp("Operation_Service", serviceid, serviceid_len) == 0) {
+            /* Parse NumberA */
+            item_number_a = cJSON_GetObjectItem(root, "NumberA");
+            if (item_number_a == NULL || !cJSON_IsNumber(item_number_a)) {
+                cJSON_Delete(root);
+                return -1;
+            }
+            EXAMPLE_TRACE("NumberA = %d", item_number_a->valueint);
+
+            /* Parse NumberB */
+            item_number_b = cJSON_GetObjectItem(root, "NumberB");
+            if (item_number_b == NULL || !cJSON_IsNumber(item_number_b)) {
+                cJSON_Delete(root);
+                return -1;
+            }
+            EXAMPLE_TRACE("NumberB = %d", item_number_b->valueint);
+
+            add_result = item_number_a->valueint + item_number_b->valueint;
+
+            /* Send Service Response To Cloud immediately */
+            HAL_Snprintf(response, sizeof(response), response_fmt, add_result);
+            response_len = strlen(response);
+            IOT_Linkkit_AnswerService(devid, (char *)serviceid, serviceid_len, response, response_len, p_service_ctx);
+        }
+
+        cJSON_Delete(root);
+        return 0;
+    }
+    ```
 
 # <a name="设备事件">设备事件</a>
 
@@ -133,6 +199,137 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
                                     event_payload, strlen(event_payload));
         EXAMPLE_TRACE("Post Event Message ID: %d", res);
     }
+
+# <a name="上报历史数据">上报历史数据</a>
+
+* 配置方法: 用户需运行`make menuconfig`, 打开`FEATURE_DEVICE_MODEL_ENABLED`后，使能`Device Model Configurations`菜单下的`FEATURE_DEVICE_HISTORY_POST`打开此配置。
+* 使用方法: 使用`IOT_Linkkit_Report`的`ITM_MSG_POST_HISTORY_DATA`的消息类型用于上报历史消息数据。
+
+历史数据的格式如下:
+```
+{
+	"id": 123,
+	"version": "1.0",
+	"method": "thing.event.property.history.post",
+	"params": [{
+			"identity": {
+				"productKey": "",
+				"deviceName": ""
+			},
+			"properties": [{
+					"Power": {
+						"value": "on",
+						"time": 123456
+					},
+					"WF": {
+						"value": "3",
+						"time": 123456
+					}
+				},
+				{
+					"Power": {
+						"value": "on",
+						"time": 123456
+					},
+					"WF": {
+						"value": "3",
+						"time": 123456
+					}
+				}
+			],
+			"events": [{
+				"alarmEvent": {
+					"value": {
+						"Power": "on",
+						"WF": "2"
+					},
+					"time": 123456
+				},
+				"alertEvent": {
+					"value": {
+						"Power": "off",
+						"WF": "3"
+					},
+					"time": 123456
+				}
+			}]
+		},
+		{
+			"identity": {
+				"productKey": "",
+				"deviceName": ""
+			},
+			"properties": [{
+				"Power": {
+					"value": "on",
+					"time": 123456
+				},
+				"WF": {
+					"value": "3",
+					"time": 123456
+				}
+			}],
+			"events": [{
+				"alarmEvent": {
+					"value": {
+						"Power": "on",
+						"WF": "2"
+					},
+					"time": 123456
+				},
+				"alertEvent": {
+					"value": {
+						"Power": "off",
+						"WF": "3"
+					},
+					"time": 123456
+				}
+			}]
+		}
+	]
+}
+```
+
+上报内容有以下限制:
+
++ 网关最多同时代理10个子设备上报
++ Property数组最大长度是30
++ 每个property中最多包含200个属性
++ Event数组最大长度是20
++ 每个event中最多包含20个事件
+
+按照上报数据格式定义, 我们给出了下面的参考代码, 参考代码只演示了上报直连设备自身的1个历史属性值的情况:
+```
+void user_post_history(void)
+{
+    int res = 0;
+
+    char property_payload[200] = "[{\"identity\":{\"productKey\":\"a1RIsMLz2BJ\",\"deviceName\":\"example1\"},\"properties\":" \
+                                 "[{\"Counter\": {\"value\": 12, \"time\":1570612996}}]}]";
+
+    res = IOT_Linkkit_Report(EXAMPLE_MASTER_DEVID, ITM_MSG_POST_HISTORY_DATA,
+                             (unsigned char *)property_payload, strlen(property_payload));
+
+    EXAMPLE_TRACE("Post Property Message ID: -0x%04x", -res);
+}
+```
+
+在main函数中循环调动此历史上报函数, 即可在控制台日志服务的上行消息中查看到正确的上报记录
+```
+int main(int argc, char **argv)
+{
+    ... ...
+
+    /* Post Event Example */
+    if ((cnt % 10) == 0) {
+        /* user_post_event(); */
+        user_post_history();
+    }
+    cnt++;
+
+    ... ...
+}
+```
 
 # <a name="关于上报消息的格式说明及示例">关于上报消息的格式说明及示例</a>
 

@@ -3,6 +3,7 @@
 + [OTA例程讲解](#OTA例程讲解)
     * [用基础版接口实现的OTA例程](#用基础版接口实现的OTA例程)
     * [用高级版接口实现的OTA例程](#用高级版接口实现的OTA例程)
+    * [子设备OTA例程](#子设备OTA例程)
 + [OTA功能API](#OTA功能API)
     * [用基础版接口实现OTA功能涉及的API](#用基础版接口实现OTA功能涉及的API)
     * [用高级版接口实现OTA功能涉及的API](#用高级版接口实现OTA功能涉及的API)
@@ -126,8 +127,8 @@ int main(int argc, char *argv[]) {
 ---
 ```
     do {
-        /* 下载OTA固件 */
         len = IOT_OTA_FetchYield(h_ota, buf_ota, OTA_BUF_LEN, 1);
+        EXAMPLE_TRACE("IOT_OTA_FetchYield result: %d",len);
         if (len > 0) {
             if (1 != fwrite(buf_ota, len, 1, fp)) {
                 EXAMPLE_TRACE("write data to file failed");
@@ -135,13 +136,12 @@ int main(int argc, char *argv[]) {
                 break;
             }
         } else {
-            /* 上报已下载进度 */
-            IOT_OTA_ReportProgress(h_ota, IOT_OTAP_FETCH_FAILED, NULL);
-            EXAMPLE_TRACE("ota fetch fail");
+            /* 当下载出现错误时，可继续尝试 */
+            HAL_SleepMs(500);
+            continue;
         }
 
         /* get OTA information */
-        /* 获取已下载到的数据量, 文件总大小, md5信息, 版本号等信息 */
         IOT_OTA_Ioctl(h_ota, IOT_OTAG_FETCHED_SIZE, &size_downloaded, 4);
         IOT_OTA_Ioctl(h_ota, IOT_OTAG_FILE_SIZE, &size_file, 4);
         IOT_OTA_Ioctl(h_ota, IOT_OTAG_MD5SUM, md5sum, 33);
@@ -150,14 +150,15 @@ int main(int argc, char *argv[]) {
         last_percent = percent;
         percent = (size_downloaded * 100) / size_file;
         if (percent - last_percent > 0) {
-            /* 上报已下载进度 */
             IOT_OTA_ReportProgress(h_ota, percent, NULL);
             IOT_OTA_ReportProgress(h_ota, percent, "hello");
         }
         IOT_MQTT_Yield(pclient, 100);
-        /* 判断下载是否结束 */
     } while (!IOT_OTA_IsFetchFinish(h_ota));
 ```
+
+目前OTA支持断点续传，断点续传通过扩展`IOT_OTA_FetchYield`来实现。当下载过程网络不稳定，导致本次http连接断开时，IOT_OTA_FetchYield返回值小于0，此时可继续调用`IOT_OTA_FetchYield`进行重试，如果网络恢复，可以重连成功，那么将继续下载剩余的固件。
+
 6. 校验md5的值
 ---
 ```
@@ -311,6 +312,172 @@ int HAL_Firmware_Persistence_Write(char *buffer, uint32_t length);
 /* SDK在固件下载结束时进行调用 */
 int HAL_Firmware_Persistence_Stop(void);
 ```
+
+## <a name="子设备OTA例程">子设备OTA例程</a>
+>  子设备OTA,具体例子下载请见[子设备OTA例子](http://gitlab.alibaba-inc.com/xicai.cxc/test_wiki/raw/master/linkkit_example_subdev_ota.c)
+
+
+该例子可以概括如下：一个子设备(设备A)在加入网关的时候, 订阅了OTA有关的topic, 同时检查一下该设备未上线前云端是否发布过跟它有关的升级消息。如果一定时间内都没有收到升级的信息，则将设备A有关升级的topic进行unsubscribe, 并切换到另外一个子设备B，将子设备B加入网关并订阅有关的topic。所有子设备都将轮询一次。用户可以根据需要对这个例子进行修改。
+
+
+1. 调用`IOT_RegisterCallback`注册固件升级所用的回调函数user_fota_event_handler
+---
+```
+/** fota event handler **/
+static int user_fota_event_handler(int type, const char *version)
+{
+    char buffer[128] = {0};
+    int buffer_length = 128;
+
+    /* 0 - new firmware exist, query the new firmware */
+    if (type == 0) {
+        EXAMPLE_TRACE("New Firmware Version: %s", version);
+
+        IOT_Linkkit_Query(0, ITM_MSG_QUERY_FOTA_DATA, (unsigned char *)buffer, buffer_length);
+    }
+
+    return 0;
+}
+    ...
+    IOT_RegisterCallback(ITE_FOTA, user_fota_event_handler);
+    IOT_RegisterCallback(ITE_INITIALIZE_COMPLETED, user_initialized);
+    ...
+```
+
+2. 添加子设备，进行子设备OTA
+---
+在`ITE_INITIALIZE_COMPLETED`事件处理函数中确认网关连云初始化完成后,便可以调用example_add_subdev进行添加子设备的动作，添加完毕后调用do_subdev_ota进行子设备OTA操作。其中HAL_SleepMs(25000)为预估的OTA任务的执行，子设备期望在这个时间段内完成OTA下载。最后再调用unsub_ota把当前子设备的ota的topic给unsub掉。
+```
+        /* Add subdev */
+        if (user_example_ctx->master_initialized && user_example_ctx->subdev_index >= 0 &&
+            (user_example_ctx->auto_add_subdev == 1 || user_example_ctx->permit_join != 0)) {
+            if (user_example_ctx->subdev_index < EXAMPLE_SUBDEV_ADD_NUM) {
+                EXAMPLE_TRACE("try to add sub\n");
+                /* Add next subdev */
+                if (example_add_subdev((iotx_linkkit_dev_meta_info_t *)&subdevArr[user_example_ctx->subdev_index]) == SUCCESS_RETURN) {
+                    EXAMPLE_TRACE("subdev %s add succeed", subdevArr[user_example_ctx->subdev_index].device_name);
+                } else {
+                    EXAMPLE_TRACE("subdev %s add failed", subdevArr[user_example_ctx->subdev_index].device_name);
+                }
+                int cur_subdevid = user_example_ctx->subdev_index + 1;
+                const char *pk = subdevArr[user_example_ctx->subdev_index].product_key;
+                const char *dn = subdevArr[user_example_ctx->subdev_index].device_name;
+                /* check each sub dev has remote ota message */
+                do_subdev_ota(cur_subdevid);
+                user_example_ctx->subdev_index++;
+                user_example_ctx->permit_join = 0;
+                /* wait remote ota message */
+                HAL_SleepMs(25000);
+                unsub_ota(pk, dn);
+            }
+        }
+```
+
+3. example_add_subdev函数详解
+---
+ example_add_subdev函数实现了将一个子设备添加到网关的过程，并在子设备上线后上报一个版本号，云端在识别了这个版本号后才能下推相应的升级任务。
+```
+static int example_add_subdev(iotx_linkkit_dev_meta_info_t *meta_info)
+{
+    int res = 0, devid = -1;
+    devid = IOT_Linkkit_Open(IOTX_LINKKIT_DEV_TYPE_SLAVE, meta_info);
+    if (devid <= 0) {
+        EXAMPLE_TRACE("subdev open Failed\n");
+        return -1;
+    }
+    EXAMPLE_TRACE("subdev open susseed, devid = %d\n", devid);
+    res = IOT_Linkkit_Connect(devid);
+    if (res < 0) {
+        EXAMPLE_TRACE("subdev connect Failed\n");
+        return res;
+    }
+    EXAMPLE_TRACE("subdev connect success: devid = %d\n", devid);
+
+    res = IOT_Linkkit_Report(devid, ITM_MSG_LOGIN, NULL, 0);
+    if (res < 0) {
+        EXAMPLE_TRACE("subdev login Failed\n");
+        return res;
+    }
+    EXAMPLE_TRACE("subdev login success: devid = %d\n", devid);
+    HAL_SleepMs(6000);
+    const char *current_subdev_version = "app-1.0.0-20180101.1000";
+    IOT_Linkkit_Report(devid, ITM_MSG_REPORT_SUBDEV_FIRMWARE_VERSION, (unsigned char *)(current_subdev_version),
+                       strlen(current_subdev_version));
+    return res;
+}
+```
+
+4. do_subdev_ota函数详解：
+---
+
+用户通过IOT_Ioctl这个接口来切换OTA通道为某个子设备(以devid区分)使用。切换后，只有这个子设备的升级消息能够被接收到。同时通过IOT_Linkkit_Query接口向云端查询是否有适合当前子设备的固件版本信息，如果有则走入OTA流程（触发用户自定义的OTA回调函数user_fota_event_handler）
+
+```
+void do_subdev_ota(int devid)
+{
+    if (status_list[devid] == SUB_OTA_SUCCESS) {
+        HAL_Printf("current devid is %d, its has checked remote ota message, skip\n", devid);
+        return;
+    }
+
+    if (current_ota_running == 1) {
+        return;
+    }
+
+    HAL_Printf("current devid running ota is %d\n", devid);
+    int ota_result = 0;
+    ota_result = IOT_Ioctl(IOTX_IOCTL_SET_OTA_DEV_ID, (void *)(&devid));
+    if (0 != ota_result) {
+        status_list[devid] = SUB_OTA_FAILED_SET_DEV_ID;
+        HAL_Printf("IOTX_IOCTL_SET_OTA_DEV_ID failed, id is %d\n", devid);
+        return;
+    }
+    ota_result = IOT_Linkkit_Query(devid, ITM_MSG_REQUEST_FOTA_IMAGE, (unsigned char *)current_subdev_version,
+                                   strlen(current_subdev_version));
+    HAL_Printf("current devid is %d, ITM_MSG_REQUEST_FOTA_IMAGE ret is %d\n", devid, ota_result);
+    if (0 != ota_result) {
+        status_list[devid] = SUB_OTA_FAILED_QUERY;
+        return;
+    }
+    status_list[devid] = SUB_OTA_SUCCESS;
+}
+```
+
+5. unsub_ota函数详解：
+---
+
+用户通过下述函数把当前的ota回调给unsubscribe掉，从而让出ota通道
+
+```
+void unsub_ota(const char *pk, const char *dn)
+{
+    char buf[100] = {0};
+    int ret;
+    ret = HAL_Snprintf(buf,
+                       100,
+                       "/ota/device/upgrade/%s/%s",
+                       pk,
+                       dn);
+    IOT_MQTT_Unsubscribe(NULL, buf);
+    HAL_Printf("unsubed success\n");
+}
+```
+
+
+6. unsub网关的ota的topic
+---
+在添加子设备前把网关的ota的topic给unsub掉，避免网关设备和子设备的ota冲突
+```
+unsub_ota(g_product_key, g_device_name);
+```
+
+
+7. 关于HAL烧写函数的说明
+---
+对于不同的子设备的烧写，可以在example中用全局变量记录一个devid, 在HAL_Firmware_Persistence_Start和HAL_Firmware_Persistence_Write中读取这个全局变量，然后烧写到相应的位置。
+
+
+
 
 # <a name="OTA功能API">OTA功能API</a>
 ## <a name="用基础版接口实现OTA功能涉及的API">用基础版接口实现OTA功能涉及的API</a>
