@@ -18,6 +18,13 @@
 SDK手册目录
 ---
 
++ [使用第三方开源软件连接](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/3rd_Party_MQTT_Guide)
+    * [Paho-MQTT Go](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/Paho_Go)
+    * [Paho-MQTT C#](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/Paho_CSharp)
+    * [Paho-MQTT C](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/Paho_C)
+    * [Paho-MQTT Java](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/Paho_Java)
+    * [Paho-MQTT Android](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/Paho_Android)
+
 + [SDK概述](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/SDK_Overview)
 + [快速体验](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Quick_Start)
 + **移植指南**
