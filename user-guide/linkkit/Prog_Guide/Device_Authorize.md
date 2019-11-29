@@ -31,6 +31,7 @@
 
 1. 运行make menuconfig，使用默认的编译配置选项即可。
 2. 修改HAL层配置选项，在`wrappers/tls/HAL_TLS_mbedtls.c`中，将`#define TLS_AUTH_MODE TLS_AUTH_MODE_CA`修改为`#define TLS_AUTH_MODE TLS_AUTH_MODE_PSK`。
+3. 修改mbedtls库的PSK最大长度默认值，将`ssl.h`中的`MBEDTLS_PSK_MAX_LEN`define为64。
 
 ### <a name="运行期调用方式">运行期调用方式</a>
 

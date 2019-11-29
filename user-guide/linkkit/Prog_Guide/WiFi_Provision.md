@@ -5,7 +5,8 @@
 + [配网通用HAL移植说明](#配网通用HAL移植说明)
     * [配网依赖的Linkkit SDK公共HAL](#配网依赖的Linkkit SDK公共HAL)
     * [配网模块公共HAL](#配网模块公共HAL)
-+ [扩展 ](#扩展 )
++ [配网方案 ](#配网方案 )
++ [用户交互参考实现](#用户交互参考实现)
 
 # <a name="功能概述">功能概述</a>
 
@@ -94,9 +95,13 @@ WiFi设备需要连接到WiFi热点(WiFi AP)之后才能与其它设备进行基
 ---
 + 配网通用HAL, 仅配网模块调用
 
-# <a name="扩展 ">扩展 </a>
+# <a name="配网方案 ">配网方案 </a>
 
 - [一键配网](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_Smartconfig)
 - [设备热点配网](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_DevAP)
 - [手机热点配网](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_PhoneAP)
 - [零配](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_ZeroConfig)
+
+# <a name="用户交互参考实现">用户交互参考实现</a>
+
+- [用户交互参考](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/Awss_Interaction)
