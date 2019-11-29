@@ -307,9 +307,12 @@ void do_subdev_ota(int devid)
 | [IOT_Linkkit_TriggerEvent](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Linkkit_Provides#iot_linkkit_triggerevent)  | 向云端发送**事件报文**, 如错误码, 异常告警等
 
 
-| 其他通用函数名                                                                                                                  | 说明
-| [IOT_Ioctl](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Provided_APIs#iot_ioctl)                                 | 设置SDK运行时的可配置选
-项
-| [IOT_RegisterCallback](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Provided_APIs#iot_registercallback)           | 注册事件回调函数
+其他通用函数
+---
+
+| 函数名                                                                                                                                                  | 说明
+|---------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------
+| [IOT_Ioctl](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Provided_APIs#iot_ioctl)                           | 设置SDK运行时的可配置选项
+| [IOT_RegisterCallback](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/API/Provided_APIs#iot_registercallback)     | 注册事件回调函数
 
 
