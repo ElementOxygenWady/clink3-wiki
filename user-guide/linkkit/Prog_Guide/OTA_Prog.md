@@ -15,6 +15,10 @@
 
 OTA(Over-the-Air Technology)即空中下载技术. 物联网平台支持通过OTA方式进行设备固件升级
 
+**注:**
+
+使用tls下载时，需使能SNI功能，即打开MBEDTLS_SSL_SERVER_NAME_INDICATION宏。
+
 基于MQTT协议下固件升级流程如下
 ---
 

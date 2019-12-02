@@ -65,10 +65,8 @@ go run iot.go
 ```
 clientId192.168.56.1deviceNamedengproductKeya1Zd7n5yTt8timestamp1528018257135
 1b865320fc183cc747041c9faffc9055fc45bbab
-Connect aliyun IoT Cloud Success
+Connect aliyun IoT Cloud Sucess
 Subscribe topic /a1Zd7n5yTt8/deng/user/get success
-publish msg: 0
-publish msg:  ABC #0
 publish msg: 0
 publish msg:  ABC #0
 publish msg: 1
@@ -79,6 +77,8 @@ publish msg: 3
 publish msg:  ABC #3
 publish msg: 4
 publish msg:  ABC #4
+publish msg: 5
+publish msg:  ABC #5
 ```
 
 ## <a name="核心源码">核心源码</a>
@@ -87,17 +87,7 @@ publish msg:  ABC #4
 ### <a name="计算登录密码">计算登录密码</a>
 
 ```go
-  // mandatory input data
-  var productKey string = "a1Zd7n5yTt8"
-  var deviceName string = "deng"
-  var deviceSecrete string = "UrwclDV33NaFSmk0JaBxNTqgSrJWXIkN"
-
-  // optional input
-  var timeStamp string = "1528018257135"
-  var clientId string =  "192.168.56.1"
-  var subTopic string = "/" + productKey + "/" + deviceName + "/user/get";
-  var pubTopic string = "/" + productKey + "/" + deviceName + "/user/update";
-
+func calculate_sign(clientId, productKey, deviceName, deviceSecret, timeStamp string) AuthInfo {
   var raw_passwd bytes.Buffer
   raw_passwd.WriteString("clientId" + clientId)
   raw_passwd.WriteString("deviceName")
@@ -107,61 +97,55 @@ publish msg:  ABC #4
   raw_passwd.WriteString("timestamp")
   raw_passwd.WriteString(timeStamp)
   fmt.Println(raw_passwd.String())
-
-  mac := hmac.New(sha1.New, []byte(deviceSecrete))
+  //hmac ,use sha1
+  mac := hmac.New(sha1.New, []byte(deviceSecret))
   mac.Write([]byte(raw_passwd.String()))
-  password := fmt.Sprintf("%02x", mac.Sum(nil))
+  password:= fmt.Sprintf("%02x", mac.Sum(nil))
   fmt.Println(password)
+  username := deviceName + "&" + productKey;
+
+  var MQTTClientId bytes.Buffer
+  MQTTClientId.WriteString(clientId)
+  //hmac ,use sha1
+  MQTTClientId.WriteString("|securemode=2,_v=sdk-go-1.0.0,signmethod=hmacsha1,timestamp=") //TLS
+  MQTTClientId.WriteString(timeStamp)
+  MQTTClientId.WriteString("|")
 
   var raw_broker bytes.Buffer
   raw_broker.WriteString("tls://")
   raw_broker.WriteString(productKey)
   raw_broker.WriteString(".iot-as-mqtt.cn-shanghai.aliyuncs.com:1883")
-  opts := MQTT.NewClientOptions().AddBroker(raw_broker.String())
 
-  var MQTTClientId bytes.Buffer
-  MQTTClientId.WriteString(clientId)
-
-  MQTTClientId.WriteString("|securemode=2,_v=sdk-go-1.0.0,signmethod=hmacsha1,timestamp=") //TLS
-  MQTTClientId.WriteString(timeStamp)
-  MQTTClientId.WriteString("|")
-  opts.SetClientID(MQTTClientId.String())
-
-  opts.SetUsername(deviceName + "&" + productKey)   // device name and product key
-  opts.SetPassword(password)
-
-  opts.SetKeepAlive(60 * 2 * time.Second)
-  opts.SetDefaultPublishHandler(f)
-
-  tlsconfig := NewTLSConfig()
-  opts.SetTLSConfig(tlsconfig)
-
+  auth := AuthInfo{password:password, username:username, mqttClientId:MQTTClientId.String(), brokerUrl:raw_broker.String()}
+  return auth;
+}
 ```
 
-用户替换三元组的时候, 只要替换下图中的productKey, deviceName, deviceSecrete这三个值即可
+用户替换三元组的时候, 只要替换下图中的productKey, deviceName, deviceSecret这三个值即可
 
 <img src="http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/imgs/aiot-go-dev-1.png" width="600">
 
 ### <a name="连接阿里云IoT">连接阿里云IoT</a>
-用上一节中计算出了连云需要参数, 包括`broker`, `username`, `password`, `clientId`等
+调用calculate_sign函数，计算出连云需要参数, 包括`broker`, `username`, `password`, `clientId`等
 
 接着将这些信息都包含在`opts`中, 调用MQTT的Connect()函数连云
 
 ```go
-  // create and start a client using the above ClientOptions
-  c := MQTT.NewClient(opts)
+  auth := calculate_sign(clientId,  productKey,  deviceName ,  deviceSecret,  timeStamp)
+  opts := MQTT.NewClientOptions().AddBroker(auth.brokerUrl);
 
-  if token := c.Connect(); token.Wait() && token.Error() != nil {
-    panic(token.Error())
-  }
-  fmt.Print("Connect aliyun IoT Cloud Success\n");
+  opts.SetClientID(auth.mqttClientId)
+  opts.SetUsername(auth.username)   
+  opts.SetPassword(auth.password)
+  opts.SetKeepAlive(60 * 2 * time.Second)
+  opts.SetDefaultPublishHandler(f)
 ```
 
 ### <a name="发布数据">发布数据</a>
 指定了拟发布报文的目的topic, 以及相应的payload, 调用`Publish`接口就能实现报文的发送
 
 ```go
-  // Publish 5 messages to 'user/update' at qos 1 and wait for the receipt
+  // Publish 5 messages to pubTopic ('/${productkey}/${deviceName}/user/update)' at qos 1 and wait for the receipt
   // from the server after sending each message
   for i := 0; i < 10; i++ {
     fmt.Println("publish msg:", i)
@@ -179,7 +163,7 @@ publish msg:  ABC #4
 指定了要订阅的topic, 以及相应的payload, 调用`Subscribe`接口就能实现主题的订阅
 
 ```go
-  // Subscribe to the topic 'user/get' and request messages to be delivered
+  // Subscribe to the subTopic ('/${productkey}/${deviceName}/user/get') and request messages to be delivered
   // at a maximum qos of zero, wait for the receipt to confirm the subscription
   if token := c.Subscribe(subTopic, 0, nil); token.Wait() && token.Error() != nil {
     fmt.Println(token.Error())

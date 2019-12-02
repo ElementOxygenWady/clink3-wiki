@@ -13,18 +13,12 @@ import (
   MQTT "github.com/eclipse/paho.mqtt.golang"
 )
 
-func main() {
-  //mandatory input data
-  var productKey string = "a1Zd7n5yTt8"
-  var deviceName string = "deng"
-  var deviceSecrete string = "UrwclDV33NaFSmk0JaBxNTqgSrJWXIkN"
+type AuthInfo struct {
+   password, username, mqttClientId, brokerUrl string;
+}
 
-  //optional input
-  var timeStamp string = "1528018257135"
-  var clientId string =  "192.168.56.1"
-  var subTopic string = "/" + productKey + "/" + deviceName + "/user/get";
-  var pubTopic string = "/" + productKey + "/" + deviceName + "/user/update";
-
+// func calculate_passwd (string clientId, string productKey, string deviceName , string deviceSecret, string timeStamp ){
+  func calculate_sign ( clientId,  productKey,  deviceName ,  deviceSecret,  timeStamp string )   AuthInfo {
   var raw_passwd bytes.Buffer
   raw_passwd.WriteString("clientId" + clientId)
   raw_passwd.WriteString("deviceName")
@@ -35,28 +29,46 @@ func main() {
   raw_passwd.WriteString(timeStamp)
   fmt.Println(raw_passwd.String())
   //hmac ,use sha1
-  mac := hmac.New(sha1.New, []byte(deviceSecrete))
+  mac := hmac.New(sha1.New, []byte(deviceSecret))
   mac.Write([]byte(raw_passwd.String()))
-  password := fmt.Sprintf("%02x", mac.Sum(nil))
+  password:= fmt.Sprintf("%02x", mac.Sum(nil))
   fmt.Println(password)
+  username := deviceName + "&" + productKey;
+
+  var MQTTClientId bytes.Buffer
+  MQTTClientId.WriteString(clientId)
+  //hmac ,use sha1
+  MQTTClientId.WriteString("|securemode=2,_v=sdk-go-1.0.0,signmethod=hmacsha1,timestamp=") //TLS
+  MQTTClientId.WriteString(timeStamp)
+  MQTTClientId.WriteString("|")
 
   var raw_broker bytes.Buffer
   raw_broker.WriteString("tls://")
   raw_broker.WriteString(productKey)
   raw_broker.WriteString(".iot-as-mqtt.cn-shanghai.aliyuncs.com:1883")
-  opts := MQTT.NewClientOptions().AddBroker(raw_broker.String())
 
-  var MQTTClientId bytes.Buffer
-  MQTTClientId.WriteString(clientId)
-  //hmac ,use sha1
-  MQTTClientId.WriteString("|securemode=2,_v=sdk-c-3.0.1,lan=C,_ss=1,gw=0,ext=0,signmethod=hmacsha1,timestamp=") //TLS
-  MQTTClientId.WriteString(timeStamp)
-  MQTTClientId.WriteString("|")
-  opts.SetClientID(MQTTClientId.String())
+  auth := AuthInfo{password:password, username:username, mqttClientId:MQTTClientId.String(), brokerUrl:raw_broker.String()}
+  return auth;
+}
 
-  opts.SetUsername(deviceName + "&" + productKey)   // device name and product key 
-  opts.SetPassword(password)
+func main() {
+  //设备三元组
+  var productKey string = "a1Zd7n5yTt8"
+  var deviceName string = "deng"
+  var deviceSecret string = "UrwclDV33NaFSmk0JaBxNTqgSrJWXIkN"
 
+  //用户自定义信息，包括时间戳，用户id, sub的topic，pub的topic
+  var timeStamp string = "1528018257135"
+  var clientId string =  "192.168.56.1"
+  var subTopic string = "/" + productKey + "/" + deviceName + "/user/get";
+  var pubTopic string = "/" + productKey + "/" + deviceName + "/user/update";
+
+  auth := calculate_sign(clientId,  productKey,  deviceName ,  deviceSecret,  timeStamp)
+  opts := MQTT.NewClientOptions().AddBroker(auth.brokerUrl);
+
+  opts.SetClientID(auth.mqttClientId)
+  opts.SetUsername(auth.username)   // device name and product key 
+  opts.SetPassword(auth.password)
   opts.SetKeepAlive(60 * 2 * time.Second)
   opts.SetDefaultPublishHandler(f)
 
@@ -68,9 +80,9 @@ func main() {
   if token := c.Connect(); token.Wait() && token.Error() != nil {
     panic(token.Error())
   }
-  fmt.Print("Connect aliyun IoT Cloud Success\n");
+  fmt.Print("Connect aliyun IoT Cloud Sucess\n");
 
-  //subscribe to the topic /go-mqtt/sample and request messages to be delivered
+  //subscribe to subTopic("/a1Zd7n5yTt8/deng/user/get") and request messages to be delivered
   //at a maximum qos of zero, wait for the receipt to confirm the subscription
   if token := c.Subscribe(subTopic, 0, nil); token.Wait() && token.Error() != nil {
     fmt.Println(token.Error())
@@ -78,20 +90,18 @@ func main() {
   }
   fmt.Print("Subscribe topic " + subTopic + " success\n");
 
-  //Publish 5 messages to /go-mqtt/sample at qos 1 and wait for the receipt
+  //Publish 5 messages to pubTopic("/a1Zd7n5yTt8/deng/user/update") at qos 1 and wait for the receipt
   //from the server after sending each message
   for i := 0; i < 10; i++ {
     fmt.Println("publish msg:", i)
     text := fmt.Sprintf("ABC #%d", i)
-    //    token := c.Publish("go-mqtt/sample", 0, false, text)
     token := c.Publish(pubTopic, 0, false, text)
     fmt.Println("publish msg: ", text)
     token.Wait()
-
     time.Sleep(20 * time.Second)
   }
 
-  //unsubscribe from topic "/BDe33KsvGyu/rdtu001/get"
+  //unsubscribe from subTopic("/a1Zd7n5yTt8/deng/user/get")
   if token := c.Unsubscribe(subTopic);token.Wait() && token.Error() != nil {
     fmt.Println(token.Error())
     os.Exit(1)

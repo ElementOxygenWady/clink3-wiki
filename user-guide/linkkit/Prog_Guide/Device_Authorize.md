@@ -1,6 +1,6 @@
 # <a name="目录">目录</a>
 + [概述](#概述)
-    * [共享密钥](#共享密钥)
+    * [共享密钥TLS](#共享密钥TLS)
         - [编译期配置方式](#编译期配置方式)
         - [运行期调用方式](#运行期调用方式)
         - [示例运行日志](#示例运行日志)
@@ -25,28 +25,28 @@
 ---
 以下几种认证方式都是IoT平台认证设备的方式, 它们是互斥的, 取其中任何一种认证成功即可使用阿里云IoT平台提供的云端服务
 
-## <a name="共享密钥">共享密钥</a>
+## <a name="共享密钥TLS">共享密钥TLS</a>
 
 ### <a name="编译期配置方式">编译期配置方式</a>
 
-1. 运行make menuconfig，使用默认的编译配置选项即可。
-2. 修改HAL层配置选项，在`wrappers/tls/HAL_TLS_mbedtls.c`中，将`#define TLS_AUTH_MODE TLS_AUTH_MODE_CA`修改为`#define TLS_AUTH_MODE TLS_AUTH_MODE_PSK`。
-3. 修改mbedtls库的PSK最大长度默认值，将`ssl.h`中的`MBEDTLS_PSK_MAX_LEN`define为64。
+1. 运行make menuconfig, 使用默认的编译配置选项即可
+2. 修改HAL层配置选项, 在`wrappers/tls/HAL_TLS_mbedtls.c`中, 将`#define TLS_AUTH_MODE TLS_AUTH_MODE_CA`修改为`#define TLS_AUTH_MODE TLS_AUTH_MODE_PSK`
+3. 修改mbedtls库的PSK最大长度默认值, 将`ssl.h`中的`MBEDTLS_PSK_MAX_LEN`define为64
 
 ### <a name="运行期调用方式">运行期调用方式</a>
 
-以`src/mqtt/examples/mqtt_example.c`为例，修改服务器域名和端口，PSK模式目前指定连接域名为`{$productKey}.itls.cn-shanghai.aliyuncs.com`，端口号为1883:
+以`src/mqtt/examples/mqtt_example.c`为例, 修改服务器域名和端口, PSK模式目前指定连接域名为`{$productKey}.itls.cn-shanghai.aliyuncs.com`, 端口号为1883:
 
-```
-    mqtt_params.handle_event.h_fp = example_event_handle;
-    mqtt_params.host = "a1MZxOdcBnO.itls.cn-shanghai.aliyuncs.com";
-    mqtt_params.port = 1883;
-    pclient = IOT_MQTT_Construct(&mqtt_params);
+```c
+mqtt_params.handle_event.h_fp = example_event_handle;
+mqtt_params.host = "a1MZxOdcBnO.itls.cn-shanghai.aliyuncs.com";
+mqtt_params.port = 1883;
+pclient = IOT_MQTT_Construct(&mqtt_params);
 ```
 
 ### <a name="示例运行日志">示例运行日志</a>
 
-编译后运行`./output/release/bin/mqtt-example`，日志如下：
+编译后运行`./output/release/bin/mqtt-example`, 日志如下:
 ```
 main|158 :: mqtt example
 everything_state_handle|120 :: recv -0x0327(a1MZxOdcBnO.itls.cn-shanghai.aliyuncs.com)
@@ -72,15 +72,15 @@ everything_state_handle|120 :: recv -0x0000(mqtt connected in 675 ms)
 
 ### <a name="编译期配置方式">编译期配置方式</a>
 
-运行make menuconfig，在图形化界面中选中`FEATURE_DYNAMIC_REGISTER`
+运行make menuconfig, 在图形化界面中选中`FEATURE_DYNAMIC_REGISTER`
 
 ![image](http://git.cn-hangzhou.oss-cdn.aliyun-inc.com/uploads/Apsaras64/pub/ceba7a51bb099b5b5462adcab9877f10/image.png)
 
 ### <a name="运行期调用方式">运行期调用方式</a>
 
-一型一密功能的例子程序在 `src/dynamic_register/examples/dynreg_example.c`，运行前填入自己设备的product key，product secret和device name，device secret留空即可
+一型一密功能的例子程序在 `src/dynamic_register/examples/dynreg_example.c`, 运行前填入自己设备的product key, product secret和device name, device secret留空即可
 
-```
+```c
 char g_product_key[IOTX_PRODUCT_KEY_LEN + 1]       = "xxx";
 char g_product_secret[IOTX_PRODUCT_SECRET_LEN + 1] = "xxx";
 char g_device_name[IOTX_DEVICE_NAME_LEN + 1]       = "xxx";
@@ -89,15 +89,15 @@ char g_device_secret[IOTX_DEVICE_SECRET_LEN + 1]   = "";
 
 ### <a name="示例代码段">示例代码段</a>
 
-如例子程序`src/dynamic_register/examples/dynreg_example.c`所示：
+如例子程序`src/dynamic_register/examples/dynreg_example.c`所示:
 
-```
+```c
 int main(int argc, char *argv[])
 {
     int32_t res = 0;
     iotx_dev_meta_info_t meta;
     iotx_http_region_types_t region = IOTX_HTTP_REGION_SHANGHAI;
-    
+
     HAL_Printf("dynreg example\n");
 
     memset(&meta, 0, sizeof(iotx_dev_meta_info_t));
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
 ### <a name="示例运行日志">示例运行日志</a>
 
-编译完成后，运行`output/release/bin/dynreg-example`，正常运行日志如下
+编译完成后, 运行`output/release/bin/dynreg-example`, 正常运行日志如下
 
 ```
 Loading the CA root certificate ...
@@ -153,7 +153,7 @@ ssl_disconnect
 Device Secret: xvrQk38ZCJ6bdClB3E0XpY4JdPzvoq3g
 ```
 
-需要注意的是，在使用一型一密拿到设备的device secret，并使用该设备上线后，就不能再次获取device secret，否则会报如下错误
+需要注意的是, 在使用一型一密拿到设备的device secret, 并使用该设备上线后, 就不能再次获取device secret, 否则会报如下错误
 
 ```
 Loading the CA root certificate ...
@@ -185,18 +185,18 @@ IOT_Dynamic_Register failed
 
 ### <a name="编译期配置方式">编译期配置方式</a>
 
-1. 运行make menuconfig，使用默认的编译配置选项即可。
-2. 用户需使用ID2官方提供的安全库，并适配SDK的TLS HAL层接口，即`HAL_SSL_Establish`,`HAL_SSL_Read`,`HAL_SSL_Write`,`HAL_SSL_Destroy`这4个接口。
+1. 运行make menuconfig, 使用默认的编译配置选项即可
+2. 用户需使用ID2官方提供的安全库, 并适配SDK的TLS HAL层接口, 即`HAL_SSL_Establish`,`HAL_SSL_Read`,`HAL_SSL_Write`,`HAL_SSL_Destroy`这4个接口
 
 ### <a name="运行期调用方式">运行期调用方式</a>
 
-需在用户层API配置ITLS服务的域名和端口号。
-+ 如果使用Linkkit API，需在建连前做以下配置:
+需在用户层API配置ITLS服务的域名和端口号
++ 如果使用Linkkit API, 需在建连前做以下配置:
     ```
         IOT_Ioctl(IOTX_IOCTL_SET_MQTT_DOMAIN, (void *)"${pk}.itls.cn-shanghai.aliyuncs.com");
         IOT_Ioctl(IOTX_IOCTL_SET_CUSTOMIZE_INFO, (void *)"authtype=id2");
     ```
-+ 如果使用MQTT API，需在建连前做以下配置:
++ 如果使用MQTT API, 需在建连前做以下配置:
     ```
         mqtt_params.host = "${pk}.itls.cn-shanghai.aliyuncs.com");
         mqtt_params.customize_info = "authtype=id2"; /* 增加此项配置 */
@@ -207,11 +207,11 @@ IOT_Dynamic_Register failed
 
 ### <a name="编译期配置方式">编译期配置方式</a>
 
-目前TLS默认使能，menuconfig编译选项无需配置
+目前TLS默认使能, menuconfig编译选项无需配置
 
 ### <a name="运行期调用方式">运行期调用方式</a>
 
-- 从阿里云物联网平台的设备详情中获得设备端的X.509证书和私钥，然后修改`wrappers/tls/HAL_TLS_mbedtls.c`，将`HAL_TLS_mbedtls.c`中的`g_cli_crt`和`g_cli_key`分别替换为从物联网平台获取的设备证书和私钥
+- 从阿里云物联网平台的设备详情中获得设备端的X.509证书和私钥, 然后修改`wrappers/tls/HAL_TLS_mbedtls.c`, 将`HAL_TLS_mbedtls.c`中的`g_cli_crt`和`g_cli_key`分别替换为从物联网平台获取的设备证书和私钥
 
 ```
 const char *g_cli_crt = \
@@ -273,11 +273,11 @@ const char *g_cli_key = \
 };
 ```
 
-- 修改`src/mqtt/examples/mqtt_example.c`，将product key、device name和device secret置为空字符串，并手动设置域名为`x509.itls.cn-shanghai.aliyuncs.com`，端口号为`1883`
+- 修改`src/mqtt/examples/mqtt_example.c`, 将product key/device name和device secret置为空字符串, 并手动设置域名为`x509.itls.cn-shanghai.aliyuncs.com`, 端口号为`1883`
 
 ### <a name="示例代码段">示例代码段</a>
 
-在`src/mqtt/examples/mqtt_example.c`中，做如下修改
+在`src/mqtt/examples/mqtt_example.c`中, 做如下修改
 
 ```
 char g_product_key[IOTX_PRODUCT_KEY_LEN + 1]       = "";
@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
 
 ### <a name="示例运行日志">示例运行日志</a>
 
-编译成功后，运行`output/release/bin/mqtt-example`，正常运行日志如下：
+编译成功后, 运行`output/release/bin/mqtt-example`, 正常运行日志如下:
 
 ```
 main|158 :: mqtt example

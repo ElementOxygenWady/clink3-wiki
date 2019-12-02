@@ -160,7 +160,7 @@ Paho提供的源代码中已包含Visual Studio工程, 打开Paho源代码中的
 
 <img src="http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/imgs/aiot-csharp-dev-10.png" width="1200">
 
-至此, Visual Studio项目解决方案准备就绪
+至此, Visual Studio项目解决方案准备就绪，在aiot-csharp-demo中引入`MqttSign.cs`即可进行登录密码的计算，在`Program.cs`中即可进行密码计算并调用Paho Mqtt类库连接阿里云IoT。
 
 # <a name="确认接入成功">确认接入成功</a>
 
