@@ -4,6 +4,10 @@
         - [编译期配置方式](#编译期配置方式)
         - [运行期调用方式](#运行期调用方式)
         - [示例运行日志](#示例运行日志)
+    * [共享秘钥DTLS](#共享秘钥DTLS)
+        - [编译期配置方式](#编译期配置方式)
+        - [运行期调用方式](#运行期调用方式)
+        - [示例运行日志](#示例运行日志)
     * [一型一密](#一型一密)
         - [编译期配置方式](#编译期配置方式)
         - [运行期调用方式](#运行期调用方式)
@@ -67,6 +71,135 @@ Performing the SSL/TLS handshake...
 certificate verification result: 0x00
 everything_state_handle|120 :: recv -0x0000(mqtt connected in 675 ms)
 ```
+
+## <a name="共享秘钥DTLS">共享秘钥DTLS</a>
+
+对于CoAP协议连接，阿里云IoT提供了DTLS-psk通道安全模式。
+
+### <a name="编译期配置方式">编译期配置方式</a>
+
+1. 运行make menuconfig, 选中`FEATURE_COAP_COMM_ENABLED`选项使能CoAP通道，其他选项不变
+2. 修改HAL层配置选项, 在`wrappers/tls/HAL_DTLS_mbedtls.c`中, 将`DTLS_AUTH_MODE`定义为`DTLS_AUTH_MODE_PSK`
+3. 修改mbedtls库的PSK最大长度默认值, 将`ssl.h`中的`MBEDTLS_PSK_MAX_LEN`define为64
+4. 用户可根据应用报文的最大包长合理配置`ssl.h`中的`MBEDTLS_SSL_MAX_CONTENT_LEN`定义，以减少内存开销。
+
+### <a name="运行期调用方式">运行期调用方式</a>
+
+SDK提供的CoAP Demo提供了命令行参数用于配置连接服务器和所使用的安全模式。
+执行`./output/release/bin/coap-example -e online -s dtls -l`即可使用`DTLS`安全通道连接阿里云IoT平台。
+
+### <a name="示例运行日志">示例运行日志</a>
+
+```
+[prt] log level set as: [ 5 ]
+[COAP-Client]: Enter Coap Client
+*****The Product Key  : a1RIsMLz2BJ *****
+*****The Device Name  : example1 *****
+*****The Device Secret: RDXf67itLqZCwdMCRrw0N5FHbv5D7jrE *****
+*****The Device ID    : a1RIsMLz2BJ.example1 *****
+[dbg] Cloud_CoAPUri_parse(31): The uri is coaps://a1RIsMLz2BJ.coap.cn-shanghai.link.aliyuncs.com:5684
+[dbg] Cloud_CoAPUri_parse(67): The endpoint type is: 1
+[dbg] Cloud_CoAPUri_parse(95): The host name is: a1RIsMLz2BJ.coap.cn-shanghai.link.aliyuncs.com
+[dbg] Cloud_CoAPUri_parse(118): The port is: 5684
+[inf] HAL_DTLSSession_init success
+mbedtls psk config finished
+[trc] mbedtls_ssl_setup result 0x0000
+[trc] mbedtls_ssl_set_bio result 0x0000
+[trc] mbedtls_ssl_handshake result 0x0000
+[trc] mbedtls handshake memory total used: 3474  max used: 4413
+[dbg] iotx_calc_sign(74): The device name sign: c6e03baaf8e59919f58bdf9d48586710
+[dbg] IOT_CoAP_DeviceNameAuth(509): The payload is: {"productKey":"a1RIsMLz2BJ","deviceName":"example1","clientId":"a1RIsMLz2BJ.example1","sign":"c6e03baaf8e59919f58bdf9d48586710"}
+[dbg] IOT_CoAP_DeviceNameAuth(510): Send authentication message to server
+[dbg] Cloud_CoAPMessage_send(117): ----The message length 146-----
+[dbg] Cloud_CoAPMessage_send(124): Add message id 1 len 146 to the list
+[dbg] Cloud_CoAPNetworkDTLS_read(31): << secure_datagram_read, read buffer len 1280, timeout 3000
+[trc] mbedtls_ssl_read len 53 bytes
+[dbg] Cloud_CoAPNetwork_read(137): << CoAP recv 53 bytes data
+[dbg] Cloud_CoAPMessage_handle(216): Version     : 1
+[dbg] Cloud_CoAPMessage_handle(217): Code        : 2.05(0x45)
+[dbg] Cloud_CoAPMessage_handle(218): Type        : 0x2
+[dbg] Cloud_CoAPMessage_handle(219): Msgid       : 1
+[dbg] Cloud_CoAPMessage_handle(220): Option      : 0
+[dbg] Cloud_CoAPMessage_handle(221): Payload Len : 44
+[dbg] Cloud_CoAPMessage_handle(238): Receive CoAP Response Message,ID 1
+[dbg] Cloud_CoAPRespMessage_handle(173): Find the node by token
+[inf] Cloud_CoAPRespMessage_handle(174): Downstream Payload:
+
+< {
+<     "token": "5061bf72b70b44dd96b5ad7cd95fdeed"
+< }
+
+[dbg] iotx_device_name_auth_callback(205): Receive response message:
+[dbg] iotx_device_name_auth_callback(206): * Response Code : 0x45
+[dbg] iotx_device_name_auth_callback(207): * Payload: {"token":"5061bf72b70b44dd96b5ad7cd95fdeed"}
+[inf] iotx_device_name_auth_callback(219): CoAP authenticate success!!!
+[dbg] Cloud_CoAPRespMessage_handle(188): Remove the message id 1 from list
+[dbg] Cloud_CoAPNetworkDTLS_read(31): << secure_datagram_read, read buffer len 1280, timeout 3000
+[trc] DTLS recv timeout
+[dbg] iotx_report_devinfo(71): devinfo report
+[dbg] iotx_report_devinfo(83): devinfo report topic: /sys/a1RIsMLz2BJ/example1/thing/deviceinfo/update
+[dbg] iotx_report_devinfo(105): devinfo report data: {"id":"0","version":"1.0","params":[{"attrKey":"SYS_LP_SDK_VERSION","attrValue":"3.0.1","domain":"SYSTEM"},{"attrKey":"SYS_SDK_LANGUAGE","attrValue":"C","domain":"SYSTEM"}],"method":"thing.deviceinfo.update"}
+[inf] IOT_CoAP_SendMessage(624): Upstream Topic: '/topic/sys/a1RIsMLz2BJ/example1/thing/deviceinfo/update'
+[inf] IOT_CoAP_SendMessage(625): Upstream Payload:
+
+> {
+>     "id": "0",
+>     "version": "1.0",
+>     "params": [
+>         {
+>             "attrKey": "SYS_LP_SDK_VERSION",
+>             "attrValue": "3.0.1",
+>             "domain": "SYSTEM"
+>         },
+>         {
+>             "attrKey": "SYS_SDK_LANGUAGE",
+>             "attrValue": "C",
+>             "domain": "SYSTEM"
+>         }
+>     ],
+>     "method": "thing.deviceinfo.update"
+> }
+
+[dbg] iotx_split_path_2_option(565): The uri is /topic/sys/a1RIsMLz2BJ/example1/thing/deviceinfo/update
+[dbg] iotx_split_path_2_option(572): path: topic,len=5
+[dbg] iotx_split_path_2_option(572): path: sys,len=3
+[dbg] iotx_split_path_2_option(572): path: a1RIsMLz2BJ,len=11
+[dbg] iotx_split_path_2_option(572): path: example1,len=8
+[dbg] iotx_split_path_2_option(572): path: thing,len=5
+[dbg] iotx_split_path_2_option(572): path: deviceinfo,len=10
+[dbg] iotx_split_path_2_option(582): path: update,len=6
+[dbg] Cloud_CoAPMessage_send(117): ----The message length 311-----
+[dbg] Cloud_CoAPMessage_send(124): Add message id 2 len 311 to the list
+[dbg] iotx_report_devinfo(117): devinfo report succeed
+[dbg] Cloud_CoAPNetworkDTLS_read(31): << secure_datagram_read, read buffer len 1280, timeout 3000
+[trc] mbedtls_ssl_read len 122 bytes
+[dbg] Cloud_CoAPNetwork_read(137): << CoAP recv 122 bytes data
+[dbg] Cloud_CoAPMessage_handle(216): Version     : 1
+[dbg] Cloud_CoAPMessage_handle(217): Code        : 2.05(0x45)
+[dbg] Cloud_CoAPMessage_handle(218): Type        : 0x1
+[dbg] Cloud_CoAPMessage_handle(219): Msgid       : 50843
+[dbg] Cloud_CoAPMessage_handle(220): Option      : 1
+[dbg] Cloud_CoAPMessage_handle(221): Payload Len : 102
+[dbg] Cloud_CoAPMessage_handle(238): Receive CoAP Response Message,ID 50843
+[dbg] Cloud_CoAPRespMessage_handle(173): Find the node by token
+[inf] Cloud_CoAPRespMessage_handle(174): Downstream Payload:
+
+< {
+<     "code": 200,
+<     "data": {
+<     },
+<     "id": "0",
+<     "message": "success",
+<     "method": "thing.deviceinfo.update",
+<     "version": "1.0"
+< }
+```
+
+可以查看到
+```
+mbedtls psk config finished
+```
+这段日志信息。
 
 ## <a name="一型一密">一型一密</a>
 
