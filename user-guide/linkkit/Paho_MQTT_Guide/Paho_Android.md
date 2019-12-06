@@ -13,14 +13,14 @@
 
 # <a name="文档简介">文档简介</a>
 
-本文将介绍如何使用`Paho Android Service`连上阿里云物联网平台并进行简单的数据收发.
+本文将介绍如何使用`Paho Android Service`连上阿里云物联网平台并进行简单的数据收发
 
 + `Paho android service`是一个基于`paho java mqtt client`库开发的Mqtt客户端服务包
 + 它将MQTT连接封装到一个运行在后台android服务中, 并维护着MQTT心跳, 网络连接等
 
 # <a name="准备开发环境">准备开发环境</a>
 
-+ 本演示使用的`Android Studio`版本为`3.5.1`, `gradle`版本为`3.5.1`.
++ 本演示使用的`Android Studio`版本为`3.5.1`, `gradle`版本为`3.5.1`
 + 用户可访问[Android Studio官网](https://developer.android.com/studio)下载最新的`Android Studio`, 安装完成后安装`Android SDK`
 + Android开发的相关教程可以查看官方文档
 
