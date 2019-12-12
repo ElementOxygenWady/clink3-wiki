@@ -28,7 +28,7 @@ class AiotMqttOption {
 
             // clientId
             this.clientId = productKey + "." + deviceName + "|timestamp=" + timestamp +
-                    ",_v=sdk-android-1.0.0,securemode=2,signmethod=hmacsha256|";
+                    ",_v=android-android-1.0.0,securemode=2,signmethod=hmacsha256|";
 
             // userName
             this.username = deviceName + "&" + productKey;

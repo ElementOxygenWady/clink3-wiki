@@ -62,7 +62,7 @@ public class MqttSign {
 
             //MQTT ClientId
             this.clientid = productKey + "." + deviceName + "|" + "timestamp=" + timestamp +
-                    ",_v=sdk-java-0.9.0,securemode=2,signmethod=hmacsha256|";
+                    ",_v=paho-java-1.0.0,securemode=2,signmethod=hmacsha256|";
         }catch (Exception e) {
             e.printStackTrace();
         }

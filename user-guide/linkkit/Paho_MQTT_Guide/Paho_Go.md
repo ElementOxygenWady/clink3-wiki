@@ -109,7 +109,7 @@ func calculate_sign(clientId, productKey, deviceName, deviceSecret, timeStamp st
     var MQTTClientId bytes.Buffer
     MQTTClientId.WriteString(clientId)
     // hmac, use sha1; securemode=2 means TLS connection 
-    MQTTClientId.WriteString("|securemode=2,_v=sdk-go-1.0.0,signmethod=hmacsha1,timestamp=")
+    MQTTClientId.WriteString("|securemode=2,_v=paho-go-1.0.0,signmethod=hmacsha1,timestamp=")
     MQTTClientId.WriteString(timeStamp)
     MQTTClientId.WriteString("|")
 

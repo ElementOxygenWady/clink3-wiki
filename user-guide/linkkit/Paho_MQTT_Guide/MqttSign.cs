@@ -48,7 +48,7 @@ namespace aiot_paho_csharp
 
             //MQTT ClientId
             this.clientid = productKey + "." + deviceName + "|" + "timestamp=" + timestamp +
-                    ",_v=sdk-csharp-1.0.0,securemode=2,signmethod=hmacsha256|";
+                    ",_v=paho-c#-1.0.0,securemode=2,signmethod=hmacsha256|";
 
             return true;
         }
