@@ -64,8 +64,8 @@ go run iot.go MqttSign.go
 运行效果
 ---
 ```
-clientId192.168.56.1deviceNamedengproductKeya1Zd7n5yTt8timestamp1528018257135
-1b865320fc183cc747041c9faffc9055fc45bbab
+clientIdgo_device_id_0001deviceNamedengproductKeya1Zd7n5yTt8timestamp1528018257135
+2c3ee317400468c170ac3222fe2466c3a4a5b312
 Connect aliyun IoT Cloud Sucess
 Subscribe topic /a1Zd7n5yTt8/deng/user/get success
 publish msg: 0
@@ -78,8 +78,6 @@ publish msg: 3
 publish msg:  ABC #3
 publish msg: 4
 publish msg:  ABC #4
-publish msg: 5
-publish msg:  ABC #5
 ```
 
 ## <a name="核心源码">核心源码</a>
