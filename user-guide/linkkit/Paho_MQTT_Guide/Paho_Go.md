@@ -126,47 +126,47 @@ func calculate_sign(clientId, productKey, deviceName, deviceSecret, timeStamp st
 接着将这些信息都包含在`opts`中, 调用MQTT的Connect()函数连云
 
 ```go
-    // set the login broker url
-    var raw_broker bytes.Buffer
-    raw_broker.WriteString("tls://")
-    raw_broker.WriteString(productKey)
-    raw_broker.WriteString(".iot-as-mqtt.cn-shanghai.aliyuncs.com:1883")
-    opts := MQTT.NewClientOptions().AddBroker(raw_broker.String());
+// set the login broker url
+var raw_broker bytes.Buffer
+raw_broker.WriteString("tls://")
+raw_broker.WriteString(productKey)
+raw_broker.WriteString(".iot-as-mqtt.cn-shanghai.aliyuncs.com:1883")
+opts := MQTT.NewClientOptions().AddBroker(raw_broker.String());
 
-    // calculate the login auth info, and set it into the connection options
-    auth := calculate_sign(clientId, productKey, deviceName, deviceSecret, timeStamp)
-    opts.SetClientID(auth.mqttClientId)
-    opts.SetUsername(auth.username)
-    opts.SetPassword(auth.password)
-    opts.SetKeepAlive(60 * 2 * time.Second)
-    opts.SetDefaultPublishHandler(f)
+// calculate the login auth info, and set it into the connection options
+auth := calculate_sign(clientId, productKey, deviceName, deviceSecret, timeStamp)
+opts.SetClientID(auth.mqttClientId)
+opts.SetUsername(auth.username)
+opts.SetPassword(auth.password)
+opts.SetKeepAlive(60 * 2 * time.Second)
+opts.SetDefaultPublishHandler(f)
 ```
 
 ### <a name="发布数据">发布数据</a>
 指定了拟发布报文的目的topic, 以及相应的payload, 调用`Publish`接口就能实现报文的发送
 
 ```go
-    // publish 5 messages to pubTopic("/a1Zd7n5yTt8/deng/user/update")
-    for i := 0; i < 5; i++ {
-        fmt.Println("publish msg:", i)
-        text := fmt.Sprintf("ABC #%d", i)
-        token := c.Publish(pubTopic, 0, false, text)
-        fmt.Println("publish msg: ", text)
-        token.Wait()
-        time.Sleep(2 * time.Second)
-    }
+// publish 5 messages to pubTopic("/a1Zd7n5yTt8/deng/user/update")
+for i := 0; i < 5; i++ {
+    fmt.Println("publish msg:", i)
+    text := fmt.Sprintf("ABC #%d", i)
+    token := c.Publish(pubTopic, 0, false, text)
+    fmt.Println("publish msg: ", text)
+    token.Wait()
+    time.Sleep(2 * time.Second)
+}
 ```
 
 ### <a name="订阅主题">订阅主题</a>
 指定了要订阅的topic, 以及相应的payload, 调用`Subscribe`接口就能实现主题的订阅
 
 ```go
-  // Subscribe to the subTopic ('/${productkey}/${deviceName}/user/get') 
-  if token := c.Subscribe(subTopic, 0, nil); token.Wait() && token.Error() != nil {
+// Subscribe to the subTopic ('/${productkey}/${deviceName}/user/get') 
+if token := c.Subscribe(subTopic, 0, nil); token.Wait() && token.Error() != nil {
     fmt.Println(token.Error())
     os.Exit(1)
-  }
-  fmt.Print("Subscribe topic " + subTopic + " success\n");
+}
+fmt.Print("Subscribe topic " + subTopic + " success\n");
 ```
 
 ## <a name="详细开发过程">详细开发过程</a>
