@@ -32,6 +32,10 @@ brew install go
 sudo apt-get install golang-go
 ```
 
++ Windows电脑
+
+从 https://golang.google.cn/dl 官网下载安装
+
 # <a name="下载Go语言版本的Paho库">下载Go语言版本的Paho库</a>
 安装go语言的mqtt和相关依赖的库
 
