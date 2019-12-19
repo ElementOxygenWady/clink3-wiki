@@ -70,6 +70,10 @@ Topic订阅设备超过1000怎么处理
 ---
 这代表设备被限流了, 单个设备数据上报的上限在 QoS0 下为30条每秒, 在 QoS1 下为10条每秒, 下行接收限制为50条每秒
 
+设备掉线了, 查看控制台日志怎么理解掉线原因
+---
+<img src="https://linkkit-export.oss-cn-shanghai.aliyuncs.com/mqtt-disconn-reason.png" width="800">
+
 ### <a name="可调节参数">可调节参数</a>
 
 > 下表说明 `SDK-3.0.1` 以上版本中, 可调节的连接参数, 其它版本可以类推, 命名大致相似
