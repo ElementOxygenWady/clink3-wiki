@@ -162,6 +162,34 @@ MQTTPublish 0, msgid 5
 ## <a name="核心源码">核心源码</a>
 [aiot_mqtt_sign.c](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/aiot_mqtt_sign.c)
 
+原型说明
+---
+
++ 函数原型
+
+```c
+int aiotMqttSign(const char *productKey, const char *deviceName, const char *deviceSecret,
+                 char clientId[150], char username[65], char password[65]);
+```
+
++ 参数说明
+
+| **参数**        | **数据类型**    | **方向**    | **说明**
+|-----------------|-----------------|-------------|-----------------------------
+| productKey      | const char *    | 输入        | 设备三元组之一, 产品标识
+| deviceName      | const char *    | 输入        | 设备三元组之一, 设备名称
+| deviceSecret    | const char *    | 输入        | 设备三元组之一, 设备秘钥
+| clientId        | char *          | 输出        | MQTT建连参数之一, 客户端ID
+| username        | char *          | 输出        | MQTT建连参数之一, 用户名
+| password        | char *          | 输出        | MQTT建连参数之一, 密码
+
++ 返回值说明
+
+| **返回值**  | **说明**
+|-------------|-------------
+| 0           | 成功
+| -1          | 失败
+
 ### <a name="计算登录密码">计算登录密码</a>
 
 `aiot_mqtt_sign.c`中提供的`aiotMqttSign()`接口生成连接MQTT服务端的3个建连参数
@@ -257,7 +285,7 @@ int cnt = 0;
 unsigned int msgid = 0;
 while (!toStop)
 {
-	MQTTYield(&c, 1000);	
+	MQTTYield(&c, 1000);
 
 	if (++cnt % 5 == 0) {
 		MQTTMessage msg = {

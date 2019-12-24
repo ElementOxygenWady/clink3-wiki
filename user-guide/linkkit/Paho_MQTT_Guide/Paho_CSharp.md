@@ -36,7 +36,7 @@
 
 + 在github上下载Paho MQTT for C#, [点此下载](https://github.com/eclipse/paho.mqtt.m2mqtt/archive/master.zip)
 
-*本文编写时，使用了master分支，commit id为`b2e64bc4485721a0bd5ae805d9f4917e8d040e81`*
+*本文编写时, 使用了master分支, commit id为`b2e64bc4485721a0bd5ae805d9f4917e8d040e81`*
 
 # <a name="改造连接阿里云">改造连接阿里云</a>
 
@@ -50,6 +50,26 @@
 
 ## <a name="核心源码">核心源码</a>
 [MqttSign.cs](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/MqttSign.cs)
+
+原型说明
+---
+class MqttSign
+
+功能描述
+---
+MqttSign类用于计算通过MQTT连接阿里云IoT物联网平台时需要的mqtt协议中username/password和clientid
+
+调用者可以通过这些参数使用paho的mqtt接口连接到阿里云IoT物联网平台
+
+成员
+---
+
+| **类型定义**    | **方法描述**
+|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| public void     | calculate(String productKey, String deviceName, String deviceSecret) <br><br> 通过输入设备的product key/device name/device secret来计算MQTT连接参数username/password和clientid
+| public String   | getUsername() <br><br> 获取mqtt建联参数username
+| public String   | getPassword() <br><br> 获取mqtt建联参数password
+| public String   | getClientid() <br><br> 获取mqtt建联参数clientid
 
 ### <a name="计算登录密码">计算登录密码</a>
 调用以上文件中的`MqttSign`, 计算连接阿里云的密码
@@ -160,7 +180,7 @@ Paho提供的源代码中已包含Visual Studio工程, 打开Paho源代码中的
 
 <img src="http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/imgs/aiot-csharp-dev-10.png" width="1200">
 
-至此, Visual Studio项目解决方案准备就绪，在aiot-csharp-demo中引入`MqttSign.cs`即可进行登录密码的计算，在`Program.cs`中即可进行密码计算并调用Paho Mqtt类库连接阿里云IoT。
+至此, Visual Studio项目解决方案准备就绪, 在aiot-csharp-demo中引入`MqttSign.cs`即可进行登录密码的计算, 在`Program.cs`中即可进行密码计算并调用Paho Mqtt类库连接阿里云IoT
 
 # <a name="确认接入成功">确认接入成功</a>
 

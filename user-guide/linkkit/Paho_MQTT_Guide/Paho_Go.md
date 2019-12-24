@@ -51,18 +51,18 @@ go get golang.org/x/net/proxy
 
 [下载链接](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/aiot-go-demo.zip)
 
-| 文件         | 说明
-|-------------|---------------------------------
-| MqttSign.go | 这个文件里面包含了mqtt连云所需的鉴权信息
-| iot.go      | 这个文件里面包含了连云的逻辑
-| x509        | 这个目录包含了连云需要的证书
+| 文件            | 说明
+|-----------------|---------------------------------------------
+| MqttSign.go     | 这个文件里面包含了mqtt连云所需的鉴权信息
+| iot.go          | 这个文件里面包含了连云的逻辑
+| x509            | 这个目录包含了连云需要的证书
 
 ## <a name="运行示例">运行示例</a>
 
 运行iot.go文件
 ---
 ```bash
-go run iot.go MqttSign.go 
+go run iot.go MqttSign.go
 ```
 
 运行效果
@@ -87,6 +87,34 @@ publish msg:  ABC #4
 ## <a name="核心源码">核心源码</a>
 [MqttSign.go](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/MqttSign.go)
 
+
+原型说明
+---
+```go
+type AuthInfo struct {
+    password, username, mqttClientId string;
+}
+
+func calculate_sign(clientId, productKey, deviceName, deviceSecret, timeStamp string) AuthInfo;
+```
+
++ 参数说明
+
+| **参数**        | **数据类型**    | **方向**    | **说明**
+|-----------------|-----------------|-------------|-----------------------------
+| clientId        | String          | 输入        | MQTT建连参数之一, 客户端ID
+| productKey      | String          | 输入        | 设备三元组之一, 产品标识
+| deviceName      | String          | 输入        | 设备三元组之一, 设备名称
+| deviceSecret    | String          | 输入        | 设备三元组之一, 设备秘钥
+| timeStamp       | String          | 输入        | 当前时间戳
+
++ 返回值说明
+
+| **返回值**          | **说明**
+|---------------------|-------------------------------------------------------------------------------------------------
+| AuthInfo 结构体     | 包含username(mqtt连接所需的用户名), password(mqtt连接所需的密码), mqttClientId(mqtt客户端ID)
+
+
 ### <a name="计算登录密码">计算登录密码</a>
 
 ```go
@@ -110,7 +138,7 @@ func calculate_sign(clientId, productKey, deviceName, deviceSecret, timeStamp st
 
     var MQTTClientId bytes.Buffer
     MQTTClientId.WriteString(clientId)
-    // hmac, use sha1; securemode=2 means TLS connection 
+    // hmac, use sha1; securemode=2 means TLS connection
     MQTTClientId.WriteString("|securemode=2,_v=paho-go-1.0.0,signmethod=hmacsha1,timestamp=")
     MQTTClientId.WriteString(timeStamp)
     MQTTClientId.WriteString("|")
@@ -125,7 +153,7 @@ func calculate_sign(clientId, productKey, deviceName, deviceSecret, timeStamp st
 <img src="http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/imgs/aiot-go-dev-1.png" width="600">
 
 ### <a name="连接阿里云IoT">连接阿里云IoT</a>
-调用calculate_sign函数，计算出连云需要参数, 包括`username`, `password`, `clientId`等
+调用calculate_sign函数, 计算出连云需要参数, 包括`username`, `password`, `clientId`等
 
 接着将这些信息都包含在`opts`中, 调用MQTT的Connect()函数连云
 
@@ -165,7 +193,7 @@ for i := 0; i < 5; i++ {
 指定了要订阅的topic, 以及相应的payload, 调用`Subscribe`接口就能实现主题的订阅
 
 ```go
-// Subscribe to the subTopic ('/${productkey}/${deviceName}/user/get') 
+// Subscribe to the subTopic ('/${productkey}/${deviceName}/user/get')
 if token := c.Subscribe(subTopic, 0, nil); token.Wait() && token.Error() != nil {
     fmt.Println(token.Error())
     os.Exit(1)

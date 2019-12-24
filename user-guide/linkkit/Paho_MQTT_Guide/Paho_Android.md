@@ -46,7 +46,7 @@ dependencies {
 
 + 为了使App能够创建绑定到`paho android service`, 需要在`AndroidManifest.xml`中添加声明以下服务
 
-```html
+```xml
 <!-- Mqtt Service -->
 <service android:name="org.eclipse.paho.android.service.MqttService">
 </service>
@@ -54,7 +54,7 @@ dependencies {
 
 + 还需要在`AndroidManifest.xml`中添加paho mqtt service所需的权限
 
-```html
+```xml
 <uses-permission android:name="android.permission.WAKE_LOCK" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.INTERNET" />
@@ -104,6 +104,27 @@ final private String DEVICESECRET = "tLMT9QWD36U2SArglGqcHCDK9rK9nOrA";
 
 [AiotMqttOption.java](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/AiotMqttOption.java)
 
+
+原型说明
+---
+class AiotMqttOption
+
+功能描述
+---
+
+MQTT建连选项类, 使用设备三元组productKey, deviceName和deviceSecret创建对象
+
+通过对应的get方法获取MQTT建连参数clientId, username和password
+
+成员说明
+---
+
+| **成员方法**                                                                | **方法描述**
+|-----------------------------------------------------------------------------|---------------------------------------------
+| getMqttOption(String productKey, String deviceName, String deviceSecret)    | 输入设备三元组获取AiotMqttOption实例对象
+| getUsername()                                                               | 获取MQTT建连username
+| getPassword()                                                               | 获取MQTT建连password
+| getClientId()                                                               | 获取MQTT建连clientId
 
 ### <a name="计算登录密码">计算登录密码</a>
 
