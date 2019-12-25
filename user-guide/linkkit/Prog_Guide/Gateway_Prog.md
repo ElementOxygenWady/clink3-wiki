@@ -115,6 +115,9 @@ int example_add_subdev(iotx_linkkit_dev_meta_info_t *meta_info)
     return res;
 }
 ```
+**注意**:
+
+使用相同`ProductKey`, `DeviceName`重复调用`IOT_Linkkit_Open`初始化子设备资源, 将返回相同的`devid`, SDK不会重复创建子设备资源. 因此, 在子设备创建成功后, 用户可通过重复调用`IOT_Linkkit_Open`来查询`ProductKey`, `DeviceName`对应的子设备`devid`
 
 ## <a name="子设备管理相关">子设备管理相关</a>
 
