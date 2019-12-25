@@ -16,7 +16,7 @@
 #define PASSWORD_MAXLEN             (65)
 
 #define TIMESTAMP_VALUE             "2524608000000"
-#define MQTT_CLINETID_KV            "|timestamp=2524608000000,_v=sdk-c-1.0.0,securemode=3,signmethod=hmacsha256,lan=C|"
+#define MQTT_CLINETID_KV            "|timestamp=2524608000000,_v=paho-c-1.0.0,securemode=3,signmethod=hmacsha256,lan=C|"
 
 static void utils_hmac_sha256(const uint8_t *msg, uint32_t msg_len, const uint8_t *key, uint32_t key_len, uint8_t output[32]);
 
@@ -31,7 +31,7 @@ static void _hex2str(uint8_t *input, uint16_t input_len, char *output)
     }
 }
 
-int aiotMqttSign(const char *productKey, const char *deviceName, const char *deviceSecret, 
+int aiotMqttSign(const char *productKey, const char *deviceName, const char *deviceSecret,
                      char clientId[150], char username[64], char password[65])
 {
     char deviceId[PRODUCTKEY_MAXLEN + DEVICENAME_MAXLEN + 2] = {0};
