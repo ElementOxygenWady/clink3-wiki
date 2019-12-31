@@ -5,7 +5,7 @@
     * [awss_start](#awss_start)
     * [awss_config_press](#awss_config_press)
     * [awss_stop](#awss_stop)
-    * [awss_report_reset](#awss_report_reset)
+    * [awss_report_set](#awss_report_set)
 + [AWSS示例](#AWSS示例)
 + [需要实现的HAL接口](#需要实现的HAL接口)
 + [绑定与解绑通知](#绑定与解绑通知)
@@ -92,12 +92,12 @@ int awss_stop();
 | < 0     | 失败
 
 ---
-## <a name="awss_report_reset">awss_report_reset</a>
+## <a name="awss_report_set">awss_report_set</a>
 
 原型
 ---
 ```c
-int awss_report_reset();
+int awss_report_set();
 ```
 
 接口说明
