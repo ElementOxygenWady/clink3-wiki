@@ -6,6 +6,7 @@
     * [第三步 从控制台获取设备三元组](#第三步 从控制台获取设备三元组)
 + [选择适合你的编程语言](#选择适合你的编程语言)
 + [控制台确认设备上线成功](#控制台确认设备上线成功)
++ [错误排查](#错误排查)
 
 > 阿里云IoT平台基于标准的MQTT协议搭建, 因此它支持用户直接使用第三方的开源MQTT客户端接入平台, 而不一定要使用阿里提供的官方SDK
 
@@ -61,3 +62,12 @@ MQTT客户端能够连接到阿里云IoT平台的前提, 是用户在平台侧�
 除了客户端的运行日志, 从阿里云IoT的控制台, 以下页面部分也可以看到设备上下线和上报数据的状态
 
 <img src="http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/imgs/console_online_log.png" width="800">
+
+# <a name="错误排查">错误排查</a>
+如果连接过程出现了失败, 可以查阅[MQTT标准协议文档](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html), 对连接失败
+
+<img src="http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Paho_MQTT_Guide/imgs/connack_errcode.png" width="600">
+
+可以对照上面的图表来解析服务端的回应报文, 因为阿里云平台使用的是完全标准的MQTT协议
+
+
