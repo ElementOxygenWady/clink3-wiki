@@ -136,7 +136,7 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
                               void *p_service_ctx);
     ```
     ```
-    IOT_RegisterCallback(ITE_SERVICE_REQUEST, user_service_request_ext_event_handler);
+    IOT_RegisterCallback(ITE_SERVICE_REQUEST_EXT, user_service_request_ext_event_handler);
     static int user_service_request_ext_event_handler(const int devid, const char *serviceid, const int serviceid_len,
                                                       const char *request, const int request_len, void *p_service_ctx)
     {
