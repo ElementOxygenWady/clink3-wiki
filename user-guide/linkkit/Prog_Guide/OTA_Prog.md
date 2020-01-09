@@ -518,3 +518,7 @@ unsub_ota(g_product_key, g_device_name);
 | [HAL_GetFirmwareVersion](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/Basic_Requires#HAL_GetFirmwareVersion)                | 获取设备的固件版本字符串, 此固件版本号将会用于OTA升级的版本上报
 | [HAL_Firmware_Persistence_Start](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/OTA_Requires#HAL_Firmware_Persistence_Start)  | 固件持久化功能开始
 | [HAL_Firmware_Persistence_Write](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/OTA_Requires#HAL_Firmware_Persistence_Write)  | 固件持久化写入固件
+| [HAL_Firmware_Persistence_Stop](https://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/Prog_Guide/HAL/OTA_Requires#HAL_Firmware_Persistence_Stop)    | 固件持久化功能结束
+
+---
+
