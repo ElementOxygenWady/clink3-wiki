@@ -34,6 +34,7 @@
         - [设备端TLS密码算法](#设备端TLS密码算法)
         - [云端TLS密码算法](#云端TLS密码算法)
     * [B.13 配网绑定问题](#B.13 配网绑定问题)
+    * [B.14 OTA升级问题](#B.14 OTA升级问题)
 
 
 # <a name="附录B 典型咨询问题">附录B 典型咨询问题</a>
@@ -647,3 +648,79 @@ iOS手机用云智能app绑定失败
 
 + [aos2.0.0的patch](https://code.aliyun.com/edward.yangx/public-docs/blob/master/patches/aos20-bugID-20066702-awss-add-connectap-info-response-to-i.patch)
 + [aos1.3.2的patch](https://code.aliyun.com/edward.yangx/public-docs/blob/master/patches/aos132_fix_ios_app.patch)
+
+## <a name="B.14 OTA升级问题">B.14 OTA升级问题</a>
+
+OTA升级出现下载失败
+---
+如果OTA升级出现长时间下载固件不成功, 设备日志显示类似以下文本
+
+```
+[LK-DBG] httpclient_recv(411): 127 bytes has been read
+[LK-INF] httpclient_common(862): host: 'ota.iot-thing.cn-shanghai.aliyuncs.com', port: 443
+[LK-DBG] httpclient_retrieve_content(455): Current data: 
+[LK-DBG] httpclient_retrieve_content(561): Total-Payload: 416 Bytes; Read: 0 Bytes
+[LK-DBG] httpclient_recv(411): 127 bytes has been read
+[LK-INF] httpclient_common(862): host: 'ota.iot-thing.cn-shanghai.aliyuncs.com', port: 443
+[LK-DBG] httpclient_retrieve_content(455): Current data: 
+[LK-DBG] httpclient_retrieve_content(561): Total-Payload: 289 Bytes; Read: 0 Bytes
+[LK-DBG] httpclient_recv(411): 127 bytes has been read
+[LK-INF] httpclient_common(862): host: 'ota.iot-thing.cn-shanghai.aliyuncs.com', port: 443
+[LK-DBG] httpclient_retrieve_content(455): Current data: 
+[LK-DBG] httpclient_retrieve_content(561): Total-Payload: 162 Bytes; Read: 0 Bytes
+[LK-DBG] httpclient_recv(411): 109 bytes has been read
+[LK-DBG] httpclient_retrieve_content(601): extend countdown_ms to avoid NULL input to select, tired 1 times
+[LK-DBG] MQTTKeepalive(375): len = MQTTSerialize_pingreq() = 2
+[LK-INF] iotx_mc_keepalive_sub(2928): send MQTT ping...
+[LK-INF] iotx_mc_cycle(1829): receive ping response!
+[LK-DBG] httpclient_retrieve_content(601): extend countdown_ms to avoid NULL input to select, tired 101 times
+[LK-PRT] ssl recv error: code = -30848, err_str = 'SSL - The peer notified us that '
+[LK-ERR] httpclient_recv(408): Connection error (recv returned -2)
+[LK-ERR] httpclient_common(893): httpclient_recv_response is error,ret = -8
+[LK-PRT] ssl_disconnect
+[LK-INF] httpclient_close(851): client disconnected
+[LK-ERR] ofc_Fetch(65): fetch firmware failed
+[LK-ERR] IOT_OTA_FetchYield(700): Fetch firmware failed
+[LK-INF] MQTTPublish(514): Upstream Topic: '/ota/device/progress/a19R38p2SdQ/horizon_real'
+[LK-INF] MQTTPublish(515): Upstream Payload:
+
+> {
+>     "id": 0,
+>     "params": {
+>         "step": "-2",
+>         "desc": ""
+>     }
+> }
+```
+
+这往往是因为调用 `IOT_Linkkit_Query()` 接口时传入的 `buffer_length` 太短, 下载太慢导致的
+
+```c
+char buffer[128] = {0};
+int buffer_length = 128;
+
+IOT_Linkkit_Query(EXAMPLE_MASTER_DEVID, ITM_MSG_QUERY_FOTA_DATA, (unsigned char *)buffer, buffer_length);
+```
+
+例如以上的错误日志, 对应的就是上面的调用代码, 每次只下载 `127` 字节, 而整个固件有 `50MB` 以上, 花费时间太长出现的
+
+**因为OTA服务器有个限制, 如果下载速度低于`10KB/s`达到累计`1分钟`以上, 则会主动断开设备连接**
+
+从上面的日志中, 可以看到
+
+```
+[LK-PRT] ssl recv error: code = -30848, err_str = 'SSL - The peer notified us that '
+```
+
+这就是服务端断开了设备连接造成的, 之后SDK按照OTA协议从MQTT通道上报了 `"step": "-2"` 的JSON报文, 控制台就会显示下载失败
+
+---
+优化的办法就是对固件比较大( > `100KB` )的情况, 调整每次下载的buffer长度, 比如将以上代码改为
+
+```c
+char buffer[8192] = {0};
+int buffer_length = 8192;
+
+IOT_Linkkit_Query(EXAMPLE_MASTER_DEVID, ITM_MSG_QUERY_FOTA_DATA, (unsigned char *)buffer, buffer_length);
+```
+
