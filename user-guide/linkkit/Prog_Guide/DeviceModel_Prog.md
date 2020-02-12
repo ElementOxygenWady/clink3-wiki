@@ -137,8 +137,11 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
     ```
     ```
     IOT_RegisterCallback(ITE_SERVICE_REQUEST_EXT, user_service_request_ext_event_handler);
-    static int user_service_request_ext_event_handler(const int devid, const char *serviceid, const int serviceid_len,
-                                                      const char *request, const int request_len, void *p_service_ctx)
+    static int user_service_request_ext_event_handler(const int devid,
+                                                      const char *serviceid, int serviceid_len,
+                                                      const char *msgid, int msgid_len,
+                                                      const char *request, int request_len,
+                                                      void *p_service_ctx)
     {
         int add_result = 0;
         cJSON *root = NULL, *item_number_a = NULL, *item_number_b = NULL;
@@ -146,7 +149,10 @@ SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过
         char response[30] = {0};
         int response_len = 0;
 
-        EXAMPLE_TRACE("Service Request Received, Service ID: %.*s, Payload: %s", serviceid_len, serviceid, request);
+        EXAMPLE_TRACE("Service Request Received, Msg ID: %.*s, Service ID: %.*s, Payload: %s, ",
+                      msgid_len, msgid,
+                      serviceid_len, serviceid,
+                      request);
 
         /* Parse Root */
         root = cJSON_Parse(request);
