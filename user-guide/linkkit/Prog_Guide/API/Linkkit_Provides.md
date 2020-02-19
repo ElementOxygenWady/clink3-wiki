@@ -26,6 +26,8 @@
     * [ITE_COTA](#ITE_COTA)
 
 # <a name="Alink协议API详解">Alink协议API详解</a>
+> 补充说明: JSON报文中, 消息id取值范围`0~4294967295`, id是String类型的数字，如"12345"
+
 ## <a name="IOT_Linkkit_Open">IOT_Linkkit_Open</a>
 
 原型

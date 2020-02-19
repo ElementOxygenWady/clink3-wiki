@@ -320,7 +320,7 @@ void user_post_history(void)
 }
 ```
 
-在main函数中循环调动此历史上报函数, 即可在控制台日志服务的上行消息中查看到正确的上报记录
+在main函数中循环调用此历史上报函数, 即可在控制台日志服务的上行消息中查看到正确的上报记录
 ```
 int main(int argc, char **argv)
 {
