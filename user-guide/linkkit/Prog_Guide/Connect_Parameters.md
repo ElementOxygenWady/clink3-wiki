@@ -149,7 +149,7 @@ IOT_Ioctl(IOTX_IOCTL_SET_MQTT_PORT, (void *)&custom_port);
 
 ```
 
-#### <a name="https预认证">https预认证</a>
+#### <a name="https预认证和动态注册">https预认证和动态注册</a>
 预认证方式仅支持连接阿里云IOT平台，常用于海外设备，先通过https建连动态获取mqtt连接所需的url;
 且高级版跟基础版设置方式相同：
 ```
