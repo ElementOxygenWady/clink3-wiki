@@ -287,7 +287,8 @@ int IOT_MQTT_Publish(void *handle, const char *topic_name, iotx_mqtt_topic_info_
 ---
 | 值      | 说明
 |---------|---------
-| 0       | 成功
+| > 0     | 成功(消息是QoS1时, 返回值就是这个上报报文的MQTT消息ID, 对应协议里的`messageId`)
+| 0       | 成功(消息是QoS0时)
 | < 0     | 失败
 
 -----
@@ -318,7 +319,8 @@ int IOT_MQTT_Publish_Simple(void *handle, const char *topic_name, int qos, void 
 ---
 | 值      | 说明
 |---------|---------
-| 0       | 成功
+| > 0     | 成功(消息是QoS1时, 返回值就是这个上报报文的MQTT消息ID, 对应协议里的`messageId`)
+| 0       | 成功(消息是QoS0时)
 | < 0     | 失败
 
 -----
