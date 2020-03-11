@@ -372,7 +372,8 @@ IOT_Linkkit_Report(devid, ITM_MSG_POST_PROPERTY, payload, strlen(payload));
 
 上报事件时, 与上报属性的区别是, 事件ID需要单独拿出来, 放在`IOT_Linkkit_TriggerEvent()`的`eventid`中
 
-而事件的上报内容, 也就是物模型定义中事件的输出参数, 则使用与上报属性相同的格式进行上报, 示例如下:
+而事件的上报内容, 也就是物模型定义中事件的输出参数, 则使用与上报属性相同的格式进行上报, 示例如下:
+
 ```
 /* 事件ID为Error, 其输出参数ID为ErrorCode, 数据类型为枚举型 */
 char *eventid = "Error";
