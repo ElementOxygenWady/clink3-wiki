@@ -9,7 +9,7 @@
 
 # <a name="设备属性">设备属性</a>
 
-SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过`IOT_Ioctl`对`IOTX_IOCTL_RECV_EVENT_REPLY`选项进行设备
+SDK提供当上报属性或者事件时是否需要云端应答的功能, 通过`IOT_Ioctl`对`IOTX_IOCTL_RECV_EVENT_REPLY`选项进行设置
 
 * 属性上报说明
 
