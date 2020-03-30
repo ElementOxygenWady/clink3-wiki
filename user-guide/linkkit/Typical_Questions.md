@@ -386,6 +386,54 @@ SSL报文缓冲区过短: `Buffer is too small to hold the data`
 
 ## <a name="B.5 MQTT上云问题">B.5 MQTT上云问题</a>
 
+MQTT站点地址和端口如何自定义
+---
+> 在使用阿里云物联网套件连接阿里云时, 可指定MQTT连接的服务器站点, 配置方法如下
+
+枚举类型 `iotx_cloud_region_types_t` 定义了当前可连接的MQTT站点
+
+```c
+    /* region type */
+    typedef enum IOTX_CLOUD_REGION_TYPES {
+        /* Shanghai */
+        IOTX_CLOUD_REGION_SHANGHAI,
+
+        /* Singapore */
+        IOTX_CLOUD_REGION_SINGAPORE,
+
+        /* Japan */
+        IOTX_CLOUD_REGION_JAPAN,
+
+        /* America */
+        IOTX_CLOUD_REGION_USA_WEST,
+
+        /* Germany */
+        IOTX_CLOUD_REGION_GERMANY,
+
+        /* Custom setting */
+        IOTX_CLOUD_REGION_CUSTOM,
+
+        /* Maximum number of domain */
+        IOTX_CLOUD_DOMAIN_MAX
+    } iotx_cloud_region_types_t;
+```
+
++ 首先使用 `IOT_Ioctl` 的 `IOTX_IOCTL_SET_DOMAIN` 选项, 配合上面的枚举值, 设置要连接的站点
++ 然后使用 `IOT_MQTT_Construct` 或者 `IOT_Linkkit_Connect` 来建立设备到阿里云的连接
+
+> 例如
+
+```c
+    /* Choose Login Server */
+    int domain_type = IOTX_CLOUD_REGION_SHANGHAI;
+    IOT_Ioctl(IOTX_IOCTL_SET_DOMAIN, (void *)&domain_type);
+```
+
+**注意事项: 如果在阿里云物联网控制台申请的三元组与连接时使用的域名不符合, 连接站点时会出现认证错误(错误码-35)**
+
+*例如: 在阿里云物联网控制台的华东2站点申请的三元组, 在物联网套件中应该连接华东2(上海)站点*
+
+
 MQTT云端服务器IP地址和端口号
 ---
 端口: 1883
