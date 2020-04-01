@@ -31,6 +31,7 @@
     * [B.11 HTTP上云问题](#B.11 HTTP上云问题)
         - [认证连接](#认证连接)
     * [B.12 TLS连接问题](#B.12 TLS连接问题)
+        - [TLS对接自测程序](#TLS对接自测程序)
         - [设备端TLS密码算法](#设备端TLS密码算法)
         - [云端TLS密码算法](#云端TLS密码算法)
     * [B.13 配网绑定问题](#B.13 配网绑定问题)
@@ -621,6 +622,64 @@ HTTPS进行设备认证时, Server会返回的错误码及其含义
     + 解决方法: 检查`IOTX_PRODUCT_KEY`, `IOTX_DEVICE_NAME`, `IOTX_DEVICE_SECRET`, `IOTX_DEVICE_ID`是不是从控制台获得的正确参数
 
 ## <a name="B.12 TLS连接问题">B.12 TLS连接问题</a>
+### <a name="TLS对接自测程序">TLS对接自测程序</a>
+C-SDK需要用户实现以下4个TLS的HAL接口, 来支撑自身的正常工作
+
++ `HAL_SSL_Establish`
++ `HAL_SSL_Read`
++ `HAL_SSL_Write`
++ `HAL_SSL_Destroy`
+
+在调试SDK的MQTT/HTTP能否在TLS上运行**之前**, 用户必须保证这些接口在设备上能正常运行, 尤其是改动过参考实现的话, 更是如此
+
+---
+> 以下提供了1个简单的对接自测程序: [hal_tls_test.c](http://code.aliyun.com/edward.yangx/public-docs/wikis/user-guide/linkkit/hal_tls_test.c)
+
+**使用方式**
++ 把自测程序跟自己实现的4个HAL接口, 通常是`libiot_hal.a`这样的库, 编译到一起
++ 运行自测程序, 如果能打印出`TEST PASS`的字样, 则说明对接没有基本的错误, 可以用于支撑SDK
+
+**举例**
++ 在`Linux`主机上这样编译测试程序
+
+```bash
+gcc -o hal_test hal_tls_test.c libiot_hal.a libiot_tls.a -lpthread
+```
+
++ 在`Linux`主机上运行测试程序, 看到执行效果是通过的
+
+```bash
+$ ./hal_test 
+Loading the CA root certificate ...
+ ok (0 skipped)
+start prepare client cert .
+start mbedtls_pk_parse_key[(null)]
+Connecting to /public.iot-as-mqtt.cn-shanghai.aliyuncs.com/443...
+setsockopt SO_SNDTIMEO timeout: 10s
+connecting IP_ADDRESS: 106.15.100.2
+ ok
+  . Setting up the SSL/TLS structure...
+ ok
+Performing the SSL/TLS handshake...
+ ok
+  . Verifying peer X.509 certificate..
+certificate verification result: 0x00
+hdl = 0x0063f010
+
+=> #1. HAL_SSL_Establish() TEST PASS!
+
+res = 5
+
+=> #2. HAL_SSL_Write() TEST PASS!
+
+need release client crt&key
+ssl_disconnect
+res = 0
+
+=> #3. HAL_SSL_Destroy() TEST PASS!
+
+```
+
 ### <a name="设备端TLS密码算法">设备端TLS密码算法</a>
 
 目前C-SDK连接云端用到的默认TLS算法是: **`TLS-RSA-WITH-AES-256-CBC-SHA256`**
