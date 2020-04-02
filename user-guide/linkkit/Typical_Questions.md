@@ -420,6 +420,7 @@ MQTT站点地址和端口如何自定义
 ```
 
 + 首先使用 `IOT_Ioctl` 的 `IOTX_IOCTL_SET_DOMAIN` 选项, 配合上面的枚举值, 设置要连接的站点
++ 其次使用 `IOT_Ioctl` 的 `IOTX_IOCTL_SET_MQTT_PORT` 选项, 可以设置要连接的端口号
 + 然后使用 `IOT_MQTT_Construct` 或者 `IOT_Linkkit_Connect` 来建立设备到阿里云的连接
 
 > 例如
@@ -427,7 +428,9 @@ MQTT站点地址和端口如何自定义
 ```c
     /* Choose Login Server */
     int domain_type = IOTX_CLOUD_REGION_SHANGHAI;
+    uint16_t custom_port = 1883;
     IOT_Ioctl(IOTX_IOCTL_SET_DOMAIN, (void *)&domain_type);
+    IOT_Ioctl(IOTX_IOCTL_SET_MQTT_PORT, (void *)&custom_port);
 ```
 
 **注意事项: 如果在阿里云物联网控制台申请的三元组与连接时使用的域名不符合, 连接站点时会出现认证错误(错误码-35)**
