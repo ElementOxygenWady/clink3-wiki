@@ -125,6 +125,21 @@ int example_add_subdev(iotx_linkkit_dev_meta_info_t *meta_info)
 
 + 获取子设备列表: 网关可以用`ITM_MSG_QUERY_TOPOLIST`选项来调用`IOT_Linkkit_Query`以获取与其存在拓扑关系的所有子设备信息. 列表信息将在`ITE_TOPOLIST_REPLY`事件回调中返回
 
+```c
+    /* 子设备topoList接收处理函数, devid默认为主设备ID, topo_data指向json数组字符串 */
+    int user_topolist_received_event_handler(const int devid, const int msgid, const int code, const char *topo_data, const int topo_datalen)
+    {
+        printf(" devid = %d\r\n msgid = %d\r\n code = %d\r\n topo list = %.*s\r\n", devid, msgid, code, topo_datalen, topo_data);
+        return 0;
+    }
+
+    /* 用户在建连前注册子设备topoList接收处理函数 */
+    IOT_RegisterCallback(ITE_TOPOLIST_REPLY, user_topolist_received_event_handler);
+
+    /* 发送获取子设备列表请求 */
+    IOT_Linkkit_Query(user_example_ctx->master_devid, ITM_MSG_QUERY_TOPOLIST, NULL, 0);
+```
+
 + 注销子设备: SDK不提供注销子设备的API, 防止因用户错误调用导致子设备被意外删除
 
 + 删除子设备拓扑关系: SDK不提供删除拓扑关系的API
