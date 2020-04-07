@@ -102,4 +102,5 @@ SDK的断网探测机制
         IOT_RegisterCallback(ITE_DISCONNECTED, user_disconnected_event_handler);
 
 + 例如以上代码, 可使SDK在感知断线发生时, 调用用户传入的回调函数 `user_disconnected_event_handler()`
++ **注意: SDK对断网是探测而不是被通知的, 所以网络真实断开之后, 需要延迟一点的时间, 有上行报文发送失败或心跳回应丢失时才会感知到, 不是实时的**
 + **注意: 回调函数只是告诉用户断线了, 用户不必在其中又调用 `IOT_Linkkit_Connect()` 去做主动重连, SDK自己会有重连动作, 在用户回调中主动重连, 反倒会造成循环卡顿**
